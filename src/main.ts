@@ -13,10 +13,12 @@ import 'vant/lib/index.css'
 import { createSSRApp } from 'vue'
 import App from './App.vue'
 import Pinia from './store'
+// 导入工具函数
+import install from './utils'
 
 export function createApp() {
   const app = createSSRApp(App)
-  app.use(Pinia).use(Vant)
+  app.use(Pinia).use(Vant).use(install)
 
   return { app }
 }

@@ -8,7 +8,7 @@
     {
       "path": "pages/expenses/index",
       "style": {
-        "navigationBarTitleText": "首页"
+        "navigationBarTitleText": "花销"
       }
     },
     {
