@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 15:10:00
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-10-08 15:52:26
+ * @LastEditTime: 2025-10-13 16:00:25
  * @FilePath: \wanWanApp\src\pages\expenses\index.vue
  * @Description:
  *
@@ -76,11 +76,10 @@ const onSubmit = async (values: any) => {
 
   request('/expensesDetail/add', 'POST', values)
     .then((res: any) => {
-      console.log('新增成功:', res)
-      uni.showToast({ title: '新增成功', icon: 'success' })
+      uni.showToast({ title: res.message, icon: 'success' })
     })
     .catch((err: any) => {
-      console.log('新增失败:', err)
+      console.error('新增失败:', err)
     })
     .finally(() => {
       dialogVisible.value = false
@@ -91,16 +90,16 @@ const tableData = ref([
   { label: '吃', prop: 'eat', iconName: 'food' },
   { label: '喝', prop: 'drink', iconName: 'drink' },
   { label: '玩', prop: 'play', iconName: 'play-circle-o' },
-  { label: '乐', prop: 'glad', iconName: 'smile-o' },
+  { label: '乐', prop: 'glad', iconName: 'hotel-o' },
   { label: '过路费', prop: 'tolls', iconName: 'road' },
   { label: '车油', prop: 'oil', iconName: 'gas' },
   { label: '停车', prop: 'parking', iconName: 'parking' },
-  { label: '交通', prop: 'traffic', iconName: 'transport' },
+  { label: '交通', prop: 'traffic', iconName: 'logistics' },
   { label: '超市', prop: 'supermarket', iconName: 'shop-o' },
   { label: '网购', prop: 'online_shopping', iconName: 'shopping-cart-o' },
   { label: '话费', prop: 'phone_bill', iconName: 'phone-o' },
-  { label: '红包', prop: 'red_packet', iconName: 'gift-o' },
-  { label: 'vip', prop: 'vip', iconName: 'gift-o' }
+  { label: '红包', prop: 'red_packet', iconName: 'bill-o' },
+  { label: 'vip', prop: 'vip', iconName: 'vip-card-o' }
 ])
 
 const formColumns = ref([
