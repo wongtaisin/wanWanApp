@@ -38,9 +38,9 @@
           label-width="auto"
           type="textarea"
           maxlength="300"
-          name="remake"
+          name="remark"
           placeholder="请填写备注"
-          v-model="params.remake"
+          v-model="params.remark"
         />
       </CommonForm>
     </van-action-sheet>
