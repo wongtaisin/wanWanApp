@@ -48,6 +48,7 @@
 </template>
 
 <script setup lang="ts">
+import { request } from '@/services/request'
 import _utils from '@/utils/utils'
 import { ref } from 'vue'
 
@@ -72,6 +73,18 @@ const handleClick = (item: { label: string; prop: string; iconName: string }) =>
 
 const onSubmit = async (values: any) => {
   console.log(values)
+
+  request('/expensesDetail/add', 'POST', values)
+    .then((res: any) => {
+      console.log('新增成功:', res)
+      uni.showToast({ title: '新增成功', icon: 'success' })
+    })
+    .catch((err: any) => {
+      console.log('新增失败:', err)
+    })
+    .finally(() => {
+      dialogVisible.value = false
+    })
 }
 
 const tableData = ref([
