@@ -1,39 +1,26 @@
 <template>
   <view class="login-page">
-    <van-form @submit="onSubmit">
-      <van-cell-group inset>
-        <van-field
-          v-model="form.user_name"
-          name="user_name"
-          label="用户名"
-          placeholder="用户名"
-          required
-          :rules="[{ required: true, message: '请填写用户名' }]"
-        />
-        <van-field
-          v-model="form.password"
-          type="password"
-          name="password"
-          label="密码"
-          placeholder="密码"
-          required
-          :rules="[{ required: true, message: '请填写密码' }]"
-        />
-      </van-cell-group>
-      <div style="margin: 16px">
-        <van-button round block type="primary" native-type="submit"> 提交 </van-button>
-      </div>
-    </van-form>
+    <uni-forms :model="params">
+      <uni-forms-item label="用户名" name="user_name" :required="true">
+        <input v-model="params.user_name" placeholder="用户名" class="form-input" />
+      </uni-forms-item>
+      <uni-forms-item label="密码" name="password" :required="true">
+        <input v-model="params.password" type="password" placeholder="密码" class="form-input" />
+      </uni-forms-item>
+      <view style="margin: 32rpx">
+        <uni-button type="primary" size="large" @click="onSubmit(params)"> 提交 </uni-button>
+      </view>
+    </uni-forms>
 
     <!-- 账号密码登录 -->
     <view class="login-form">
       <view class="form-item">
         <text class="label">账号</text>
-        <input v-model="form.user_name" type="text" placeholder="请输入账号" class="input" />
+        <input v-model="params.user_name" type="text" placeholder="请输入账号" class="input" />
       </view>
       <view class="form-item">
         <text class="label">密码</text>
-        <input v-model="form.password" type="password" placeholder="请输入密码" class="input" />
+        <input v-model="params.password" type="password" placeholder="请输入密码" class="input" />
       </view>
       <button class="login-btn" @click="handleLogin">登录</button>
     </view>
@@ -44,7 +31,7 @@
 import { reactive } from 'vue'
 import { request } from '../../services/request'
 
-const form = reactive({
+const params = reactive({
   user_name: '大帅',
   password: '123456'
 })
@@ -55,12 +42,12 @@ const onSubmit = (values: any) => {
 }
 
 const handleLogin = () => {
-  if (!form.user_name || !form.password) {
+  if (!params.user_name || !params.password) {
     uni.showToast({ title: '账号或密码不能为空', icon: 'none' })
     return
   }
 
-  request('/login', 'POST', form).then((res: any) => {
+  request('/login', 'POST', params).then((res: any) => {
     console.log('创建成功:', res)
     uni.showToast({ title: '登录成功', icon: 'success' })
     uni.setStorageSync('token', res.data.token)
@@ -109,5 +96,15 @@ const handleLogin = () => {
   height: 88rpx;
   line-height: 88rpx;
   font-size: 32rpx;
+}
+
+.form-input {
+  width: 100%;
+  height: 80rpx;
+  border: 1rpx solid #dcdfe6;
+  border-radius: 4rpx;
+  padding: 0 10rpx;
+  box-sizing: border-box;
+  font-size: 28rpx;
 }
 </style>

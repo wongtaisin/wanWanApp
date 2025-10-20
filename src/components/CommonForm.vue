@@ -2,54 +2,52 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 15:27:20
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-10-08 15:51:20
+ * @LastEditTime: 2025-10-20 15:52:32
  * @FilePath: \wanWanApp\src\components\CommonForm.vue
  * @Description:
  *
  * Copyright (c) 2025 by wongtaisin1024@gmail.com, All Rights Reserved.
 -->
 <template>
-  <van-form @submit="onSubmit">
-    <van-cell-group>
-      <template v-for="column in formColumns" :key="column.prop">
-        <p v-if="column.title" class="title">{{ column.title }}</p>
-        <template v-if="column.slot">
-          <component :is="column.slot.render(params)" />
-        </template>
-        <template v-else>
-          <van-field
-            :input-align="column.align"
-            :error-message-align="column.align"
-            :required="column.required ?? false"
-            :readonly="column.readonly ?? false"
-            :is-link="column.isLink ?? false"
-            :name="column.prop"
-            :label="column.label"
-            :placeholder="column.placeholder"
-            :rules="[{ required: column.required, message: column.placeholder }]"
-            @click="column.handler"
-            v-model="params[column.prop]"
-          />
-        </template>
-        <p v-if="column.remark" class="remark">{{ column.remark }}</p>
+  <uni-forms label-position="left" :model="params">
+    <template v-for="column in formColumns" :key="column.prop">
+      <p v-if="column.title" class="title">{{ column.title }}</p>
+      <template v-if="column.slot">
+        <component :is="column.slot.render(params)" />
       </template>
-    </van-cell-group>
+      <template v-else>
+        <uni-forms-item
+          :label="column.label"
+          :name="column.prop"
+          :required="column.required ?? false"
+          :rules="[{ required: column.required, message: column.placeholder }]"
+        >
+          <input
+            :placeholder="column.placeholder"
+            :readonly="column.readonly ?? false"
+            v-model="params[column.prop]"
+            @click="column.handler"
+            class="form-input"
+          />
+        </uni-forms-item>
+      </template>
+      <p v-if="column.remark" class="remark">{{ column.remark }}</p>
+    </template>
 
     <slot />
 
-    <van-button
+    <uni-button
       style="width: 90%; margin: 5.33vw auto"
-      round
-      block
       type="primary"
-      native-type="submit"
+      size="large"
+      @click="onSubmit(params)"
     >
       提交
-    </van-button>
-  </van-form>
+    </uni-button>
+  </uni-forms>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { computed } from 'vue'
 
 interface FormData {
@@ -77,16 +75,26 @@ const onSubmit = async (values: any) => {
 
 <style lang="scss" scoped>
 .title {
-  font-size: 15px;
+  font-size: 30rpx;
   color: #333;
   background: #f5f5f5;
-  line-height: 36px;
-  text-indent: 20px;
+  line-height: 72rpx;
+  text-indent: 40rpx;
 }
 
 .remark {
   background: white;
-  padding: 12px 15px;
+  padding: 24rpx 30rpx;
   color: red;
+}
+
+.form-input {
+  width: 100%;
+  height: 80rpx;
+  border: 1rpx solid #dcdfe6;
+  border-radius: 4rpx;
+  padding: 0 10rpx;
+  box-sizing: border-box;
+  font-size: 28rpx;
 }
 </style>

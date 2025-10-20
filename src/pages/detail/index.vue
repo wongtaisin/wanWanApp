@@ -42,16 +42,16 @@ const goToIndex = () => {
 
 <style scoped>
 .detail-page {
-  padding: 20px;
+  padding: 40rpx;
 }
 
 .header {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 60rpx;
 }
 
 .title {
-  font-size: 24px;
+  font-size: 48rpx;
   font-weight: bold;
   color: #333;
 }
@@ -61,16 +61,16 @@ const goToIndex = () => {
 }
 
 .btn-group {
-  margin-top: 30px;
+  margin-top: 60rpx;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 30rpx;
 }
 
 .btn {
-  padding: 12px 24px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
+  padding: 24rpx 48rpx;
+  border-radius: 16rpx;
+  border: 2rpx solid #ddd;
   background: #fff;
   color: #333;
 }

@@ -1,7 +1,10 @@
 {
-  // 小程序端用 @vant/weapp，会自动引入
+  // 用 uni-ui，会自动引入
   "easycom": {
-    "^van-(.*)": "@vant/weapp/lib/$1/index"
+    "autoscan": true,
+    "custom": {
+      "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
+    }
   },
   "pages": [
     //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
