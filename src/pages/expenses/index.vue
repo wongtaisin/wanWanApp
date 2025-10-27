@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 15:10:00
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-10-14 15:43:17
+ * @LastEditTime: 2025-10-27 15:57:50
  * @FilePath: \wanWanApp\src\pages\expenses\index.vue
  * @Description:
  *
@@ -22,17 +22,35 @@
       </uni-grid>
     </view>
 
-    <uni-popup v-model:show="dialogVisible" mode="bottom">
-      <view style="background: #fff; padding: 20rpx; border-radius: 20rpx 20rpx 0 0">
-        <view style="font-size: 32rpx; font-weight: bold; text-align: center; margin-bottom: 30rpx">
-          新增消费
-        </view>
-        <CommonForm ref="commonFormRef" v-model="params" :columns="formColumns" @refresh="onSubmit">
+    <uni-popup ref="popupRef" type="bottom" background-color="#fff" borderRadius="20rpx 20rpx 0 0">
+      <view style="padding: 20rpx">
+        <view class="popup-title"> 新增消费</view>
+        <CommonForm
+          ref="commonFormRef"
+          :rules="rules"
+          v-model="params"
+          :columns="formColumns"
+          @refresh="onSubmit"
+        >
+          <uni-forms-item label="支付类型" name="paymentName">
+            <uni-data-select
+              v-model="params.paymentName"
+              :localdata="range"
+              @change="handleChange"
+            />
+          </uni-forms-item>
           <uni-forms-item label="备注" name="remark">
-            <textarea v-model="params.remark" class="textarea" />
+            <uni-easyinput type="textarea" v-model="params.remark" placeholder="请输入备注" />
+          </uni-forms-item>
+
+          <uni-forms-item label="创建时间" name="createDate" required>
+            <uni-datetime-picker
+              type="datetime"
+              return-type="timestamp"
+              v-model="params.createDate"
+            />
           </uni-forms-item>
         </CommonForm>
-        <button class="close-btn" @click="dialogVisible = false">关闭</button>
       </view>
     </uni-popup>
   </view>
@@ -44,22 +62,24 @@ import _utils from '@/utils/utils'
 import { ref } from 'vue'
 
 interface FormData {
-  expenses_name: string
+  expensesName: string
   money: string
-  create_date: string
+  createDate: string
   [key: string]: string | number | Record<string, any>[] | undefined | null | any
 }
 const params = ref<FormData>({
-  expenses_name: '',
+  expensesName: '',
   money: '',
-  create_date: ''
+  shopName: '',
+  paymentName: 2,
+  createDate: ''
 })
-const dialogVisible = ref(false)
+const popupRef = ref()
 
 const handleClick = (item: { label: string; prop: string; iconName: string }) => {
-  dialogVisible.value = true
-  params.value.create_date = _utils.formatDate(Date.now(), 'yyyy-MM-dd hh:mm:ss')
-  params.value.expenses_name = item.prop
+  popupRef.value.open() // 打开弹窗
+  params.value.createDate = _utils.formatDate(Date.now(), 'yyyy-MM-dd hh:mm:ss')
+  params.value.expensesName = item.prop
 
   console.log(item.prop, `点击了${item.label}`)
 }
@@ -75,7 +95,7 @@ const onSubmit = async (values: any) => {
       console.error('新增失败:', err)
     })
     .finally(() => {
-      dialogVisible.value = false
+      popupRef.value.close()
     })
 }
 
@@ -95,17 +115,42 @@ const tableData = ref([
   { label: 'vip', prop: 'vip', iconName: 'star-fill' }
 ])
 
+const handleChange = (val: any) => {
+  console.log(val)
+}
+
+const range = [
+  { value: 1, text: '现金' },
+  { value: 2, text: '微信支付' },
+  { value: 3, text: '支付宝' },
+  { value: 4, text: '信用卡' },
+  { value: 5, text: '储蓄卡' },
+  { value: 6, text: '抖音支付' }
+]
+
+const rules = {
+  money: { rules: [{ required: true, errorMessage: '金额不能为空' }] },
+  shopName: { rules: [{ required: true, errorMessage: '店铺不能为空' }] },
+  createDate: { rules: [{ required: true, errorMessage: '创建时间不能为空' }] }
+  // age: {
+  //   rules: [
+  //     { required: true, errorMessage: '年龄不能为空' },
+  //     { format: 'number', errorMessage: '年龄只能输入数字' }
+  //   ]
+  // }
+}
+
 const formColumns = ref([
   {
-    prop: 'expenses_name',
+    prop: 'expensesName',
     label: '支出类型',
-    placeholder: '请输入expenses_name',
+    placeholder: '请输入expensesName',
     required: true,
-    readonly: true
+    readonly: true,
+    disabled: true
   },
   { prop: 'money', label: '金额', placeholder: '请输入金额', required: true },
-  { prop: 'create_date', label: '创建时间', placeholder: '请输入创建时间', required: true }
-  // { prop: 'remark', label: '备注', placeholder: '请输入备注' }
+  { prop: 'shopName', label: '店铺', placeholder: '请输入店铺', required: true }
 ])
 </script>
 
@@ -139,16 +184,12 @@ const formColumns = ref([
     box-sizing: border-box;
     font-size: 28rpx;
   }
+}
 
-  .close-btn {
-    width: 100%;
-    height: 80rpx;
-    margin-top: 20rpx;
-    background: #f5f5f5;
-    color: #666;
-    border: none;
-    border-radius: 4rpx;
-    font-size: 28rpx;
-  }
+.popup-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 30rpx;
 }
 </style>
