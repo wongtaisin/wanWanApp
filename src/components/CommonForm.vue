@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 15:27:20
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-10-27 15:10:10
+ * @LastEditTime: 2025-10-27 17:05:50
  * @FilePath: \wanWanApp\src\components\CommonForm.vue
  * @Description:
  *
@@ -34,8 +34,7 @@
 
     <slot />
 
-    <uni-button type="primary" size="large" @click="onSubmit"> 提交 </uni-button>
-    <button v-show="false">提交</button>
+    <button type="primary" size="large" @click="onSubmit">提交</button>
   </uni-forms>
 </template>
 

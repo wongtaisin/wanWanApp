@@ -17,7 +17,7 @@
       <uni-forms-item label="密码" name="password" :required="true">
         <uni-easyinput v-model="params.password" type="password" placeholder="请输入密码" />
       </uni-forms-item>
-      <uni-button type="primary" size="large" @click="onSubmit"> 提交 </uni-button>
+      <button type="primary" size="large" @click="onSubmit">提交</button>
     </uni-forms>
   </view>
 </template>

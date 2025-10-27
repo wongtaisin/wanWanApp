@@ -5,8 +5,8 @@
       <text class="title">{{ title }}</text>
     </view>
     <view class="btn-group">
-      <uni-button type="primary" @click="goToDetail">跳转到详情页</uni-button>
-      <uni-button type="default" @click="goToDetailByRouter">通过路由跳转到详情页</uni-button>
+      <button type="primary" @click="goToDetail">跳转到详情页</button>
+      <button type="default" @click="goToDetailByRouter">通过路由跳转到详情页</button>
     </view>
   </view>
 </template>

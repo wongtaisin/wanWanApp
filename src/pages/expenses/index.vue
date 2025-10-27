@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 15:10:00
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-10-27 15:57:50
+ * @LastEditTime: 2025-10-27 17:04:21
  * @FilePath: \wanWanApp\src\pages\expenses\index.vue
  * @Description:
  *
