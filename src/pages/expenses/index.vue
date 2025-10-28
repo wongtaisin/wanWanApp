@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 15:10:00
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-10-27 17:04:21
+ * @LastEditTime: 2025-10-28 09:36:54
  * @FilePath: \wanWanApp\src\pages\expenses\index.vue
  * @Description:
  *
@@ -32,12 +32,16 @@
           :columns="formColumns"
           @refresh="onSubmit"
         >
-          <uni-forms-item label="支付类型" name="paymentName">
+          <uni-forms-item label="店铺" name="shopName" required>
             <uni-data-select
-              v-model="params.paymentName"
-              :localdata="range"
+              placeholder="请选择店铺"
+              v-model="params.shopId"
+              :localdata="shopLocal"
               @change="handleChange"
             />
+          </uni-forms-item>
+          <uni-forms-item label="支付类型" name="paymentName" required>
+            <uni-data-select v-model="params.paymentName" :localdata="range" />
           </uni-forms-item>
           <uni-forms-item label="备注" name="remark">
             <uni-easyinput type="textarea" v-model="params.remark" placeholder="请输入备注" />
@@ -59,7 +63,7 @@
 <script setup lang="ts">
 import { request } from '@/services/request'
 import _utils from '@/utils/utils'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 interface FormData {
   expensesName: string
@@ -75,18 +79,23 @@ const params = ref<FormData>({
   createDate: ''
 })
 const popupRef = ref()
+const shopLocal = ref()
+
+const loadShop = async () => {
+  const res: any = await request('/shop/all', 'GET')
+  shopLocal.value = res.map((item: any) => ({
+    value: item.id,
+    text: item.shop_name
+  }))
+}
 
 const handleClick = (item: { label: string; prop: string; iconName: string }) => {
   popupRef.value.open() // 打开弹窗
   params.value.createDate = _utils.formatDate(Date.now(), 'yyyy-MM-dd hh:mm:ss')
   params.value.expensesName = item.prop
-
-  console.log(item.prop, `点击了${item.label}`)
 }
 
 const onSubmit = async (values: any) => {
-  console.log(values)
-
   request('/expensesDetail/add', 'POST', values)
     .then((res: any) => {
       uni.showToast({ title: res.message, icon: 'success' })
@@ -116,7 +125,8 @@ const tableData = ref([
 ])
 
 const handleChange = (val: any) => {
-  console.log(val)
+  const found = shopLocal.value.find((item: any) => item.value === val)
+  params.value.shopName = found.text
 }
 
 const range = [
@@ -149,9 +159,11 @@ const formColumns = ref([
     readonly: true,
     disabled: true
   },
-  { prop: 'money', label: '金额', placeholder: '请输入金额', required: true },
-  { prop: 'shopName', label: '店铺', placeholder: '请输入店铺', required: true }
+  { prop: 'money', label: '金额', placeholder: '请输入金额', required: true }
+  // { prop: 'shopName', label: '店铺', placeholder: '请输入店铺', required: true }
 ])
+
+onMounted(loadShop)
 </script>
 
 <style lang="scss">

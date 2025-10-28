@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-13 16:12:04
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-10-27 15:03:35
+ * @LastEditTime: 2025-10-28 09:20:26
  * @FilePath: \wanWanApp\src\pages\login\index.vue
  * @Description:
  *
@@ -40,10 +40,10 @@ const onSubmit = () => {
   formRef.value
     .validate()
     .then(async (res: any) => {
-      const result: any = await request('/login', 'POST', res)
-      console.log('创建成功:', result)
+      const { token }: any = await request('/login', 'POST', res)
+      console.log('创建成功:', token)
       uni.showToast({ title: '登录成功', icon: 'success' })
-      uni.setStorageSync('token', result.data.token)
+      uni.setStorageSync('token', token)
       uni.navigateTo({ url: '/pages/expenses/index' })
     })
     .catch((err: any) => {
