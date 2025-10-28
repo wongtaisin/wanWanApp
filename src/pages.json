@@ -16,12 +16,6 @@
       "style": {
         "navigationBarTitleText": "登录"
       }
-    },
-    {
-      "path": "pages/detail/index",
-      "style": {
-        "navigationBarTitleText": "详情页"
-      }
     }
   ],
   "globalStyle": {

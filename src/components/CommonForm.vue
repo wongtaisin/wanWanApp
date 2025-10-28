@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 15:27:20
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-10-08 15:51:20
+ * @LastEditTime: 2025-10-28 11:33:49
  * @FilePath: \wanWanApp\src\components\CommonForm.vue
  * @Description:
  *
@@ -18,6 +18,7 @@
         </template>
         <template v-else>
           <van-field
+            :type="column.type"
             :input-align="column.align"
             :error-message-align="column.align"
             :required="column.required ?? false"

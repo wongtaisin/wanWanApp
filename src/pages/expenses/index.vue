@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 15:10:00
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-10-13 16:00:25
+ * @LastEditTime: 2025-10-28 17:08:47
  * @FilePath: \wanWanApp\src\pages\expenses\index.vue
  * @Description:
  *
@@ -14,7 +14,7 @@
     <view class="grid-container">
       <van-grid :columns="3">
         <van-grid-item
-          v-for="item in tableData"
+          v-for="item in gridColumns"
           :key="item.prop"
           :text="item.label"
           :prop="item.prop"
@@ -44,36 +44,86 @@
         />
       </CommonForm>
     </van-action-sheet>
+
+    <van-action-sheet
+      v-model:show="pickerVisible"
+      destroy-on-close
+      position="bottom"
+      :title="pickerType === 1 ? '支付类型' : '店铺'"
+    >
+      <van-picker
+        :columns="pickerType === 1 ? paymentColumns : shopColumns"
+        :model-value="pickerValue"
+        @confirm="handleConfirm"
+        @cancel="pickerVisible = false"
+      />
+    </van-action-sheet>
   </view>
+
+  <DateTimePicker
+    :showPicker="dateTimeVisible"
+    @changeValue="() => (dateTimeVisible = false)"
+    @confirm="(val: string) => (params.createDate = val)"
+  />
 </template>
 
-<script setup lang="ts">
+<script setup lang="tsx">
+import DateTimePicker from '@/components/dateTimePicker.vue'
 import { request } from '@/services/request'
 import _utils from '@/utils/utils'
-import { ref } from 'vue'
+import { Field } from 'vant'
+import { onMounted, ref, watch } from 'vue'
 
 interface FormData {
-  expenses_name: string
+  expensesName: string
   money: string
-  create_date: string
+  createDate: string
   [key: string]: string | number | Record<string, any>[] | undefined | null | any
 }
 const params = ref<FormData>({
-  expenses_name: '',
+  expensesName: '',
   money: '',
-  create_date: ''
+  shopName: '',
+  paymentName: '',
+  createDate: ''
 })
 const dialogVisible = ref(false)
+const pickerVisible = ref(false)
+const pickerValue = ref()
+const pickerType = ref(1) // 1 支付类型，2 店铺
+const paymentColumns = [
+  { value: 1, text: '现金' },
+  { value: 2, text: '微信支付' },
+  { value: 3, text: '支付宝' },
+  { value: 4, text: '信用卡' },
+  { value: 5, text: '储蓄卡' },
+  { value: 6, text: '抖音支付' }
+]
+const shopColumns = ref<any[]>([])
+const dateTimeVisible = ref(false)
+
+const loadShop = async () => {
+  const res: any = await request('/shop/all', 'GET')
+  shopColumns.value = res.map((item: any) => ({
+    value: item.id,
+    text: item.shop_name
+  }))
+}
 
 const handleClick = (item: { label: string; prop: string; iconName: string }) => {
   dialogVisible.value = true
-  params.value.create_date = _utils.formatDate(Date.now(), 'yyyy-MM-dd hh:mm:ss')
-  params.value.expenses_name = item.prop
+  params.value.createDate = _utils.formatDate(Date.now(), 'yyyy-MM-dd hh:mm:ss')
+  params.value.paymentName = '微信支付'
+  params.value.expensesName = item.prop
+}
+
+const handleConfirm = ({ selectedOptions }: any) => {
+  const name = pickerType.value === 1 ? 'paymentName' : 'shopName'
+  params.value[name] = selectedOptions[0].text
+  pickerVisible.value = false
 }
 
 const onSubmit = async (values: any) => {
-  console.log(values)
-
   request('/expensesDetail/add', 'POST', values)
     .then((res: any) => {
       uni.showToast({ title: res.message, icon: 'success' })
@@ -86,7 +136,7 @@ const onSubmit = async (values: any) => {
     })
 }
 
-const tableData = ref([
+const gridColumns = ref([
   { label: '吃', prop: 'eat', iconName: 'food' },
   { label: '喝', prop: 'drink', iconName: 'drink' },
   { label: '玩', prop: 'play', iconName: 'play-circle-o' },
@@ -104,16 +154,103 @@ const tableData = ref([
 
 const formColumns = ref([
   {
-    prop: 'expenses_name',
+    prop: 'expensesName',
     label: '支出类型',
-    placeholder: '请输入expenses_name',
+    placeholder: '请输入expensesName',
     required: true,
-    readonly: true
+    readonly: true,
+    disabled: true
   },
-  { prop: 'money', label: '金额', placeholder: '请输入金额', required: true },
-  { prop: 'create_date', label: '创建时间', placeholder: '请输入创建时间', required: true }
+  {
+    prop: 'money',
+    label: '金额',
+    placeholder: '请输入金额',
+    type: 'number',
+    required: true
+  },
+  {
+    prop: 'paymentName',
+    label: '支付类型',
+    placeholder: '请选择支付类型',
+    required: true,
+    readonly: true,
+    slot: {
+      render: (row: any) => (
+        <Field
+          required
+          readonly
+          label="支付类型"
+          placeholder="请选择支付类型"
+          onClick={() => {
+            pickerVisible.value = true
+            pickerType.value = 1
+          }}
+          modelValue={row.paymentName}
+          onUpdate:modelValue={(value: any) => (row.paymentName = value)}
+        />
+      )
+    }
+  },
+  {
+    prop: 'shopName',
+    label: '店铺',
+    placeholder: '请选择店铺',
+    readonly: true,
+    slot: {
+      render: (row: any) => (
+        <Field
+          readonly
+          label="店铺"
+          placeholder="请选择店铺"
+          onClick={() => {
+            pickerVisible.value = true
+            pickerType.value = 2
+          }}
+          modelValue={row.shopName}
+          onUpdate:modelValue={(value: any) => (row.shopName = value)}
+        />
+      )
+    }
+  },
+  {
+    prop: 'createDate',
+    label: '创建时间',
+    placeholder: '请输入创建时间',
+    required: true,
+    slot: {
+      render: (row: any) => (
+        <Field
+          required
+          readonly
+          label="创建时间"
+          placeholder="请输入创建时间"
+          onClick={() => (dateTimeVisible.value = true)}
+          modelValue={row.createDate}
+          onUpdate:modelValue={(value: any) => (row.createDate = value)}
+        />
+      )
+    }
+  }
   // { prop: 'remark', label: '备注', placeholder: '请输入备注' }
 ])
+
+watch(
+  () => dialogVisible.value,
+  (newVal: any, _oldVal: any) => {
+    if (newVal === false) {
+      params.value = {
+        expensesName: '',
+        money: '',
+        shopName: '',
+        paymentName: '',
+        createDate: ''
+      }
+    }
+  },
+  { immediate: true }
+)
+
+onMounted(loadShop)
 </script>
 
 <style lang="scss">
