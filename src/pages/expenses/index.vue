@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 15:10:00
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-10-28 09:36:54
+ * @LastEditTime: 2025-10-28 09:56:53
  * @FilePath: \wanWanApp\src\pages\expenses\index.vue
  * @Description:
  *
@@ -37,11 +37,15 @@
               placeholder="请选择店铺"
               v-model="params.shopId"
               :localdata="shopLocal"
-              @change="handleChange"
+              @change="(val: number) => handleChange(shopLocal, val, 'shopName')"
             />
           </uni-forms-item>
           <uni-forms-item label="支付类型" name="paymentName" required>
-            <uni-data-select v-model="params.paymentName" :localdata="range" />
+            <uni-data-select
+              v-model="params.paymentId"
+              :localdata="range"
+              @change="(val: number) => handleChange(range, val, 'paymentName')"
+            />
           </uni-forms-item>
           <uni-forms-item label="备注" name="remark">
             <uni-easyinput type="textarea" v-model="params.remark" placeholder="请输入备注" />
@@ -75,7 +79,8 @@ const params = ref<FormData>({
   expensesName: '',
   money: '',
   shopName: '',
-  paymentName: 2,
+  paymentId: 2,
+  paymentName: '微信支付',
   createDate: ''
 })
 const popupRef = ref()
@@ -124,9 +129,15 @@ const tableData = ref([
   { label: 'vip', prop: 'vip', iconName: 'star-fill' }
 ])
 
-const handleChange = (val: any) => {
-  const found = shopLocal.value.find((item: any) => item.value === val)
-  params.value.shopName = found.text
+/**
+ * @description 下拉选择
+ * @param {any[]} list
+ * @param {number} id
+ * @param {string} name
+ */
+const handleChange = (list: any[], id: number, name: string) => {
+  const found = list.find((item: any) => item.value === id)
+  params.value[name] = found.text
 }
 
 const range = [
