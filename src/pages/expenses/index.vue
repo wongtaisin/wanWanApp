@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 15:10:00
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-10-28 17:08:47
+ * @LastEditTime: 2025-10-29 08:32:05
  * @FilePath: \wanWanApp\src\pages\expenses\index.vue
  * @Description:
  *
@@ -124,9 +124,10 @@ const handleConfirm = ({ selectedOptions }: any) => {
 }
 
 const onSubmit = async (values: any) => {
-  request('/expensesDetail/add', 'POST', values)
+  console.log(values, params.value, `新增消费`)
+  request('/expensesDetail/add', 'POST', params.value)
     .then((res: any) => {
-      uni.showToast({ title: res.message, icon: 'success' })
+      uni.showToast({ title: `新增成功`, icon: 'success' })
     })
     .catch((err: any) => {
       console.error('新增失败:', err)
