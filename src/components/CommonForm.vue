@@ -2,14 +2,20 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 15:27:20
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-10-27 17:05:50
+ * @LastEditTime: 2025-10-29 13:38:20
  * @FilePath: \wanWanApp\src\components\CommonForm.vue
  * @Description:
  *
  * Copyright (c) 2025 by wongtaisin1024@gmail.com, All Rights Reserved.
 -->
 <template>
-  <uni-forms ref="formRef" :rules="rules" :model="params" label-position="left" label-width="auto">
+  <uni-forms
+    ref="formRef"
+    :rules="rules"
+    :model="params"
+    :label-width="props.labelWidth"
+    :label-align="props.labelAlign"
+  >
     <template v-for="column in formColumns" :key="column.prop">
       <p v-if="column.title" class="title">{{ column.title }}</p>
       <template v-if="column.slot">
@@ -47,12 +53,13 @@ interface FormData {
 
 interface Props {
   columns: FormData[]
-  align?: 'left' | 'right' // 弃用
+  labelWidth?: string
+  labelAlign?: 'left' | 'right'
   rules?: Record<string, any> // 验证
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  align: 'left'
+  labelAlign: 'left'
 })
 
 const modelValue = defineModel<FormData>('modelValue', { default: {} })

@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-09-11 16:36:48
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-10-14 17:27:34
+ * @LastEditTime: 2025-10-29 11:31:25
  * @FilePath: \wanWanApp\src\main.ts
  * @Description:
  *
@@ -10,6 +10,7 @@
  */
 import { createSSRApp } from 'vue'
 import App from './App.vue'
+import './uni.scss'
 
 // 导入工具函数
 import Pinia from './store'

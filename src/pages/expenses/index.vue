@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 15:10:00
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-10-28 09:56:53
+ * @LastEditTime: 2025-10-29 16:02:03
  * @FilePath: \wanWanApp\src\pages\expenses\index.vue
  * @Description:
  *
@@ -15,7 +15,7 @@
       <uni-grid :column="4">
         <uni-grid-item v-for="(item, i) in tableData" :key="i" @click="handleClick(item)">
           <view style="text-align: center; padding: 20rpx 0">
-            <uni-icons :type="item.iconName" :size="22" />
+            <uni-icons :type="item.iconName" :size="28" />
             <text class="grid-text">{{ item.label }}</text>
           </view>
         </uni-grid-item>
@@ -27,19 +27,13 @@
         <view class="popup-title"> 新增消费</view>
         <CommonForm
           ref="commonFormRef"
+          label-align="right"
+          label-width="140rpx"
           :rules="rules"
           v-model="params"
           :columns="formColumns"
           @refresh="onSubmit"
         >
-          <uni-forms-item label="店铺" name="shopName" required>
-            <uni-data-select
-              placeholder="请选择店铺"
-              v-model="params.shopId"
-              :localdata="shopLocal"
-              @change="(val: number) => handleChange(shopLocal, val, 'shopName')"
-            />
-          </uni-forms-item>
           <uni-forms-item label="支付类型" name="paymentName" required>
             <uni-data-select
               v-model="params.paymentId"
@@ -47,16 +41,20 @@
               @change="(val: number) => handleChange(range, val, 'paymentName')"
             />
           </uni-forms-item>
+          <uni-forms-item label="店铺" name="shopName">
+            <uni-data-select
+              placeholder="请选择店铺"
+              v-model="params.shopId"
+              :localdata="shopLocal"
+              @change="(val: number) => handleChange(shopLocal, val, 'shopName')"
+            />
+          </uni-forms-item>
           <uni-forms-item label="备注" name="remark">
             <uni-easyinput type="textarea" v-model="params.remark" placeholder="请输入备注" />
           </uni-forms-item>
 
           <uni-forms-item label="创建时间" name="createDate" required>
-            <uni-datetime-picker
-              type="datetime"
-              return-type="timestamp"
-              v-model="params.createDate"
-            />
+            <uni-datetime-picker type="datetime" return-type="date" v-model="params.createDate" />
           </uni-forms-item>
         </CommonForm>
       </view>
@@ -101,9 +99,9 @@ const handleClick = (item: { label: string; prop: string; iconName: string }) =>
 }
 
 const onSubmit = async (values: any) => {
-  request('/expensesDetail/add', 'POST', values)
+  await request('/expensesDetail/add', 'POST', values)
     .then((res: any) => {
-      uni.showToast({ title: res.message, icon: 'success' })
+      uni.showToast({ title: `新增成功`, icon: 'success' })
     })
     .catch((err: any) => {
       console.error('新增失败:', err)
@@ -151,7 +149,6 @@ const range = [
 
 const rules = {
   money: { rules: [{ required: true, errorMessage: '金额不能为空' }] },
-  shopName: { rules: [{ required: true, errorMessage: '店铺不能为空' }] },
   createDate: { rules: [{ required: true, errorMessage: '创建时间不能为空' }] }
   // age: {
   //   rules: [
@@ -171,7 +168,6 @@ const formColumns = ref([
     disabled: true
   },
   { prop: 'money', label: '金额', placeholder: '请输入金额', required: true }
-  // { prop: 'shopName', label: '店铺', placeholder: '请输入店铺', required: true }
 ])
 
 onMounted(loadShop)
@@ -187,32 +183,22 @@ onMounted(loadShop)
     font-size: 32rpx;
     color: #333;
     background: #f5f5f5;
-    line-height: 72rpx;
+    line-height: 96rpx;
     text-indent: 40rpx;
   }
 
   .grid-text {
-    font-size: 24rpx;
+    font-size: 28rpx;
     color: #333;
     display: block;
     margin-top: 10rpx;
   }
 
-  .textarea {
-    width: 100%;
-    height: 150rpx;
-    border: 1rpx solid #dcdfe6;
-    border-radius: 4rpx;
-    padding: 10rpx;
-    box-sizing: border-box;
-    font-size: 28rpx;
+  .popup-title {
+    font-size: 38rpx;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30rpx;
   }
-}
-
-.popup-title {
-  font-size: 32rpx;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 30rpx;
 }
 </style>
