@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 15:10:00
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-10-30 09:34:23
+ * @LastEditTime: 2025-10-30 10:07:35
  * @FilePath: \wanWanApp\src\pages\expenses\index.vue
  * @Description:
  *
@@ -10,7 +10,7 @@
 -->
 <template>
   <view class="expenses-content">
-    <view class="title"> 请选择您的支出类型 </view>
+    <uni-section title="请选择您的支出类型" type="line"></uni-section>
     <view class="grid-container">
       <uni-grid :column="4">
         <uni-grid-item v-for="(item, i) in tableData" :key="i" @click="handleClick(item)">
@@ -36,6 +36,7 @@
         >
           <uni-forms-item label="支付类型" name="paymentName" required>
             <uni-data-select
+              placeholder="请选择支付类型"
               v-model="params.paymentId"
               :localdata="range"
               @change="(val: number) => handleChange(range, val, 'paymentName')"
@@ -99,6 +100,15 @@ const handleClick = (item: { label: string; prop: string; iconName: string }) =>
 }
 
 const onSubmit = async (values: any) => {
+  // 清理空字符串
+  Object.keys(params.value).forEach(key => {
+    if (params.value[key] === '') {
+      delete params.value[key]
+    }
+  })
+
+  console.log(values, `新增消费`, params.value)
+
   await request('/expensesDetail/add', 'POST', params.value)
     .then((res: any) => {
       uni.showToast({ title: `新增成功`, icon: 'success' })
@@ -131,12 +141,12 @@ const tableData = ref([
 /**
  * @description 下拉选择
  * @param {any[]} list
- * @param {number} id
+ * @param {number} val // 下拉选择的值
  * @param {string} name
  */
-const handleChange = (list: any[], id: number, name: string) => {
-  const found = list.find((item: any) => item.value === id)
-  params.value[name] = found.text
+const handleChange = (list: any[], val: number, name: string) => {
+  const found = list.find((item: any) => item.value === val)
+  params.value[name] = found?.text ?? ''
 }
 
 const range = [
@@ -180,14 +190,6 @@ onMounted(loadShop)
   height: 100vh;
   background: #f0f2f5;
 
-  .title {
-    font-size: 32rpx;
-    color: #333;
-    background: #f5f5f5;
-    line-height: 96rpx;
-    text-indent: 40rpx;
-  }
-
   .grid-text {
     font-size: 28rpx;
     color: #333;
@@ -196,7 +198,7 @@ onMounted(loadShop)
   }
 
   .popup-title {
-    font-size: 38rpx;
+    font-size: 34rpx;
     font-weight: bold;
     text-align: center;
     margin-bottom: 30rpx;
