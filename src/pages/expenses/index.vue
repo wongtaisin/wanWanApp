@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 15:10:00
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-10-29 16:02:03
+ * @LastEditTime: 2025-10-30 09:34:23
  * @FilePath: \wanWanApp\src\pages\expenses\index.vue
  * @Description:
  *
@@ -54,7 +54,7 @@
           </uni-forms-item>
 
           <uni-forms-item label="创建时间" name="createDate" required>
-            <uni-datetime-picker type="datetime" return-type="date" v-model="params.createDate" />
+            <uni-datetime-picker type="datetime" return-type="string" v-model="params.createDate" />
           </uni-forms-item>
         </CommonForm>
       </view>
@@ -76,7 +76,7 @@ interface FormData {
 const params = ref<FormData>({
   expensesName: '',
   money: '',
-  shopName: '',
+  // shopName: '',
   paymentId: 2,
   paymentName: '微信支付',
   createDate: ''
@@ -99,7 +99,7 @@ const handleClick = (item: { label: string; prop: string; iconName: string }) =>
 }
 
 const onSubmit = async (values: any) => {
-  await request('/expensesDetail/add', 'POST', values)
+  await request('/expensesDetail/add', 'POST', params.value)
     .then((res: any) => {
       uni.showToast({ title: `新增成功`, icon: 'success' })
     })
@@ -124,7 +124,8 @@ const tableData = ref([
   { label: '网购', prop: 'online_shopping', iconName: 'shopping-cart-fill' },
   { label: '话费', prop: 'phone_bill', iconName: 'phone' },
   { label: '红包', prop: 'red_packet', iconName: 'red-packet' },
-  { label: 'vip', prop: 'vip', iconName: 'star-fill' }
+  { label: 'vip', prop: 'vip', iconName: 'star-fill' },
+  { label: '其他', prop: 'other', iconName: 'star-fill' }
 ])
 
 /**
