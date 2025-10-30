@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 15:10:00
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-10-30 10:08:44
+ * @LastEditTime: 2025-10-30 16:56:07
  * @FilePath: \wanWanApp\src\pages\expenses\index.vue
  * @Description:
  *
@@ -111,7 +111,12 @@ const onSubmit = async (values: any) => {
 
   await request('/expensesDetail/add', 'POST', params.value)
     .then((res: any) => {
-      uni.showToast({ title: `新增成功`, icon: 'success' })
+      const tit =
+        tableData.value.find((item: any) => item.prop === values.expensesName)?.label || ''
+      uni.showToast({
+        title: `${tit}花费：￥${values.money}`,
+        icon: 'success'
+      })
     })
     .catch((err: any) => {
       console.error('新增失败:', err)
@@ -188,7 +193,6 @@ onMounted(loadShop)
 .expenses-content {
   width: 100%;
   height: 100vh;
-  background: #f0f2f5;
 
   .grid-text {
     font-size: 28rpx;
