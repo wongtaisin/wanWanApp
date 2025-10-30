@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 15:10:00
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-10-30 10:07:35
+ * @LastEditTime: 2025-10-30 10:08:44
  * @FilePath: \wanWanApp\src\pages\expenses\index.vue
  * @Description:
  *
@@ -34,7 +34,7 @@
           :columns="formColumns"
           @refresh="onSubmit"
         >
-          <uni-forms-item label="支付类型" name="paymentName" required>
+          <uni-forms-item label="支付类型" name="paymentId" required>
             <uni-data-select
               placeholder="请选择支付类型"
               v-model="params.paymentId"
@@ -160,13 +160,13 @@ const range = [
 
 const rules = {
   money: { rules: [{ required: true, errorMessage: '金额不能为空' }] },
-  createDate: { rules: [{ required: true, errorMessage: '创建时间不能为空' }] }
-  // age: {
-  //   rules: [
-  //     { required: true, errorMessage: '年龄不能为空' },
-  //     { format: 'number', errorMessage: '年龄只能输入数字' }
-  //   ]
-  // }
+  createDate: { rules: [{ required: true, errorMessage: '创建时间不能为空' }] },
+  paymentId: {
+    rules: [
+      { required: true, errorMessage: '支付类型不能为空' },
+      { format: 'number', errorMessage: '支付类型只能输入数字' }
+    ]
+  }
 }
 
 const formColumns = ref([
