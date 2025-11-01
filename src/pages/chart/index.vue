@@ -12,8 +12,11 @@
   <view class="chart-page">
     <uni-row class="top">
       <uni-col :span="8">
-        <text class="text">2025年</text>
-        <p class="money">1月</p>
+        <text class="text">{{ params.startDate.slice(0, 4) }}年</text>
+        <p class="money">
+          {{ params.startDate.slice(5, 7) }}
+          <text style="font-size: 28rpx">月</text>
+        </p>
       </uni-col>
       <uni-col :span="8">
         <text class="text">收入</text>
@@ -21,7 +24,7 @@
       </uni-col>
       <uni-col :span="8">
         <text class="text">支出</text>
-        <p class="money">99999</p>
+        <p class="money">{{ moneyTotal }}</p>
       </uni-col>
     </uni-row>
 
@@ -29,7 +32,7 @@
       <view class="list-top">
         <uni-row>
           <uni-col :span="12">
-            <text>2025-01-01</text>
+            <text>2025-11-01</text>
           </uni-col>
           <uni-col :span="12" style="text-align: right">
             <text>支出：32</text>
@@ -89,10 +92,39 @@ const params = ref({
   startDate: utils.getCurrentMonthRange().firstDay,
   endDate: utils.getCurrentMonthRange().lastDay
 })
+const moneyTotal = ref(0)
 
+/**
+   * 初始化数据
+   * @example 重新设计list，需要把每一天的支出都展示出来
+   [
+      {
+        list:[
+          {
+            id: 1,
+            shop_name: '店铺1',
+            money: 32,
+            create_date: '2025-11-01 10:00:00'
+          },
+          {
+            id: 2,
+            shop_name: '店铺2',
+            money: 32,
+            create_date: '2025-11-02 10:00:00'
+          }
+        ],
+        date:'2025-11-01',
+        total:64
+      }
+    ]
+   */
 const init = async () => {
   const res: any = await request('/expensesDetail/list', 'POST', params.value)
   tableData.value = res.list || []
+
+  // 支出总金额
+  const { total }: any = await request('/expenses/total', 'GET', params.value)
+  moneyTotal.value = total
 }
 
 const onClick = (e: any, row: any) => {
