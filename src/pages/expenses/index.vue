@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 15:10:00
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-10-30 16:56:07
+ * @LastEditTime: 2025-11-01 09:45:58
  * @FilePath: \wanWanApp\src\pages\expenses\index.vue
  * @Description:
  *
@@ -10,9 +10,9 @@
 -->
 <template>
   <view class="expenses-content">
-    <uni-section title="请选择您的支出类型" type="line"></uni-section>
+    <!-- <uni-section title="请选择您的支出类型" type="line"/> -->
     <view class="grid-container">
-      <uni-grid :column="4">
+      <uni-grid :column="4" :show-border="false">
         <uni-grid-item v-for="(item, i) in tableData" :key="i" @click="handleClick(item)">
           <view style="text-align: center; padding: 20rpx 0">
             <uni-icons :type="item.iconName" :size="28" />
@@ -28,7 +28,7 @@
         <CommonForm
           ref="commonFormRef"
           label-align="right"
-          label-width="140rpx"
+          label-width="150rpx"
           :rules="rules"
           v-model="params"
           :columns="formColumns"
@@ -191,8 +191,14 @@ onMounted(loadShop)
 
 <style lang="scss">
 .expenses-content {
-  width: 100%;
-  height: 100vh;
+  width: 100vw;
+  /* #ifdef APP */
+  padding-bottom: calc(env(safe-area-inset-bottom) - 40rpx);
+  /* #endif */
+
+  /* #ifdef H5 */
+  padding-bottom: var(--window-bottom);
+  /* #endif */
 
   .grid-text {
     font-size: 28rpx;
