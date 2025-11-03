@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-03 15:55:17
+ * @LastEditTime: 2025-11-03 16:09:27
  * @FilePath: \wanWanApp\src\pages\chart\index.vue
  * @Description:
  *
@@ -103,7 +103,6 @@ const options = reactive([
 const month = ref(`${new Date().getFullYear()}-${new Date().getMonth() + 1}`)
 const tableData = ref<any>([])
 const params = ref({
-  userId: 1,
   startDate: utils.getCurrentMonthRange(month.value).firstDay,
   endDate: utils.getCurrentMonthRange(month.value).lastDay,
   page: 1,
@@ -149,7 +148,6 @@ const initList = async () => {
 // 支出总金额
 const initTotal = async () => {
   const { total }: any = await expensesTotal({
-    userId: 1,
     startDate: params.value.startDate,
     endDate: params.value.endDate
   })
