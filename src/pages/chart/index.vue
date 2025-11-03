@@ -116,8 +116,7 @@ const expensesParams = ref<any>({})
 const swipeActionRef = ref<any[]>([] as any[])
 
 const init = async () => {
-  await initList()
-  await initTotal()
+  Promise.all([await initList(), await initTotal()])
 }
 
 // 初始化数据
@@ -126,7 +125,7 @@ const initList = async () => {
   const { list, total }: any = await expensesDetailList(params.value)
   params.value.total = total
 
-  // 重新设计list，需要把每一天的支出都展示出来，[{list:{}, date:2025-01-01, total:0}]
+  // 重新设计list，需要把每一天的支出都展示出来，转成[{list:{}, date:2025-01-01, total:0}]
   const grouped = Object.values(
     list.reduce((acc: any, item: any) => {
       const date = item.create_date.split(' ')[0] // 只取年月日
@@ -140,8 +139,7 @@ const initList = async () => {
   )
 
   tableData.value = [...tableData.value, ...grouped]
-  // 计算总页数
-  const totalPage = Math.ceil(total / params.value.pageSize)
+  const totalPage = Math.ceil(total / params.value.pageSize) // 计算总页数
   status.value = params.value.page >= totalPage ? 'noMore' : 'more'
 }
 
