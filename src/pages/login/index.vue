@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-13 16:12:04
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-10-28 09:20:26
+ * @LastEditTime: 2025-11-04 08:35:28
  * @FilePath: \wanWanApp\src\pages\login\index.vue
  * @Description:
  *
@@ -23,8 +23,8 @@
 </template>
 
 <script setup lang="ts">
+import { login } from '@/services/user'
 import { reactive, ref } from 'vue'
-import { request } from '../../services/request'
 
 const params = reactive({
   user_name: '大帅',
@@ -40,11 +40,11 @@ const onSubmit = () => {
   formRef.value
     .validate()
     .then(async (res: any) => {
-      const { token }: any = await request('/login', 'POST', res)
+      const { token }: any = await login(res)
       console.log('创建成功:', token)
       uni.showToast({ title: '登录成功', icon: 'success' })
       uni.setStorageSync('token', token)
-      uni.navigateTo({ url: '/pages/expenses/index' })
+      uni.switchTab({ url: '/pages/expenses/index' })
     })
     .catch((err: any) => {
       console.error('err', err)
