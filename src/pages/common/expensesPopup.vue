@@ -19,7 +19,7 @@
             @change="(val: number) => handleChange(range, val, 'paymentName')"
           />
         </uni-forms-item>
-        <uni-forms-item label="店铺" name="shopName">
+        <uni-forms-item label="店铺" name="shopId">
           <uni-data-select
             placeholder="请选择店铺"
             v-model="params.shopId"
