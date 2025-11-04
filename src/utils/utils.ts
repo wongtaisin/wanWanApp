@@ -165,6 +165,15 @@ const validateMinLength = (min: number, required: boolean = true) => {
   }
 }
 
+/**
+ * 下划线转驼峰函数
+ * @param str 下划线字符串
+ * @returns 驼峰字符串
+ */
+const snakeToCamel = (str: string): string => {
+  return str.replace(/_([a-z])/g, g => g[1].toUpperCase())
+}
+
 export default {
   deepClone,
   formatDate,
@@ -173,5 +182,6 @@ export default {
   throttle,
   urlJsonList,
   isMobileNumber,
-  validateMinLength
+  validateMinLength,
+  snakeToCamel
 }

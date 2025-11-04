@@ -52,15 +52,21 @@
             @click="onClick($event, item)"
             @change="swipeChange($event, i)"
           >
-            <uni-list-chat
-              :title="item.shop_name"
-              avatar="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png"
-              :note="item.create_date"
-            >
-              <view class="chat-custom-right">
-                <text>-{{ item.money }}</text>
-              </view>
-            </uni-list-chat>
+            <uni-list-item :title="item.shop_name" :note="item.create_date">
+              <template v-slot:header>
+                <image
+                  class="slot-image"
+                  src="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png"
+                  mode="widthFix"
+                  style="width: 86rpx; margin-right: 20rpx"
+                />
+              </template>
+              <template v-slot:footer>
+                <view class="chat-custom-right">
+                  <text>-{{ item.money }}</text>
+                </view>
+              </template>
+            </uni-list-item>
           </uni-swipe-action-item>
         </uni-swipe-action>
       </uni-list>
@@ -81,6 +87,7 @@
 <script setup lang="ts">
 import { expensesDetailDelete, expensesDetailList, expensesTotal } from '@/services/chart'
 import { expensesDetailEdit } from '@/services/expenses'
+import _utils from '@/utils/utils'
 import { onMounted, reactive, ref } from 'vue'
 import ExpensesPopup from '../common/expensesPopup.vue'
 import utils from './utils'
@@ -163,17 +170,25 @@ const onChange = (e: any) => {
 
 const onClick = async (e: any, row: any) => {
   if (e.content.text === '修改') {
-    expensesParams.value = row
-    expensesParams.value.expensesName = row.expenses_name
-    expensesParams.value.shopName = row.shop_name
-    expensesParams.value.paymentName = row.payment_name
-    expensesParams.value.createDate = row.create_date
+    const transformedRow: any = {}
+    Object.entries(row).forEach(([key, value]) => {
+      const camelKey = key.includes('_') ? _utils.snakeToCamel(key) : key
+      transformedRow[camelKey] = value
+    })
+
+    expensesParams.value = transformedRow
+
     // TODO: 需要一个getInfo 要获取到 shopId 和 paymentId，用来显示下拉框的回显
     setTimeout(() => {
       expensesPopupRef.value.open()
     }, 100) // 使用 setTimeout 延迟打开弹窗，避免事件冒泡导致立即关闭
   } else {
-    Promise.all([await expensesDetailDelete(row.id), await init()]) // 删除
+    Promise.all([
+      await expensesDetailDelete(row.id),
+      (tableData.value = []),
+      (params.value.page = 1),
+      init()
+    ]) // 删除
   }
 }
 
@@ -210,6 +225,8 @@ const onSubmit = async (values: any) => {
     } else {
       refs?.closeAll?.()
     }
+    tableData.value = []
+    params.value.page = 1
     init()
   } catch {
     console.error(`报错`)
