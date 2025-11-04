@@ -15,7 +15,10 @@
       <uni-grid :column="4" :show-border="false">
         <uni-grid-item v-for="(item, i) in tableData" :key="i" @click="handleClick(item)">
           <view style="text-align: center; padding: 20rpx 0">
-            <uni-icons :type="item.iconName" :size="28" />
+            <uni-icons :type="item.icon" :size="28" />
+            <svg class="icon">
+              <use :xlink:href="`#${item.icon}`" />
+            </svg>
             <text class="grid-text">{{ item.label }}</text>
           </view>
         </uni-grid-item>
@@ -54,7 +57,7 @@ const initialFormData: FormData = {
 const params = ref<FormData>({ ...initialFormData })
 const popupRef = ref()
 
-const handleClick = (item: { label: string; prop: string; iconName: string }) => {
+const handleClick = (item: { label: string; prop: string; icon: string }) => {
   popupRef.value.open() // 打开弹窗
   params.value = { ...initialFormData }
   params.value.createDate = _utils.formatDate(Date.now(), 'yyyy-MM-dd hh:mm:ss')
@@ -89,26 +92,27 @@ const onSubmit = async (values: any) => {
 }
 
 const tableData = ref([
-  { label: '吃', prop: 'eat', iconName: 'gift' },
-  { label: '喝', prop: 'drink', iconName: 'bag' },
-  { label: '玩', prop: 'play', iconName: 'play-circle' },
-  { label: '乐', prop: 'glad', iconName: 'heart-fill' },
-  { label: '过路费', prop: 'tolls', iconName: 'rmb-circle' },
-  { label: '车油', prop: 'oil', iconName: 'car-fill' },
-  { label: '停车', prop: 'parking', iconName: 'car' },
-  { label: '交通', prop: 'traffic', iconName: 'car' },
-  { label: '超市', prop: 'supermarket', iconName: 'shopping-cart' },
-  { label: '网购', prop: 'online_shopping', iconName: 'shopping-cart-fill' },
-  { label: '话费', prop: 'phone_bill', iconName: 'phone' },
-  { label: '红包', prop: 'red_packet', iconName: 'red-packet' },
-  { label: 'vip', prop: 'vip', iconName: 'star-fill' },
-  { label: '其他', prop: 'other', iconName: 'star-fill' }
+  { label: '吃', prop: 'eat', icon: 'icon-food-mifan' },
+  { label: '喝', prop: 'drink', icon: 'icon-kekoukele2' },
+  { label: '玩', prop: 'play', icon: 'icon-a-GamePadyouxishoubing' },
+  { label: '乐', prop: 'glad', icon: 'icon-zhoubianyule' },
+  { label: '过路费', prop: 'tolls', icon: 'icon-guolufei' },
+  { label: '车油', prop: 'oil', icon: 'icon-jiayouzhan2' },
+  { label: '停车费', prop: 'parking', icon: 'icon-tingchefeiyong' },
+  { label: '交通费', prop: 'traffic', icon: 'icon-gongjiaoche' },
+  { label: '超市', prop: 'supermarket', icon: 'icon-chaoshi2' },
+  { label: '网购', prop: 'online_shopping', icon: 'icon-wanggou' },
+  { label: '话费', prop: 'phone_bill', icon: 'icon-dianhua' },
+  { label: '红包', prop: 'red_packet', icon: 'icon-hongbao2' },
+  { label: 'vip', prop: 'vip', icon: 'icon-vip1' },
+  { label: '其他', prop: 'other', icon: 'icon-qitafeiyong' }
 ])
 </script>
 
 <style lang="scss">
 .expenses-content {
   width: 100vw;
+  margin-top: 40rpx;
   /* #ifdef APP */
   padding-bottom: calc(env(safe-area-inset-bottom) - 40rpx);
   /* #endif */
@@ -129,6 +133,12 @@ const tableData = ref([
     font-weight: bold;
     text-align: center;
     margin-bottom: 30rpx;
+  }
+
+  .icon {
+    width: 80rpx;
+    height: 80rpx;
+    margin: 0 auto;
   }
 }
 </style>
