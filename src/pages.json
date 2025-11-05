@@ -28,7 +28,7 @@
     {
       "path": "pages/user/index",
       "style": {
-        "navigationBarTitleText": "用户中心"
+        "navigationBarTitleText": "个人中心"
       }
     },
     {
