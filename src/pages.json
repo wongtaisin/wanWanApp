@@ -22,7 +22,7 @@
     {
       "path": "pages/chart/index",
       "style": {
-        // "navigationBarTitleText": "图表"
+        "navigationBarTitleText": "流水"
       }
     },
     {
@@ -53,24 +53,24 @@
     }
   },
   "tabBar": {
-    "color": "black",
-    "selectedColor": "#3cc51f",
-    "borderStyle": "black",
-    "backgroundColor": "#ffffff",
-    "position": "bottom",
-    "height": "108rpx",
+    "color": "black", // 未选中图标颜色
+    "selectedColor": "#3cc51f", // 选中图标颜色
+    "borderStyle": "black", // 边框样式，默认值为"black"
+    "backgroundColor": "#ffffff", // 背景颜色
+    "position": "bottom", // 位置，默认值为"bottom"
+    "height": "108rpx", // 高度，增大高度
     "fontSize": "24rpx", // 字体大小，增大字号
     "list": [
       {
-        "pagePath": "pages/expenses/index",
-        "iconPath": "static/image/icon/icon_expenses.png",
-        "selectedIconPath": "static/image/icon/icon_expenses_HL.png",
-        "text": "新增"
+        "pagePath": "pages/expenses/index", // 文件路径
+        "iconPath": "static/image/icon/icon_expenses.png", // 未选中图标
+        "selectedIconPath": "static/image/icon/icon_expenses_HL.png", // 选中图标
+        "text": "新增" // 标题
       },
       {
         "pagePath": "pages/chart/index",
         "iconPath": "static/image/icon/icon_chart.png",
-        "selectedIconPath": "static/image/icon/icon_chart_HL.png", // 选中图标
+        "selectedIconPath": "static/image/icon/icon_chart_HL.png",
         "text": "流水"
       },
       {

@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 15:10:00
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-03 11:46:25
+ * @LastEditTime: 2025-11-05 08:37:25
  * @FilePath: \wanWanApp\src\pages\expenses\index.vue
  * @Description:
  *
@@ -25,15 +25,14 @@
       </uni-grid>
     </view>
 
-    <ExpensesPopup ref="popupRef" v-model="params" @onSubmit="onSubmit" />
+    <CommonExpensesPopup ref="popupRef" v-model="params" @onSubmit="onSubmit" />
   </view>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { request } from '@/services/request'
 import _utils from '@/utils/utils'
 import { ref } from 'vue'
-import ExpensesPopup from '../common/expensesPopup.vue'
 
 interface FormData {
   expensesName: string
@@ -109,7 +108,7 @@ const tableData = ref([
 ])
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .expenses-content {
   width: 100vw;
   margin-top: 40rpx;

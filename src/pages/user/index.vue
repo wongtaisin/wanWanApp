@@ -22,7 +22,7 @@
   </view>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { reactive, ref } from 'vue'
 import { request } from '../../services/request'
 

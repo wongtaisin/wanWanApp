@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-03 16:09:27
+ * @LastEditTime: 2025-11-05 08:34:58
  * @FilePath: \wanWanApp\src\pages\chart\index.vue
  * @Description:
  *
@@ -76,7 +76,7 @@
     </scroll-view>
   </view>
 
-  <ExpensesPopup
+  <CommonExpensesPopup
     ref="expensesPopupRef"
     title="编辑"
     v-model="expensesParams"
@@ -84,12 +84,11 @@
   />
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { expensesDetailDelete, expensesDetailList, expensesTotal } from '@/services/chart'
 import { expensesDetailEdit } from '@/services/expenses'
 import _utils from '@/utils/utils'
 import { onMounted, reactive, ref } from 'vue'
-import ExpensesPopup from '../common/expensesPopup.vue'
 import utils from './utils'
 
 const options = reactive([
@@ -240,7 +239,7 @@ onMounted(() => {
 })
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .chart-page {
   padding-bottom: 108rpx;
   .top {

@@ -22,7 +22,7 @@
   </view>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { login } from '@/services/user'
 import { reactive, ref } from 'vue'
 

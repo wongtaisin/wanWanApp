@@ -39,7 +39,7 @@
   </uni-popup>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { request } from '@/services/request'
 import { computed, onMounted, ref } from 'vue'
 
@@ -129,7 +129,7 @@ defineExpose({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .popup-title {
   font-size: 34rpx;
   font-weight: bold;
