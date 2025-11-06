@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-06 08:37:35
+ * @LastEditTime: 2025-11-06 11:23:02
  * @FilePath: \wanWanApp\src\pages\chart\index.vue
  * @Description:
  *
@@ -10,262 +10,147 @@
 -->
 <template>
   <view class="chart-page">
-    <scroll-view scroll-y style="height: calc(100vh - 188rpx)" @scrolltolower="loadMore">
-      <uni-row class="top">
-        <uni-col :span="8">
-          <text class="text">{{ month.slice(0, 4) }}年</text>
-          <CommonMothPicker v-model="month" @change="onChange">
-            <p class="money">
-              {{ month.slice(5, 7) }}
-              <text style="font-size: 28rpx">月</text>
-            </p>
-          </CommonMothPicker>
-        </uni-col>
-        <uni-col :span="8">
-          <text class="text">消费笔数</text>
-          <p class="money">{{ params.total }}</p>
-        </uni-col>
-        <uni-col :span="8">
-          <text class="text">支出</text>
-          <p class="money">{{ moneyTotal }}</p>
-        </uni-col>
-      </uni-row>
+    <view class="chart-segmented-container">
+      <uni-segmented-control
+        :current="current"
+        :values="items"
+        style-type="button"
+        active-color="#343233"
+        @clickItem="onClickItem"
+      />
+    </view>
 
-      <uni-list v-for="group in tableData" :key="group.date">
-        <view class="list-top">
-          <uni-row>
-            <uni-col :span="12">
-              <text>{{ group.date }}</text>
-            </uni-col>
-            <uni-col :span="12" style="text-align: right">
-              <text>支出：{{ group.total }}</text>
-            </uni-col>
-          </uni-row>
-        </view>
-
-        <uni-swipe-action ref="swipeActionRef">
-          <!-- 右侧带角标 -->
-          <uni-swipe-action-item
-            v-for="(item, i) in group.list"
-            :key="item.id"
-            :right-options="options"
-            @click="onClick($event, item)"
-            @change="swipeChange($event, i)"
-          >
-            <uni-list-item :title="item.shop_name || item.remark" :note="item.create_date">
-              <template v-slot:header>
-                <image
-                  class="slot-image"
-                  src="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png"
-                  mode="widthFix"
-                  style="width: 86rpx; margin-right: 20rpx"
-                />
-              </template>
-              <template v-slot:footer>
-                <view class="chat-custom-right">
-                  <text>-{{ item.money }}</text>
-                </view>
-              </template>
-            </uni-list-item>
-          </uni-swipe-action-item>
-        </uni-swipe-action>
-      </uni-list>
-
-      <!-- 加载提示 -->
-      <uni-load-more :status="status" />
-    </scroll-view>
+    <uni-list v-for="item in Object.keys(tableData)">
+      <uni-list-item
+        :title="classify[item].label"
+        :note="`${tableData[item]} 元 / ${totals} 元 = ${Number(
+          ((tableData[item] / totals) * 100).toFixed(2)
+        )}%`"
+        link
+      >
+        <template v-slot:header>
+          <svg class="slot-icon">
+            <use :xlink:href="`#${classify[item].icon}`" />
+          </svg>
+        </template>
+        <!-- <template v-slot:body>
+          <view class="slot-box">
+            <view class="slot-text">
+              <view>
+                {{ classify[item].label }}
+                {{ Number(((tableData[item] / totals) * 100).toFixed(2)) }}%
+              </view>
+              <view>
+                {{ tableData[item] }}
+              </view>
+            </view>
+            <CommonProgress
+              style="margin-top: 20rpx"
+              :percent="Number(((tableData[item] / totals) * 100).toFixed(2))"
+              :height="12"
+              active
+            />
+          </view>
+        </template> -->
+        <template v-slot:footer>
+          <text class="slot-text">{{ tableData[item] }}</text>
+        </template>
+      </uni-list-item>
+    </uni-list>
   </view>
-
-  <CommonExpensesPopup
-    ref="expensesPopupRef"
-    title="编辑"
-    v-model="expensesParams"
-    @onSubmit="onSubmit"
-  />
 </template>
 
 <script lang="ts" setup>
-import { expensesDetailDelete, expensesDetailList, expensesTotal } from '@/services/chart'
-import { expensesDetailEdit } from '@/services/expenses'
-import _utils from '@/utils/utils'
-import { onMounted, reactive, ref } from 'vue'
-import utils from './utils'
+import { expensesCheck } from "@/services/chart";
+import { onMounted, reactive, ref } from "vue";
+import utils from "./utils";
 
-const options = reactive([
-  {
-    text: '删除',
-    style: {
-      backgroundColor: '#dd524d'
-    }
-  },
-  {
-    text: '修改',
-    style: {
-      backgroundColor: '#007aff'
-    }
-  }
-])
-
-const month = ref(`${new Date().getFullYear()}-${new Date().getMonth() + 1}`)
-const tableData = ref<any>([])
+const month = ref(`${new Date().getFullYear()}-${new Date().getMonth() + 1}`);
 const params = ref({
   startDate: utils.getCurrentMonthRange(month.value).firstDay,
   endDate: utils.getCurrentMonthRange(month.value).lastDay,
-  page: 1,
-  pageSize: 10,
-  total: 0 // 传了后台也不接受，只用作显示消费笔数
-})
-const status = ref('more') // more/loading/noMore
-const moneyTotal = ref(0)
-const expensesPopupRef = ref()
-const expensesParams = ref<any>({})
-const swipeActionRef = ref<any[]>([] as any[])
+});
+const items = reactive(["周", "月", "年"]);
+const current = ref(0);
+const classify: any = {
+  eat: { label: "吃", icon: "icon-food-mifan" },
+  drink: { label: "喝", icon: "icon-kekoukele2" },
+  play: { label: "玩", icon: "icon-a-GamePadyouxishoubing" },
+  glad: { label: "乐", icon: "icon-zhoubianyule" },
+  tolls: { label: "过路费", icon: "icon-guolufei" },
+  oil: { label: "车油", icon: "icon-jiayouzhan2" },
+  parking: { label: "停车费", icon: "icon-tingchefeiyong" },
+  traffic: { label: "交通费", icon: "icon-gongjiaoche" },
+  supermarket: { label: "超市", icon: "icon-chaoshi2" },
+  online_shopping: { label: "网购", icon: "icon-wanggou" },
+  phone_bill: { label: "话费", icon: "icon-dianhua" },
+  red_packet: { label: "红包", icon: "icon-hongbao2" },
+  vip: { label: "vip", icon: "icon-vip1" },
+  other: { label: "其他", icon: "icon-qitafeiyong" },
+};
+const tableData = ref<any>({});
+const totals = ref(0);
+
+const onClickItem = (e: any) => {
+  if (current.value !== e.currentIndex) {
+    current.value = e.currentIndex;
+  }
+};
 
 const init = async () => {
-  Promise.all([await initList(), await initTotal()])
-}
-
-// 初始化数据
-const initList = async () => {
-  status.value = 'loading'
-  const { list, total }: any = await expensesDetailList(params.value)
-  params.value.total = total
-
-  // 重新设计list，需要把每一天的支出都展示出来，转成[{list:{}, date:2025-01-01, total:0}]
-  const grouped = Object.values(
-    list.reduce((acc: any, item: any) => {
-      const date = item.create_date.split(' ')[0] // 只取年月日
-      if (!acc[date]) {
-        acc[date] = { date, list: [], total: 0 }
-      }
-      acc[date].list.push(item)
-      acc[date].total += parseFloat(item.money)
-      return acc
-    }, {})
-  )
-
-  tableData.value = [...tableData.value, ...grouped]
-  const totalPage = Math.ceil(total / params.value.pageSize) // 计算总页数
-  status.value = params.value.page >= totalPage ? 'noMore' : 'more'
-}
-
-// 支出总金额
-const initTotal = async () => {
-  const { total }: any = await expensesTotal({
+  const { sum, total } = await expensesCheck({
+    name: [
+      "eat",
+      "drink",
+      "play",
+      "glad",
+      "tolls",
+      "oil",
+      "parking",
+      "traffic",
+      "supermarket",
+      "online_shopping",
+      "phone_bill",
+      "red_packet",
+      "vip",
+      "other",
+    ],
     startDate: params.value.startDate,
-    endDate: params.value.endDate
-  })
-  moneyTotal.value = total || 0
-}
+    endDate: params.value.endDate,
+  });
 
-const onChange = (e: any) => {
-  month.value = e // 可设置可不设置，因为组件里使用了双向绑定
-  params.value.startDate = utils.getCurrentMonthRange(month.value).firstDay
-  params.value.endDate = utils.getCurrentMonthRange(month.value).lastDay
-  tableData.value = []
-  params.value.page = 1
-  init()
-}
-
-const onClick = async (e: any, row: any) => {
-  if (e.content.text === '修改') {
-    const transformedRow: any = {}
-    Object.entries(row).forEach(([key, value]) => {
-      const camelKey = key.includes('_') ? _utils.snakeToCamel(key) : key
-      transformedRow[camelKey] = value
-    })
-
-    expensesParams.value = transformedRow
-
-    // TODO: 需要一个getInfo 要获取到 shopId 和 paymentId，用来显示下拉框的回显
-    setTimeout(() => {
-      expensesPopupRef.value.open()
-    }, 100) // 使用 setTimeout 延迟打开弹窗，避免事件冒泡导致立即关闭
-  } else {
-    Promise.all([
-      await expensesDetailDelete(row.id),
-      (tableData.value = []),
-      (params.value.page = 1),
-      init()
-    ]) // 删除
-  }
-}
-
-const swipeChange = (e: any, index: number) => {
-  console.log(e, index)
-}
-
-const loadMore = () => {
-  if (status.value !== 'more') return
-  params.value.page++
-  initList()
-}
-
-const onSubmit = async (values: any) => {
-  // 清理空字符串
-  Object.keys(expensesParams.value).forEach(key => {
-    if (expensesParams.value[key] === '') {
-      delete expensesParams.value[key]
-    }
-  })
-
-  console.log(values, `编辑消费`, expensesParams.value)
-
-  try {
-    await expensesDetailEdit(expensesParams.value)
-    uni.showToast({
-      title: `编辑成功`,
-      icon: 'success'
-    })
-    const refs: any = swipeActionRef.value
-    // 优化：兼容 ref="swipeActionRef" 可能为数组或单个实例，统一关闭所有 swipeAction 实例
-    if (Array.isArray(refs)) {
-      refs.forEach(inst => inst?.closeAll?.())
-    } else {
-      refs?.closeAll?.()
-    }
-    tableData.value = []
-    params.value.page = 1
-    init()
-  } catch {
-    console.error(`报错`)
-  } finally {
-    expensesPopupRef.value.close()
-  }
-}
+  tableData.value = { ...sum };
+  totals.value = total;
+};
 
 onMounted(() => {
-  init()
-})
+  init();
+});
 </script>
 
 <style lang="scss" scoped>
 .chart-page {
-  padding-bottom: 108rpx;
-  .top {
-    padding: 20rpx;
+  .chart-segmented-container {
     background: #fede2b;
-
-    .text {
-      color: #7c7b7b;
-    }
-
-    .money {
-      margin-top: 20rpx;
-      font-size: 46rpx;
-    }
+    padding: 0 40rpx;
+    padding-bottom: 20rpx;
   }
 
-  .list-top {
-    padding: 0 30rpx;
-    line-height: 68rpx;
-    color: #a0a0a0;
+  .slot-icon {
+    width: 80rpx;
+    height: 80rpx;
+    margin-right: 20rpx;
   }
 
-  .chat-custom-right {
+  .slot-box {
+    width: 100%;
+  }
+
+  .slot-text {
     display: flex;
     align-items: center;
-    height: 68rpx;
+    justify-content: space-between;
+    color: #333;
   }
 }
 </style>

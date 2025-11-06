@@ -77,6 +77,12 @@
         "pagePath": "pages/chart/index",
         "iconPath": "static/image/icon/icon_chart.png",
         "selectedIconPath": "static/image/icon/icon_chart_HL.png",
+        "text": "图表"
+      },
+      {
+        "pagePath": "pages/spend/index",
+        "iconPath": "static/image/icon/icon_spend.png",
+        "selectedIconPath": "static/image/icon/icon_spend_HL.png",
         "text": "流水"
       },
       {

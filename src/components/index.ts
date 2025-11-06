@@ -12,12 +12,14 @@ import type { Component } from 'vue'
 import CommonForm from './CommonForm.vue'
 import ExpensesPopup from './expensesPopup.vue'
 import MothPicker from './mothPicker.vue'
+import Progress from './progress.vue'
 
 // 全局组件注册配置
 const components: Array<{ name: string; component: Component }> = [
   { name: 'CommonForm', component: CommonForm },
   { name: 'CommonMothPicker', component: MothPicker },
-  { name: 'CommonExpensesPopup', component: ExpensesPopup }
+  { name: 'CommonExpensesPopup', component: ExpensesPopup },
+  { name: 'CommonProgress', component: Progress }
 ]
 
 export default components
