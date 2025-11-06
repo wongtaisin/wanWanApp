@@ -119,6 +119,7 @@ const formColumns = ref([
     disabled: true
   },
   { prop: 'money', label: '金额', placeholder: '请输入金额', required: true }
+  // { prop: 'shopName', label: '店铺', placeholder: '请输入店铺' }
 ])
 
 onMounted(loadShop)

@@ -20,9 +20,15 @@
       }
     },
     {
-      "path": "pages/chart/index",
+      "path": "pages/spend/index",
       "style": {
         "navigationBarTitleText": "流水"
+      }
+    },
+    {
+      "path": "pages/chart/index",
+      "style": {
+        "navigationBarTitleText": "图表"
       }
     },
     {
