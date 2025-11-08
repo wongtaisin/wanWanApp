@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-06 15:28:57
+ * @LastEditTime: 2025-11-07 15:22:35
  * @FilePath: \wanWanApp\src\pages\chart\index.vue
  * @Description:
  *
@@ -124,9 +124,9 @@ const onClickItem = (e: any) => {
 const getWeekRange = () => {
   const now = new Date()
   const day = now.getDay() // 0 (周日) - 6 (周六)
-  const diffToMonday = (day === 0 ? -6 : 1) - day
-  const weekStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() + diffToMonday)
-  const weekEnd = new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + 6)
+  const diffToMonday = (day === 0 ? -6 : 1) - day // 周一与当前日期的差值
+  const weekStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() + diffToMonday) // 周一
+  const weekEnd = new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + 6) // 周日
 
   const fmt = (d: Date) =>
     `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(

@@ -2,13 +2,14 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-01-09 11:50:03
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-05 08:38:57
+ * @LastEditTime: 2025-11-08 16:43:06
  * @FilePath: \wanWanApp\src\components\index.ts
  * @Description:
  *
  * Copyright (c) 2025 by wongtaisin1024@gmail.com, All Rights Reserved.
  */
 import type { Component } from 'vue'
+import AutoUploadFile from './autoUploadFile.vue'
 import CommonForm from './CommonForm.vue'
 import ExpensesPopup from './expensesPopup.vue'
 import MothPicker from './mothPicker.vue'
@@ -19,7 +20,8 @@ const components: Array<{ name: string; component: Component }> = [
   { name: 'CommonForm', component: CommonForm },
   { name: 'CommonMothPicker', component: MothPicker },
   { name: 'CommonExpensesPopup', component: ExpensesPopup },
-  { name: 'CommonProgress', component: Progress }
+  { name: 'CommonProgress', component: Progress },
+  { name: 'CommonAutoUploadFile', component: AutoUploadFile }
 ]
 
 export default components
