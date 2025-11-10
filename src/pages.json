@@ -44,7 +44,7 @@
       }
     },
     {
-      "path": "pages/shop/index",
+      "path": "pages/shop/indexedList",
       "style": {
         "navigationBarTitleText": "店铺",
         "navigationStyle": "custom"

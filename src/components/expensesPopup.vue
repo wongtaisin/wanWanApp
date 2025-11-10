@@ -100,7 +100,7 @@ const handleChange = (list: any[], val: number, name: string) => {
 
 const handleShopSelect = () => {
   uni.navigateTo({
-    url: '/pages/shop/index'
+    url: '/pages/shop/indexedList'
   })
 }
 

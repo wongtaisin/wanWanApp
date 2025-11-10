@@ -15,4 +15,9 @@ const shopAll = async () => {
   return res
 }
 
-export { shopAll }
+const shopAdd = async (params: any) => {
+  const res: any = await request('/shop/add', 'POST', params)
+  return res
+}
+
+export { shopAdd, shopAll }
