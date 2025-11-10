@@ -44,9 +44,16 @@
       }
     },
     {
-      "path": "components/shopIndexedList",
+      "path": "pages/shop/index",
       "style": {
-        "navigationBarTitleText": "店铺"
+        "navigationBarTitleText": "店铺",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/shop/add",
+      "style": {
+        "navigationBarTitleText": "新增店铺"
       }
     }
   ],

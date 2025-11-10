@@ -100,7 +100,7 @@ const handleChange = (list: any[], val: number, name: string) => {
 
 const handleShopSelect = () => {
   uni.navigateTo({
-    url: '/components/shopIndexedList'
+    url: '/pages/shop/index'
   })
 }
 
@@ -140,7 +140,6 @@ const formColumns = ref([
 onShow(() => {
   params.value.shopId = userShop.data?.id
   params.value.shopName = userShop.data?.name
-  console.log(userShop.data)
 })
 
 defineExpose({
