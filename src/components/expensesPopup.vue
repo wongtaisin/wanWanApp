@@ -19,6 +19,7 @@
             @change="(val: number) => handleChange(range, val, 'paymentName')"
           />
         </uni-forms-item>
+
         <uni-forms-item label="店铺" name="shopId">
           <uni-data-select
             placeholder="请选择店铺"
@@ -27,6 +28,16 @@
             @change="(val: number) => handleChange(shopLocal, val, 'shopName')"
           />
         </uni-forms-item>
+
+        <!-- <uni-forms-item label="图片" name="image">
+          <CommonAutoUploadFile
+            limit="1"
+            upload-url="/api/common/upload"
+            file-mediatype="image"
+            @success="handleUploadSuccess"
+          />
+        </uni-forms-item> -->
+
         <uni-forms-item label="备注" name="remark">
           <uni-easyinput type="textarea" v-model="params.remark" placeholder="请输入备注" />
         </uni-forms-item>
@@ -40,7 +51,7 @@
 </template>
 
 <script lang="ts" setup>
-import { request } from '@/services/request'
+import { shopAll } from '@/services/common'
 import { computed, onMounted, ref } from 'vue'
 
 interface Props {
@@ -67,12 +78,18 @@ const shopLocal = ref()
 const emits = defineEmits(['onSubmit'])
 
 const loadShop = async () => {
-  const res: any = await request('/shop/all', 'GET')
+  const res: any = await shopAll()
   shopLocal.value = res.map((item: any) => ({
     value: item.id,
     text: item.shop_name
   }))
 }
+
+// const handleUploadSuccess = (data: any) => {
+//   // 存储上传成功后的图片URL
+//   params.value.image = data.url
+//   console.log('上传成功，图片URL:', data.url)
+// }
 
 const onSubmit = async (values: any) => {
   emits('onSubmit', values)

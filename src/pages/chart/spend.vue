@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-06 14:35:26
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-06 16:01:01
+ * @LastEditTime: 2025-11-10 10:14:05
  * @FilePath: \wanWanApp\src\pages\chart\spend.vue
  * @Description:
  *
@@ -51,7 +51,7 @@ const params = ref(initialFormData)
 const status = ref('more') // more/loading/noMore
 const popupRef = ref()
 
-const opens = (rows: any) => {
+const open = (rows: any) => {
   params.value = { ...initialFormData, ...rows }
   tableData.value = []
   init()
@@ -73,7 +73,7 @@ const loadMore = () => {
 }
 
 defineExpose({
-  opens,
+  opens: (rows: any) => open(rows),
   close: () => popupRef.value.close()
 })
 </script>
