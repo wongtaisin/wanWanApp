@@ -20,15 +20,6 @@
           />
         </uni-forms-item>
 
-        <!-- <uni-forms-item label="店铺" name="shopId">
-          <uni-data-select
-            placeholder="请选择店铺"
-            v-model="params.shopId"
-            :localdata="shopLocal"
-            @change="(val: number) => handleChange(shopLocal, val, 'shopName')"
-          />
-        </uni-forms-item> -->
-
         <uni-forms-item label="店铺" name="shopId">
           <uni-easyinput
             v-model="params.shopName"
@@ -59,10 +50,9 @@
 </template>
 
 <script lang="ts" setup>
-import { shopAll } from '@/services/common'
 import { useShop } from '@/store/common'
 import { onShow } from '@dcloudio/uni-app'
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 
 interface Props {
   title?: string
@@ -85,16 +75,7 @@ const userShop = useShop()
 const modelValue = defineModel<FormData>('modelValue', { default: {} })
 const params = computed(() => modelValue.value)
 const popupRef = ref()
-const shopLocal = ref()
 const emits = defineEmits(['onSubmit'])
-
-const loadShop = async () => {
-  const res: any = await shopAll()
-  shopLocal.value = res.map((item: any) => ({
-    value: item.id,
-    text: item.shop_name
-  }))
-}
 
 // const handleUploadSuccess = (data: any) => {
 //   // 存储上传成功后的图片URL
@@ -160,10 +141,6 @@ onShow(() => {
   params.value.shopId = userShop.data?.id
   params.value.shopName = userShop.data?.name
   console.log(userShop.data)
-})
-
-onMounted(() => {
-  loadShop()
 })
 
 defineExpose({
