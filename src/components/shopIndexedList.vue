@@ -10,11 +10,46 @@
         {{ selectedItem ? selectedItem.name : '无' }}
       </text>
     </view>
+
+    <uni-fab
+      :pattern="{
+        color: '#7A7E83',
+        backgroundColor: '#fff',
+        selectedColor: '#007AFF',
+        buttonColor: '#007AFF',
+        iconColor: '#fff'
+      }"
+      :content="[
+        {
+          iconPath: '/static/home.png',
+          selectedIconPath: '/static/home-active.png',
+          text: '首页',
+          active: false
+        },
+        {
+          iconPath: '/static/image/icon/icon_spend.png',
+          selectedIconPath: '/static/image/icon/icon_spend_HL.png',
+          text: '新增',
+          active: false
+        },
+        {
+          iconPath: '/static/star.png',
+          selectedIconPath: '/static/star-active.png',
+          text: '收藏',
+          active: false
+        }
+      ]"
+      horizontal="right"
+      vertical="bottom"
+      direction="horizontal"
+      @trigger="trigger"
+    ></uni-fab>
   </view>
 </template>
 
 <script lang="ts" setup>
 import { shopAll } from '@/services/common'
+import { useShop } from '@/store/common'
 import pinyin from 'pinyin'
 import { computed, onMounted, ref } from 'vue'
 
@@ -54,6 +89,8 @@ const rawList = ref<Group[]>([
     ]
   }
 ])
+
+const userShop = useShop()
 
 const loadShop = async () => {
   const res: any = await shopAll()
@@ -134,13 +171,18 @@ const computedOptions = computed(() =>
 
 /** 点击事件 */
 const onItemClick = ({ item, selected }: any) => {
-  console.log('点击了：', item)
   const name: string = item.name
   const cleanName = name.replace(/^✅\s*/, '') // 去掉选中标识
   const id = nameMap.value[cleanName]
   if (!id) return
   selectedItem.value = { id, name: cleanName }
-  console.log('当前选中：', selectedItem.value)
+
+  userShop.setUseShop(selectedItem.value) // 存储当前选中的店铺
+  uni.navigateBack()
+}
+
+const trigger = (index: number) => {
+  console.log('点击了第', index, '个按钮')
 }
 
 onMounted(() => {

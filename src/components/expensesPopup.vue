@@ -20,12 +20,20 @@
           />
         </uni-forms-item>
 
-        <uni-forms-item label="店铺" name="shopId">
+        <!-- <uni-forms-item label="店铺" name="shopId">
           <uni-data-select
             placeholder="请选择店铺"
             v-model="params.shopId"
             :localdata="shopLocal"
             @change="(val: number) => handleChange(shopLocal, val, 'shopName')"
+          />
+        </uni-forms-item> -->
+
+        <uni-forms-item label="店铺" name="shopId">
+          <uni-easyinput
+            v-model="params.shopName"
+            placeholder="点击选择店铺"
+            @focus="handleShopSelect"
           />
         </uni-forms-item>
 
@@ -52,6 +60,8 @@
 
 <script lang="ts" setup>
 import { shopAll } from '@/services/common'
+import { useShop } from '@/store/common'
+import { onShow } from '@dcloudio/uni-app'
 import { computed, onMounted, ref } from 'vue'
 
 interface Props {
@@ -71,6 +81,7 @@ interface FormData {
   [key: string]: string | number | Record<string, any>[] | undefined | null | any
 }
 
+const userShop = useShop()
 const modelValue = defineModel<FormData>('modelValue', { default: {} })
 const params = computed(() => modelValue.value)
 const popupRef = ref()
@@ -106,6 +117,12 @@ const handleChange = (list: any[], val: number, name: string) => {
   params.value[name] = found?.text ?? ''
 }
 
+const handleShopSelect = () => {
+  uni.navigateTo({
+    url: '/components/shopIndexedList'
+  })
+}
+
 const range = [
   { value: 1, text: '现金' },
   { value: 2, text: '微信支付' },
@@ -139,10 +156,21 @@ const formColumns = ref([
   // { prop: 'shopName', label: '店铺', placeholder: '请输入店铺' }
 ])
 
-onMounted(loadShop)
+onShow(() => {
+  params.value.shopId = userShop.data?.id
+  params.value.shopName = userShop.data?.name
+  console.log(userShop.data)
+})
+
+onMounted(() => {
+  loadShop()
+})
 
 defineExpose({
-  open: () => popupRef.value.open(),
+  open: () => {
+    popupRef.value.open()
+    userShop.setUseShop(undefined)
+  },
   close: () => popupRef.value.close()
 })
 </script>
