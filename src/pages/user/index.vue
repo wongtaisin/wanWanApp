@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:33:29
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-05 13:48:46
+ * @LastEditTime: 2025-11-11 14:50:52
  * @FilePath: \wanWanApp\src\pages\user\index.vue
  * @Description:
  *
@@ -17,7 +17,7 @@
             src="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png"
             class="avatar"
           />
-          <text>1111</text>
+          <text>大帅</text>
         </uni-col>
         <uni-col :span="6" :push="6">
           <uni-tag
@@ -30,12 +30,33 @@
     </view>
 
     <uni-card :is-shadow="false" class="user-card">
-      <text>这是一个基础卡片示例，内容较少，此示例展示了一个没有任何属性不带阴影的卡片。</text>
+      <uni-grid :column="4" :showBorder="false" :square="false">
+        <uni-grid-item v-for="item in cardGrid" @click="handleClick(item)">
+          <view class="card-grid">
+            <view v-if="item.badge" class="grid-dot">
+              <uni-badge class="uni-badge-left-margin" :text="item.badge" />
+            </view>
+            <uni-icons :type="item.icon" :size="28" />
+            <view>
+              <text>{{ item.label }}</text>
+            </view>
+          </view>
+        </uni-grid-item>
+      </uni-grid>
     </uni-card>
   </view>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const cardGrid = [
+  { label: '店铺', prop: 'eat', icon: 'shop', url: '/pages/shop/index', badge: 3 },
+  { label: '设置', prop: 'eat', icon: 'gear-filled' }
+]
+
+const handleClick = (item: any) => {
+  uni.navigateTo({ url: item.url })
+}
+</script>
 
 <style scoped lang="scss">
 .user-page {
@@ -63,6 +84,17 @@
 
   .user-card {
     margin-top: -40rpx !important;
+
+    .card-grid {
+      text-align: center;
+      padding-top: 20rpx;
+    }
+
+    .grid-dot {
+      position: absolute;
+      top: 0rpx;
+      right: 30rpx;
+    }
   }
 }
 </style>

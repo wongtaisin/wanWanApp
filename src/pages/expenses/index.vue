@@ -15,7 +15,6 @@
       <uni-grid :column="4" :show-border="false">
         <uni-grid-item v-for="(item, i) in tableData" :key="i" @click="handleClick(item)">
           <view style="text-align: center; padding: 20rpx 0">
-            <uni-icons :type="item.icon" :size="28" />
             <svg class="icon">
               <use :xlink:href="`#${item.icon}`" />
             </svg>

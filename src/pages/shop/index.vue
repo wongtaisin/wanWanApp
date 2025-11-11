@@ -1,219 +1,89 @@
 <template>
-  <view class="indexed-select">
-    <!-- 索引列表 -->
-    <uni-indexed-list :options="computedOptions" :showSelect="false" @click="onItemClick" />
-
-    <!-- 底部显示当前选中项 -->
-    <view class="footer">
-      当前选择：
-      <text class="selected-text">
-        {{ selectedItem ? selectedItem.name : '无' }}
-      </text>
-    </view>
-
-    <uni-fab
-      :pattern="{
-        color: '#7A7E83',
-        backgroundColor: '#fff',
-        selectedColor: '#007AFF',
-        buttonColor: '#007AFF',
-        iconColor: '#fff'
-      }"
-      :content="[
-        {
-          iconPath: '/static/home.png',
-          selectedIconPath: '/static/home-active.png',
-          text: '首页',
-          active: false
-        },
-        {
-          iconPath: '/static/image/icon/icon_spend.png',
-          selectedIconPath: '/static/image/icon/icon_spend_HL.png',
-          text: '新增',
-          active: false
-        },
-        {
-          iconPath: '/static/star.png',
-          selectedIconPath: '/static/star-active.png',
-          text: '收藏',
-          active: false
-        }
-      ]"
-      horizontal="right"
-      vertical="bottom"
-      direction="horizontal"
-      @trigger="trigger"
-    />
-  </view>
+  <scroll-view scroll-y style="height: calc(100vh - 22rpx)" @scrolltolower="loadMore">
+    <uni-list>
+      <uni-swipe-action ref="swipeActionRef">
+        <!-- 右侧带角标 -->
+        <uni-swipe-action-item
+          v-for="(item, i) in tableData"
+          :key="item.id"
+          :right-options="[
+            { text: '删除', style: { backgroundColor: '#dd524d' } },
+            { text: '修改', style: { backgroundColor: '#007aff' } }
+          ]"
+          @click="onClick($event, item, i)"
+          @change="swipeChange($event, i)"
+        >
+          <uni-list-item :title="item.shop_name" :note="item.create_date">
+            <template v-slot:header>
+              <image
+                class="slot-image"
+                src="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png"
+                mode="widthFix"
+                style="width: 86rpx; margin-right: 20rpx"
+              />
+            </template>
+            <template v-slot:footer>
+              <view class="chat-custom-right">
+                <text>-{{ item.money }}</text>
+              </view>
+            </template>
+          </uni-list-item>
+        </uni-swipe-action-item>
+      </uni-swipe-action>
+    </uni-list>
+    <!-- 加载提示 -->
+    <uni-load-more :status="status" />
+  </scroll-view>
 </template>
 
 <script lang="ts" setup>
-import { shopAll } from '@/services/shop'
-import { useShop } from '@/store/common'
-import pinyin from 'pinyin'
-import { computed, onMounted, ref } from 'vue'
+import { shopList } from '@/services/shop'
+import { onMounted, ref } from 'vue'
 
-/** 单项类型 */
-interface Item {
-  id: number
-  name: string
-}
-
-/** 分组类型 */
-interface Group {
-  letter: string
-  data: Item[]
-}
-
-/** 原始数据（对象结构） */
-const rawList = ref<Group[]>([
-  {
-    letter: 'A',
-    data: [
-      { id: 1, name: '阿里巴巴' },
-      { id: 2, name: '安踏' }
-    ]
-  },
-  {
-    letter: 'B',
-    data: [
-      { id: 3, name: '百度' },
-      { id: 4, name: '比亚迪' }
-    ]
-  },
-  {
-    letter: 'C',
-    data: [
-      { id: 5, name: '长城汽车' },
-      { id: 6, name: '长沙银行' }
-    ]
-  }
-])
-
-const userShop = useShop()
-
-const loadShop = async () => {
-  const res: any = await shopAll()
-  const list = res.map((item: any) => ({
-    id: item.id,
-    name: item.shop_name
-  }))
-
-  const groupedList = list.reduce((acc: Group[], item: Item) => {
-    const firstChar = item.name.charAt(0)
-
-    // 英文字母直接使用大写字母；数字/符号归到 '#'
-    if (/[A-Za-z]/.test(firstChar)) {
-      const firstLetter = firstChar.toUpperCase()
-      const group = acc.find(g => g.letter === firstLetter)
-      if (group) group.data.push(item)
-      else acc.push({ letter: firstLetter, data: [item] })
-      return acc
-    }
-
-    // 尝试用 pinyin 库取首字母
-    let firstLetter = '#'
-    try {
-      // pinyin 返回形如 [['z']] 的数组，使用 STYLE_FIRST_LETTER 可以直接取得首字母
-      const py = pinyin(firstChar, { style: pinyin.STYLE_FIRST_LETTER })
-      if (py && py[0] && py[0][0]) {
-        const l = String(py[0][0]).toUpperCase()
-        if (/[A-Z]/.test(l)) firstLetter = l
-      }
-    } catch (e) {
-      // ignore -> keep '#'
-    }
-
-    const group = acc.find(g => g.letter === firstLetter)
-    if (group) {
-      group.data.push(item)
-    } else {
-      acc.push({ letter: firstLetter, data: [item] })
-    }
-    return acc
-  }, [])
-
-  // 按字母排序，'#' 放在最后
-  const sortedList = groupedList.sort((a: { letter: string }, b: { letter: string }) => {
-    if (a.letter === '#') return 1
-    if (b.letter === '#') return -1
-    return a.letter.localeCompare(b.letter)
-  })
-
-  rawList.value = sortedList
-  console.log(sortedList, '分组后的数据（按中文首字母 / 英文字母分组）')
-}
-
-/** 当前选中项 */
-const selectedItem = ref<Item | null>(null)
-
-/** 名称 → ID 映射表 */
-const nameMap = computed(() => {
-  const map: Record<string, number> = {}
-  rawList.value.forEach(group => {
-    group.data.forEach(item => {
-      map[item.name] = item.id
-    })
-  })
-  return map
+const status = ref('more') // more/loading/noMore
+const params = ref({
+  page: 1,
+  pageSize: 15
 })
+const tableData = ref<any>([])
+const swipeActionRef = ref()
 
-/** 生成供 uni-indexed-list 使用的字符串数据 */
-const computedOptions = computed(() =>
-  rawList.value.map(group => ({
-    letter: group.letter,
-    data: group.data.map(item => {
-      const checked = selectedItem.value?.id === item.id
-      return checked ? `✅ ${item.name}` : item.name
-    })
-  }))
-)
+const onClick = async (e: any, row: any, i: number) => {
+  if (e.content.text === '修改') {
+    // await shopEdit(row.id)
+    console.log(`修改`)
+  } else {
+    Promise.all([
+      // await shopDelete(row.id),
+      tableData.value.splice(0, i)
+    ])
 
-/** 点击事件 */
-const onItemClick = ({ item, selected }: any) => {
-  const name: string = item.name
-  const cleanName = name.replace(/^✅\s*/, '') // 去掉选中标识
-  const id = nameMap.value[cleanName]
-  if (!id) return
-  selectedItem.value = { id, name: cleanName }
-
-  userShop.setUseShop(selectedItem.value) // 存储当前选中的店铺
-  uni.navigateBack()
-}
-
-const trigger = ({ item, index }: { item: any; index: number }) => {
-  if (index === 1) {
-    uni.navigateTo({
-      url: '/pages/shop/add'
-    })
+    console.log(`删除`)
   }
 }
 
-onMounted(() => {
-  loadShop()
-})
+const swipeChange = (e: any, index: number) => {
+  console.log(e, index)
+}
+
+const loadMore = () => {
+  if (status.value !== 'more') return
+  params.value.page++
+  init()
+}
+
+const init = async () => {
+  status.value = 'loading'
+  const { list, total } = await shopList(params.value)
+  tableData.value = [...tableData.value, ...list]
+  status.value = params.value.page >= total ? 'noMore' : 'more'
+}
+
+onMounted(init)
 </script>
 
 <style lang="scss" scoped>
-.indexed-select {
-  display: flex;
-  flex-direction: column;
+.shop-page {
   height: 100vh;
-  background-color: #fff;
-
-  .footer {
-    margin-top: auto;
-    padding: 24rpx 32rpx;
-    font-size: 30rpx;
-    color: #333;
-    border-top: 1rpx solid #eaeaea;
-    background-color: #f9f9f9;
-
-    .selected-text {
-      color: #007aff;
-      font-weight: 600;
-      margin-left: 10rpx;
-    }
-  }
 }
 </style>
