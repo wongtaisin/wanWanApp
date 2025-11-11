@@ -2,8 +2,8 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-10 16:49:02
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-10 17:26:18
- * @FilePath: \wanWanApp\src\components\chinaAreaData.vue
+ * @LastEditTime: 2025-11-11 09:56:22
+ * @FilePath: \wanWanApp\src\components\areaCityChina.vue
  * @Description:
  *
  * Copyright (c) 2025 by wongtaisin1024@gmail.com, All Rights Reserved.
@@ -75,12 +75,13 @@ const handleTree = (data: any, parent_code = null) => {
 }
 
 const cateList = handleTree(cityRows)
+const emits = defineEmits(['change', 'nodeclick'])
 
 const onchange = (e: any) => {
-  console.log(e, `onchange`, params.value)
+  emits('change', e.detail)
 }
 
 const onNodeclick = (e: any) => {
-  console.log(e, `onNodeclick`)
+  emits('nodeclick', e)
 }
 </script>

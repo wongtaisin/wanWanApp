@@ -1,3 +1,13 @@
+<!--
+ * @Author: wingddd wongtaisin1024@gmail.com
+ * @Date: 2025-11-10 16:12:42
+ * @LastEditors: wingddd wongtaisin1024@gmail.com
+ * @LastEditTime: 2025-11-11 10:25:09
+ * @FilePath: \wanWanApp\src\pages\shop\add.vue
+ * @Description:
+ *
+ * Copyright (c) 2025 by wongtaisin1024@gmail.com, All Rights Reserved.
+-->
 <template>
   <view class="shop-add">
     <uni-forms ref="formRef" :model="params" :rules="rules">
@@ -5,10 +15,27 @@
         <uni-easyinput v-model="params.shopName" placeholder="请输入店铺" />
       </uni-forms-item>
       <uni-forms-item label="省份" name="province">
-        <AreaCityChina />
+        <AreaCityChina @change="handleChange" />
       </uni-forms-item>
+
+      <!-- <uni-forms-item label="城市" name="city" v-show="false">
+        <uni-easyinput v-model="params.city" />
+      </uni-forms-item>
+      <uni-forms-item label="区县" name="area" v-show="false">
+        <uni-easyinput v-model="params.area" />
+      </uni-forms-item> -->
+
       <uni-forms-item label="详细地址" name="address">
         <uni-easyinput v-model="params.address" placeholder="请输入详细地址" />
+      </uni-forms-item>
+
+      <uni-forms-item label="备注" name="remark">
+        <uni-easyinput
+          v-model="params.remark"
+          :maxlength="100"
+          type="textarea"
+          placeholder="请输入备注"
+        />
       </uni-forms-item>
       <uni-button type="primary" size="large" @click="onSubmit">提交</uni-button>
     </uni-forms>
@@ -16,8 +43,8 @@
 </template>
 
 <script lang="ts" setup>
-// import { shopAdd } from '@/services/shop'
 import AreaCityChina from '@/components/areaCityChina.vue'
+import { shopAdd } from '@/services/shop'
 import { reactive, ref } from 'vue'
 
 interface FormData {
@@ -44,6 +71,12 @@ const initialFormData: FormData = {
 const params = reactive<FormData>({ ...initialFormData })
 const formRef = ref()
 
+const handleChange = ({ value }: any) => {
+  const china = ['province', 'city', 'area']
+  china.forEach((key, index) => (params[key] = value[index].text || ''))
+  console.log(params, `params`)
+}
+
 const rules = {
   shopName: { rules: [{ required: true, errorMessage: '用户名不能为空' }] },
   province: { rules: [{ required: true, errorMessage: '省份不能为空' }] }
@@ -60,15 +93,15 @@ const onSubmit = () => {
   formRef.value
     .validate()
     .then(async (res: any) => {
-      console.log(res, `新增店铺`, params)
-      // await shopAdd(res)
+      const op = { ...res, ...params }
+      console.log(op, `新增店铺`)
+      await shopAdd(op)
       uni.showToast({ title: '新增店铺成功', icon: 'success' })
-      // uni.navigateBack()
+      setTimeout(() => {
+        uni.navigateBack()
+      }, 500)
     })
-    .catch((err: any) => {
-      console.error('err', err)
-      uni.showToast({ title: `${err[0].errorMessage}` })
-    })
+    .catch((err: any) => console.error('err', err))
 }
 </script>
 
