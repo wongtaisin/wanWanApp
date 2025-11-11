@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-10 16:12:42
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-11 10:25:09
+ * @LastEditTime: 2025-11-11 14:09:39
  * @FilePath: \wanWanApp\src\pages\shop\add.vue
  * @Description:
  *
@@ -14,7 +14,7 @@
       <uni-forms-item label="店铺" name="shopName" :required="true">
         <uni-easyinput v-model="params.shopName" placeholder="请输入店铺" />
       </uni-forms-item>
-      <uni-forms-item label="省份" name="province">
+      <uni-forms-item label="省/市/区" name="province">
         <AreaCityChina @change="handleChange" />
       </uni-forms-item>
 
@@ -78,8 +78,7 @@ const handleChange = ({ value }: any) => {
 }
 
 const rules = {
-  shopName: { rules: [{ required: true, errorMessage: '用户名不能为空' }] },
-  province: { rules: [{ required: true, errorMessage: '省份不能为空' }] }
+  shopName: { rules: [{ required: true, errorMessage: '店铺不能为空' }] }
 }
 
 const onSubmit = () => {

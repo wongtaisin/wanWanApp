@@ -13,7 +13,7 @@
   <uni-data-picker
     :localdata="cateList"
     v-model="params"
-    popup-title="请选择任务类别"
+    popup-title="请选择省/市/区"
     @change="onchange"
     @nodeclick="onNodeclick"
   />
