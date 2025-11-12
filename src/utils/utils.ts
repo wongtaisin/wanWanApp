@@ -174,6 +174,20 @@ const snakeToCamel = (str: string): string => {
   return str.replace(/_([a-z])/g, g => g[1].toUpperCase())
 }
 
+/**
+ * @desc 转换下划线键名为驼峰键名
+ * @param {any} row - 包含下划线键名的对象
+ * @returns {any} 转换后的对象,键名采用驼峰命名
+ */
+const transformed = (row: any) => {
+  const params: any = {}
+  Object.entries(row).forEach(([key, value]) => {
+    const camelKey = key.includes('_') ? snakeToCamel(key) : key
+    params[camelKey] = value
+  })
+  return params
+}
+
 export default {
   deepClone,
   formatDate,
@@ -183,5 +197,6 @@ export default {
   urlJsonList,
   isMobileNumber,
   validateMinLength,
-  snakeToCamel
+  snakeToCamel,
+  transformed
 }
