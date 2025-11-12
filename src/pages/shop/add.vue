@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-10 16:12:42
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-12 15:18:13
+ * @LastEditTime: 2025-11-12 17:33:06
  * @FilePath: \wanWanApp\src\pages\shop\add.vue
  * @Description:
  *
@@ -11,7 +11,7 @@
 <template>
   <view class="shop-add">
     <CommonForm
-      ref="commonFormRef"
+      ref="formRef"
       label-align="right"
       label-width="150rpx"
       :rules="rules"
@@ -19,7 +19,7 @@
       :columns="formColumns"
       @refresh="onSubmit"
     >
-      <uni-forms-item label="省/市/区">
+      <uni-forms-item label="省/市/区" name="areaCode">
         <AreaCityChina @change="handleChange" />
       </uni-forms-item>
 
@@ -42,7 +42,7 @@
 <script lang="ts" setup>
 import AreaCityChina from '@/components/areaCityChina.vue'
 import { shopAdd } from '@/services/shop'
-import { reactive, ref } from 'vue'
+import { ref } from 'vue'
 
 interface FormData {
   shopName: string
@@ -65,13 +65,12 @@ const initialFormData: FormData = {
   remark: ''
 }
 
-const params = reactive<FormData>({ ...initialFormData })
-const formRef = ref()
+const params = ref<FormData>({ ...initialFormData })
 
-const handleChange = ({ value }: any) => {
-  const china = ['province', 'city', 'area']
-  china.forEach((key, index) => (params[key] = value[index].text || ''))
-  console.log(params, `params`)
+const handleChange = (row: any) => {
+  // const { provinceCode, cityCode, ...rest } = row
+  params.value = { ...params.value, ...row }
+  console.log(params.value, `params`)
 }
 
 const rules = {
@@ -80,26 +79,21 @@ const rules = {
 
 const formColumns = [{ prop: 'shopName', label: '店铺', placeholder: '请输入店铺', required: true }]
 
-const onSubmit = () => {
+const onSubmit = async (value: any) => {
   // 清理空字符串
-  Object.entries(params).forEach(([key, value]) => {
+  Object.entries(params.value).forEach(([key, value]) => {
     if (value === '') {
-      delete params[key]
+      delete params.value[key]
     }
   })
 
-  formRef.value
-    .validate()
-    .then(async (res: any) => {
-      const op = { ...res, ...params }
-      console.log(op, `新增店铺`)
-      await shopAdd(op)
-      uni.showToast({ title: '新增店铺成功', icon: 'success' })
-      setTimeout(() => {
-        uni.navigateBack()
-      }, 500)
-    })
-    .catch((err: any) => console.error('err', err))
+  const op = { ...value, ...params.value }
+  console.log(op, `新增店铺`)
+  await shopAdd(op)
+  uni.showToast({ title: '新增店铺成功', icon: 'success' })
+  setTimeout(() => {
+    uni.navigateBack()
+  }, 500)
 }
 </script>
 

@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 15:27:20
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-10-29 13:38:20
+ * @LastEditTime: 2025-11-12 16:34:20
  * @FilePath: \wanWanApp\src\components\CommonForm.vue
  * @Description:
  *
@@ -16,31 +16,24 @@
     :label-width="props.labelWidth"
     :label-align="props.labelAlign"
   >
-    <template v-for="column in formColumns" :key="column.prop">
-      <p v-if="column.title" class="title">{{ column.title }}</p>
-      <template v-if="column.slot">
-        <component :is="column.slot.render(params)" />
-      </template>
-      <template v-else>
-        <uni-forms-item
-          :label="column.label"
-          :name="column.prop"
-          :required="column.required ?? false"
-        >
-          <uni-easyinput
-            :disabled="column.disabled"
-            :placeholder="column.placeholder"
-            v-model="params[column.prop]"
-            @click="column.handler"
-          />
-        </uni-forms-item>
-      </template>
-      <p v-if="column.remark" class="remark">{{ column.remark }}</p>
-    </template>
+    <uni-forms-item
+      v-for="(column, i) in formColumns"
+      :key="i"
+      :label="column.label"
+      :name="column.prop"
+      :required="column.required ?? false"
+    >
+      <uni-easyinput
+        :disabled="column.disabled"
+        :placeholder="column.placeholder"
+        v-model="params[column.prop]"
+        @click="column.handler"
+      />
+    </uni-forms-item>
 
     <slot />
 
-    <button type="primary" size="large" @click="onSubmit">提交</button>
+    <button class="forms-button" @click="onSubmit">提交</button>
   </uni-forms>
 </template>
 
@@ -82,17 +75,13 @@ const onSubmit = async () => {
 </script>
 
 <style lang="scss" scoped>
-.title {
-  font-size: 30rpx;
-  color: #333;
-  background: #f5f5f5;
-  line-height: 72rpx;
-  text-indent: 40rpx;
-}
+.forms-button {
+  background: #007aff;
+  color: white;
+  font-size: 28rpx;
 
-.remark {
-  background: white;
-  padding: 24rpx 30rpx;
-  color: red;
+  &:hover {
+    background: #3f98f7;
+  }
 }
 </style>

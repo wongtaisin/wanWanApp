@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-12 09:30:14
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-12 12:06:08
+ * @LastEditTime: 2025-11-12 17:32:13
  * @FilePath: \wanWanApp\src\pages\shop\edit.vue
  * @Description:
  *
@@ -27,6 +27,7 @@
 </template>
 
 <script lang="tsx" setup>
+import AreaCityChina from '@/components/areaCityChina.vue'
 import CommonUniForm from '@/components/uniForm.vue'
 import _utils from '@/utils/utils'
 import { onShow } from '@dcloudio/uni-app'
@@ -84,6 +85,22 @@ const rules = {
 
 const formColumns = [
   { prop: 'shopName', label: '店铺', placeholder: '请输入店铺', required: true },
+  {
+    prop: 'areaCode',
+    label: '省/市/区',
+    placeholder: '请选择省/市/区',
+    slot: {
+      render: (row: any) => (
+        <AreaCityChina
+          modelValue={row.areaCode}
+          onUpdate:modelValue={(val: any) => {
+            row.remark = val
+            console.log(row, val, `996688774455332211`)
+          }}
+        />
+      )
+    }
+  },
   { prop: 'remark', label: '备注', placeholder: '请输入备注', type: 'textarea' },
   {
     prop: 'createDate',
@@ -97,10 +114,7 @@ const formColumns = [
           value-format="yyyy-MM-dd HH:mm:ss"
           placeholder="请选择创建时间"
           modelValue={row.createDate}
-          onUpdate:modelValue={(val: any) => {
-            row.createDate = val
-            console.log(row, `转换大小写`)
-          }}
+          onUpdate:modelValue={(val: any) => (row.createDate = val)}
         />
       )
     }
@@ -112,7 +126,6 @@ onShow(() => {})
 defineExpose({
   opens: (row: FormData) => {
     params.value = _utils.transformed(row)
-    console.log(params.value, `转换大小写`)
     setTimeout(() => {
       popupRef.value.open()
     }, 100)

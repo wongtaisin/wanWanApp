@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-10 16:49:02
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-11 09:56:22
+ * @LastEditTime: 2025-11-12 17:09:26
  * @FilePath: \wanWanApp\src\components\areaCityChina.vue
  * @Description:
  *
@@ -21,9 +21,8 @@
 
 <script lang="ts" setup>
 import cityRows from '@/json/area-city-china.json'
-import { ref } from 'vue'
 
-const params = ref()
+const params = defineModel('modelValue', { default: '' })
 
 const handleTree = (data: any, parent_code = null) => {
   let res = []
@@ -75,10 +74,17 @@ const handleTree = (data: any, parent_code = null) => {
 }
 
 const cateList = handleTree(cityRows)
-const emits = defineEmits(['change', 'nodeclick'])
+const emits = defineEmits(['change', 'nodeclick', 'update:modelValue'])
 
 const onchange = (e: any) => {
-  emits('change', e.detail)
+  const item = {} as any
+  const val = e.detail.value
+  const textKeys = ['province', 'city', 'area']
+  textKeys.forEach((key, i) => (item[key] = val[i]?.text ?? ''))
+  const codeKeys = ['provinceCode', 'cityCode', 'areaCode']
+  codeKeys.forEach((key, i) => (item[key] = val[i]?.value ?? ''))
+  emits('change', item)
+  emits('update:modelValue', item)
 }
 
 const onNodeclick = (e: any) => {
