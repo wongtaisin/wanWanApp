@@ -37,7 +37,7 @@
           placeholder="请输入备注"
         />
       </uni-forms-item>
-      <uni-button type="primary" size="large" @click="onSubmit">提交</uni-button>
+      <button type="primary" size="large" @click="onSubmit">提交</button>
     </uni-forms>
   </view>
 </template>

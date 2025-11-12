@@ -1,0 +1,131 @@
+<!--
+ * @Author: wingddd wongtaisin1024@gmail.com
+ * @Date: 2025-11-12 09:30:14
+ * @LastEditors: wingddd wongtaisin1024@gmail.com
+ * @LastEditTime: 2025-11-12 12:06:08
+ * @FilePath: \wanWanApp\src\pages\shop\edit.vue
+ * @Description:
+ *
+ * Copyright (c) 2025 by wongtaisin1024@gmail.com, All Rights Reserved.
+-->
+<template>
+  <uni-popup ref="popupRef" type="bottom" background-color="#fff" borderRadius="20rpx 20rpx 0 0">
+    <view style="padding: 20rpx">
+      <view class="popup-title">{{ props.title }}</view>
+      <CommonUniForm
+        ref="commonFormRef"
+        label-align="right"
+        label-width="150rpx"
+        :rules="rules"
+        v-model="params"
+        :columns="formColumns"
+        @refresh="onSubmit"
+      >
+      </CommonUniForm>
+    </view>
+  </uni-popup>
+</template>
+
+<script lang="tsx" setup>
+import CommonUniForm from '@/components/uniForm.vue'
+import _utils from '@/utils/utils'
+import { onShow } from '@dcloudio/uni-app'
+import UniDatetimePicker from '@dcloudio/uni-ui/lib/uni-datetime-picker/uni-datetime-picker.vue'
+import { ref } from 'vue'
+
+interface Props {
+  title?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  title: '新增'
+})
+
+interface FormData {
+  id?: number
+  shopName: string
+  province: string
+  city: string
+  area: string
+  address: string
+  images: string
+  remark: string
+  createDate: string
+  [key: string]: string | number | Record<string, any>[] | undefined | null | any
+}
+
+const params = ref<FormData>({
+  shopName: '',
+  province: '',
+  city: '',
+  area: '',
+  address: '',
+  images: '',
+  remark: '',
+  createDate: ''
+})
+const popupRef = ref()
+const emits = defineEmits(['onSubmit'])
+
+const onSubmit = async (values: any) => {
+  emits('onSubmit', values)
+}
+
+const rules = {
+  shopName: { rules: [{ required: true, errorMessage: '店铺不能为空' }] },
+  paymentId: {
+    rules: [
+      { required: true, errorMessage: '支付类型不能为空' },
+      { format: 'number', errorMessage: '支付类型只能输入数字' }
+    ]
+  },
+  createDate: { rules: [{ required: true, errorMessage: '创建时间不能为空' }] }
+}
+
+const formColumns = [
+  { prop: 'shopName', label: '店铺', placeholder: '请输入店铺', required: true },
+  { prop: 'remark', label: '备注', placeholder: '请输入备注', type: 'textarea' },
+  {
+    prop: 'createDate',
+    label: '创建时间',
+    placeholder: '请选择创建时间',
+    slot: {
+      render: (row: any) => (
+        <UniDatetimePicker
+          type="datetime"
+          format="yyyy-MM-dd HH:mm:ss"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          placeholder="请选择创建时间"
+          modelValue={row.createDate}
+          onUpdate:modelValue={(val: any) => {
+            row.createDate = val
+            console.log(row, `转换大小写`)
+          }}
+        />
+      )
+    }
+  }
+]
+
+onShow(() => {})
+
+defineExpose({
+  opens: (row: FormData) => {
+    params.value = _utils.transformed(row)
+    console.log(params.value, `转换大小写`)
+    setTimeout(() => {
+      popupRef.value.open()
+    }, 100)
+  },
+  closes: () => popupRef.value.close()
+})
+</script>
+
+<style lang="scss" scoped>
+.popup-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 30rpx;
+}
+</style>

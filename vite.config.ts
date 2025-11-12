@@ -22,7 +22,8 @@ export default defineConfig({
       // ✅ 以下配置确保在小程序端 JSX 可正常编译
       transformOn: true, // 支持 onClick / onTap 等事件
       mergeProps: true, // 合并相同属性（防止重复属性警告）
-      enableObjectSlots: false // 避免部分平台 slot 编译出错
+      enableObjectSlots: false, // 避免部分平台 slot 编译出错
+      isCustomElement: (tag) => tag.startsWith('uni-') // 将 uni- 开头的组件识别为自定义元素
     })
   ],
   // css: {
