@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-10 16:12:42
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-11 14:09:39
+ * @LastEditTime: 2025-11-12 15:18:13
  * @FilePath: \wanWanApp\src\pages\shop\add.vue
  * @Description:
  *
@@ -10,20 +10,18 @@
 -->
 <template>
   <view class="shop-add">
-    <uni-forms ref="formRef" :model="params" :rules="rules">
-      <uni-forms-item label="店铺" name="shopName" :required="true">
-        <uni-easyinput v-model="params.shopName" placeholder="请输入店铺" />
-      </uni-forms-item>
-      <uni-forms-item label="省/市/区" name="province">
+    <CommonForm
+      ref="commonFormRef"
+      label-align="right"
+      label-width="150rpx"
+      :rules="rules"
+      v-model="params"
+      :columns="formColumns"
+      @refresh="onSubmit"
+    >
+      <uni-forms-item label="省/市/区">
         <AreaCityChina @change="handleChange" />
       </uni-forms-item>
-
-      <!-- <uni-forms-item label="城市" name="city" v-show="false">
-        <uni-easyinput v-model="params.city" />
-      </uni-forms-item>
-      <uni-forms-item label="区县" name="area" v-show="false">
-        <uni-easyinput v-model="params.area" />
-      </uni-forms-item> -->
 
       <uni-forms-item label="详细地址" name="address">
         <uni-easyinput v-model="params.address" placeholder="请输入详细地址" />
@@ -37,8 +35,7 @@
           placeholder="请输入备注"
         />
       </uni-forms-item>
-      <button type="primary" size="large" @click="onSubmit">提交</button>
-    </uni-forms>
+    </CommonForm>
   </view>
 </template>
 
@@ -80,6 +77,8 @@ const handleChange = ({ value }: any) => {
 const rules = {
   shopName: { rules: [{ required: true, errorMessage: '店铺不能为空' }] }
 }
+
+const formColumns = [{ prop: 'shopName', label: '店铺', placeholder: '请输入店铺', required: true }]
 
 const onSubmit = () => {
   // 清理空字符串
