@@ -106,11 +106,11 @@ const handleShopSelect = () => {
 
 const range = [
   { value: 1, text: '现金' },
-  { value: 2, text: '微信支付' },
+  { value: 2, text: '微信' },
   { value: 3, text: '支付宝' },
   { value: 4, text: '信用卡' },
   { value: 5, text: '储蓄卡' },
-  { value: 6, text: '抖音支付' }
+  { value: 6, text: '抖音' }
 ]
 
 const rules = {
@@ -133,7 +133,7 @@ const formColumns = ref([
     readonly: true,
     disabled: true
   },
-  { prop: 'money', label: '金额', placeholder: '请输入金额', required: true }
+  { prop: 'money', label: '金额', placeholder: '请输入金额', required: true, type: 'number' }
   // { prop: 'shopName', label: '店铺', placeholder: '请输入店铺' }
 ])
 

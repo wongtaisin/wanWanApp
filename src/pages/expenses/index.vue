@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 15:10:00
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-05 08:37:25
+ * @LastEditTime: 2025-11-13 16:20:37
  * @FilePath: \wanWanApp\src\pages\expenses\index.vue
  * @Description:
  *
@@ -48,7 +48,7 @@ const initialFormData: FormData = {
   money: '',
   // shopName: '',
   paymentId: 2,
-  paymentName: '微信支付',
+  paymentName: '微信',
   createDate: ''
 }
 

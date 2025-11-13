@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 15:27:20
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-12 16:34:20
+ * @LastEditTime: 2025-11-13 16:31:10
  * @FilePath: \wanWanApp\src\components\CommonForm.vue
  * @Description:
  *
@@ -25,6 +25,7 @@
     >
       <uni-easyinput
         :disabled="column.disabled"
+        :type="column.type"
         :placeholder="column.placeholder"
         v-model="params[column.prop]"
         @click="column.handler"
