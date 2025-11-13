@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 16:59:39
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-12 15:09:37
+ * @LastEditTime: 2025-11-13 09:25:57
  * @FilePath: \wanWanApp\src\components\uniForm.vue
  * @Description:
  *
@@ -36,7 +36,7 @@ const props = withDefaults(defineProps<Props>(), {
 const modelValue = defineModel<FormData>('modelValue', { default: {} })
 const params = computed(() => modelValue.value)
 const formColumns = computed(() => props.columns)
-const emits = defineEmits(['refresh'])
+const emits = defineEmits(['submit'])
 const formRef = ref()
 const slots = useSlots() // 插槽
 
@@ -44,7 +44,7 @@ const onSubmit = async () => {
   formRef.value
     .validate()
     .then((res: any) => {
-      emits('refresh', res)
+      emits('submit', res)
     })
     .catch((err: any) => {
       console.error('err', err)
@@ -85,18 +85,4 @@ const containerRender = () => (
 )
 </script>
 
-<style lang="scss" scoped>
-.title {
-  font-size: 30rpx;
-  color: #333;
-  background: #f5f5f5;
-  line-height: 72rpx;
-  text-indent: 40rpx;
-}
-
-.remark {
-  background: white;
-  padding: 24rpx 30rpx;
-  color: red;
-}
-</style>
+<style lang="scss" scoped></style>

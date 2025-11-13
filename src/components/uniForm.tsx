@@ -2,8 +2,8 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-12 11:10:55
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-12 15:09:43
- * @FilePath: \wanWanApp\src\components\UniForm.tsx
+ * @LastEditTime: 2025-11-13 08:39:31
+ * @FilePath: \wanWanApp\src\components\uniForm.tsx
  * @Description:
  *
  * Copyright (c) 2025 by wongtaisin1024@gmail.com, All Rights Reserved.
@@ -29,7 +29,10 @@ export default defineComponent({
       type: String as () => 'left' | 'right',
       default: 'left'
     },
-    rules: Object,
+    rules: {
+      type: Object,
+      default: () => ({})
+    },
     modelValue: {
       type: Object as () => FormData,
       default: () => ({})

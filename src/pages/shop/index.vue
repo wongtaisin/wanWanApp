@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-10 16:07:15
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-12 10:05:15
+ * @LastEditTime: 2025-11-13 10:43:14
  * @FilePath: \wanWanApp\src\pages\shop\index.vue
  * @Description: 店铺列表
  *
@@ -43,11 +43,11 @@
     <uni-load-more :status="status" />
   </scroll-view>
 
-  <Edit ref="editRef" />
+  <Edit ref="editRef" @refresh="handleRefresh" />
 </template>
 
 <script lang="ts" setup>
-import { shopList } from '@/services/shop'
+import { shopDelete, shopList } from '@/services/shop'
 import { onMounted, ref } from 'vue'
 import Edit from './edit.vue'
 
@@ -62,16 +62,12 @@ const editRef = ref<any>()
 
 const onClick = async (e: any, row: any, i: number) => {
   if (e.content.text === '修改') {
-    // await shopEdit(row.id)
     editRef.value.opens(row)
     console.log(`修改`)
   } else {
-    Promise.all([
-      // await shopDelete(row.id),
-      tableData.value.splice(0, i)
-    ])
-
-    console.log(`删除`)
+    await shopDelete(row.id)
+    tableData.value.splice(i, 1)
+    uni.showToast({ title: '删除成功', icon: 'success' })
   }
 }
 
@@ -82,6 +78,12 @@ const swipeChange = (e: any, index: number) => {
 const loadMore = () => {
   if (status.value !== 'more') return
   params.value.page++
+  init()
+}
+
+const handleRefresh = () => {
+  params.value.page = 1
+  tableData.value = []
   init()
 }
 

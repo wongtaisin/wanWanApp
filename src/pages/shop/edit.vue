@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-12 09:30:14
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-12 17:32:13
+ * @LastEditTime: 2025-11-13 09:52:34
  * @FilePath: \wanWanApp\src\pages\shop\edit.vue
  * @Description:
  *
@@ -19,9 +19,8 @@
         :rules="rules"
         v-model="params"
         :columns="formColumns"
-        @refresh="onSubmit"
-      >
-      </CommonUniForm>
+        @submit="onSubmit"
+      />
     </view>
   </uni-popup>
 </template>
@@ -29,10 +28,11 @@
 <script lang="tsx" setup>
 import AreaCityChina from '@/components/areaCityChina.vue'
 import CommonUniForm from '@/components/uniForm.vue'
+import { shopEdit } from '@/services/shop'
 import _utils from '@/utils/utils'
 import { onShow } from '@dcloudio/uni-app'
 import UniDatetimePicker from '@dcloudio/uni-ui/lib/uni-datetime-picker/uni-datetime-picker.vue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 interface Props {
   title?: string
@@ -66,24 +66,34 @@ const params = ref<FormData>({
   createDate: ''
 })
 const popupRef = ref()
-const emits = defineEmits(['onSubmit'])
+const emits = defineEmits(['refresh'])
 
 const onSubmit = async (values: any) => {
-  emits('onSubmit', values)
+  const op = { ...values, ...params.value }
+  // Object.keys(op).forEach(key => {
+  //   if (op[key] === null || op[key] === undefined || op[key] === '') {
+  //     delete op[key]
+  //   }
+  // })
+
+  console.log(op, `编辑店铺`)
+
+  await shopEdit(op)
+  uni.showToast({ title: '编辑成功', icon: 'success' })
+  popupRef.value.close()
+  emits('refresh')
 }
 
-const rules = {
+const rules = computed(() => ({
   shopName: { rules: [{ required: true, errorMessage: '店铺不能为空' }] },
-  paymentId: {
-    rules: [
-      { required: true, errorMessage: '支付类型不能为空' },
-      { format: 'number', errorMessage: '支付类型只能输入数字' }
-    ]
+  address: {
+    rules: [{ required: !params.value.provinceCode ? false : true, errorMessage: '地址不能为空' }]
   },
-  createDate: { rules: [{ required: true, errorMessage: '创建时间不能为空' }] }
-}
 
-const formColumns = [
+  createDate: { rules: [{ required: true, errorMessage: '创建时间不能为空' }] }
+}))
+
+const formColumns = computed(() => [
   { prop: 'shopName', label: '店铺', placeholder: '请输入店铺', required: true },
   {
     prop: 'areaCode',
@@ -94,12 +104,24 @@ const formColumns = [
         <AreaCityChina
           modelValue={row.areaCode}
           onUpdate:modelValue={(val: any) => {
-            row.remark = val
-            console.log(row, val, `996688774455332211`)
+            Object.assign(row, {
+              province: val.province,
+              provinceCode: val.provinceCode,
+              city: val.city,
+              cityCode: val.cityCode,
+              area: val.area,
+              areaCode: val.areaCode
+            })
           }}
         />
       )
     }
+  },
+  {
+    prop: 'address',
+    label: '地址',
+    placeholder: '请输入地址',
+    required: !params.value.provinceCode ? false : true
   },
   { prop: 'remark', label: '备注', placeholder: '请输入备注', type: 'textarea' },
   {
@@ -119,7 +141,7 @@ const formColumns = [
       )
     }
   }
-]
+])
 
 onShow(() => {})
 

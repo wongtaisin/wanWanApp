@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-10 16:49:02
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-12 17:09:26
+ * @LastEditTime: 2025-11-13 08:34:56
  * @FilePath: \wanWanApp\src\components\areaCityChina.vue
  * @Description:
  *
@@ -80,9 +80,9 @@ const onchange = (e: any) => {
   const item = {} as any
   const val = e.detail.value
   const textKeys = ['province', 'city', 'area']
-  textKeys.forEach((key, i) => (item[key] = val[i]?.text ?? ''))
+  textKeys.forEach((key, i) => (item[key] = val[i]?.text))
   const codeKeys = ['provinceCode', 'cityCode', 'areaCode']
-  codeKeys.forEach((key, i) => (item[key] = val[i]?.value ?? ''))
+  codeKeys.forEach((key, i) => (item[key] = val[i]?.value))
   emits('change', item)
   emits('update:modelValue', item)
 }
