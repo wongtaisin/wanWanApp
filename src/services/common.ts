@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-10 11:02:33
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-10 16:20:45
+ * @LastEditTime: 2025-11-14 16:41:54
  * @FilePath: \wanWanApp\src\services\common.ts
  * @Description:
  *
@@ -10,9 +10,9 @@
  */
 import { request } from '@/services/request'
 
-const shopAll = async () => {
-  const res: any = await request('/shop/all', 'GET')
+const areaData = async () => {
+  const res: any = await request('/common/areaData', 'GET')
   return res
 }
 
-export { shopAll }
+export { areaData }
