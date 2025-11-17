@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-15 11:53:44
+ * @LastEditTime: 2025-11-17 14:23:28
  * @FilePath: \wanWanApp\src\pages\chart\list.vue
  * @Description:
  *
@@ -52,22 +52,16 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { expensesCheck } from '@/services/expenses'
+import { computed, ref, watch } from 'vue'
 import Spend from './spend.vue'
+import type { FormData } from './types'
 
-interface Props {
-  totals?: string | number
-  tableData: any
-  params?: any
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  totals: 0
-})
-
-const tableData = computed(() => props.tableData)
-const totals = computed(() => props.totals)
-const params = computed(() => props.params)
+const modelValue = defineModel<FormData>('modelValue', { default: {} })
+const params = computed(() => modelValue.value)
+const tableData = ref<any>({})
+const totals = ref(0)
+const spendRef = ref()
 
 const classify: any = {
   eat: { label: '吃', icon: 'icon-food-mifan' },
@@ -86,7 +80,6 @@ const classify: any = {
   other: { label: '其他', icon: 'icon-qitafeiyong' }
 }
 
-const spendRef = ref()
 const handleOpens = (item: string) => {
   spendRef.value.opens({
     expensesName: [item],
@@ -94,6 +87,43 @@ const handleOpens = (item: string) => {
     endDate: params.value.endDate
   })
 }
+
+const initCheck = async () => {
+  const { sum, total } = await expensesCheck({
+    // userId: 1, // TODO: 从登录状态获取
+    name: [
+      'eat',
+      'drink',
+      'play',
+      'glad',
+      'tolls',
+      'oil',
+      'parking',
+      'traffic',
+      'supermarket',
+      'online_shopping',
+      'phone_bill',
+      'red_packet',
+      'vip',
+      'other'
+    ],
+    startDate: params.value.startDate,
+    endDate: params.value.endDate
+  })
+
+  tableData.value = { ...sum }
+  totals.value = total
+}
+
+watch(
+  () => params.value,
+  () => {
+    if (params.value.startDate && params.value.endDate) {
+      initCheck()
+    }
+  },
+  { deep: true, immediate: true }
+)
 </script>
 
 <style lang="scss" scoped>

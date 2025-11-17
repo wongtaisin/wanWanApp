@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-15 14:55:30
+ * @LastEditTime: 2025-11-17 14:25:36
  * @FilePath: \wanWanApp\src\pages\chart\index.vue
  * @Description:
  *
@@ -20,29 +20,23 @@
       />
     </view>
 
-    <Calendar ref="calendarRef" :data="calendarData" />
+    <Calendar v-if="current === 1" ref="calendarRef" v-model="params" />
 
     <uni-section title="支出类型" type="line" />
-    <List ref="listRef" :params="params" :tableData="tableData" :totals="totals" />
+    <List ref="listRef" v-model="params" />
   </view>
 </template>
 
 <script lang="ts" setup>
-import { expensesCheck, expensesList } from '@/services/expenses'
 import { onMounted, reactive, ref } from 'vue'
 import utils from '../spend/utils'
 import Calendar from './calendar.vue'
 import List from './list.vue'
+import type { FormData } from './types'
 
-const params = ref({
-  startDate: '',
-  endDate: ''
-})
-const items = reactive(['本周', '本月', '本年'])
+const params = ref<FormData>({ startDate: '', endDate: '' })
+const items = reactive(['周', '月', '年'])
 const current = ref(0)
-const tableData = ref<any>({})
-const totals = ref(0)
-const calendarData = ref<any>([])
 
 const onClickItem = (e: any) => {
   if (current.value !== e.currentIndex) {
@@ -66,8 +60,6 @@ const onClickItem = (e: any) => {
       params.value.endDate = `${year}-12-31`
       break
   }
-
-  init()
 }
 
 // 以周一为一周开始，周日为结束
@@ -88,44 +80,6 @@ const getWeekRange = () => {
     weekStart: fmt(weekStart),
     weekEnd: fmt(weekEnd)
   }
-}
-
-const init = async () => {
-  await Promise.all([initCheck(), initList()])
-}
-
-const initCheck = async () => {
-  const { sum, total } = await expensesCheck({
-    name: [
-      'eat',
-      'drink',
-      'play',
-      'glad',
-      'tolls',
-      'oil',
-      'parking',
-      'traffic',
-      'supermarket',
-      'online_shopping',
-      'phone_bill',
-      'red_packet',
-      'vip',
-      'other'
-    ],
-    startDate: params.value.startDate,
-    endDate: params.value.endDate
-  })
-
-  tableData.value = { ...sum }
-  totals.value = total
-}
-
-const initList = async () => {
-  const res = await expensesList({
-    startDate: params.value.startDate,
-    endDate: params.value.endDate
-  })
-  calendarData.value = res.sum
 }
 
 onMounted(() => {
