@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-15 11:29:03
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-17 14:15:48
+ * @LastEditTime: 2025-11-17 16:28:26
  * @FilePath: \wanWanApp\src\pages\chart\calendar.vue
  * @Description:
  *
@@ -12,7 +12,9 @@
   <uni-calendar
     class="uni-calendar--hook"
     :selected="info.selected"
-    :showMonth="false"
+    :lunar="info.lunar"
+    :range="info.range"
+    :insert="info.insert"
     @change="change"
     @monthSwitch="monthSwitch"
   />
@@ -31,9 +33,9 @@ const emits = defineEmits<{
 }>()
 
 const info = ref<Info>({
-  lunar: true,
-  range: true,
-  insert: false,
+  lunar: false,
+  range: false,
+  insert: true,
   selected: [] as SelectedItem[]
 })
 
@@ -52,8 +54,11 @@ const initList = async () => {
   const res = await expensesList({ ...params.value })
   info.value.selected = res.sum.map((item: SelectedItem) => ({
     date: item.date,
-    info: item.info,
-    data: item.data
+    info: `￥${item.info}`,
+    data: {
+      custom: item.info,
+      name: item.date
+    }
   }))
 }
 
