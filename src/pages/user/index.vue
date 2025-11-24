@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:33:29
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-11 14:50:52
+ * @LastEditTime: 2025-11-24 17:04:48
  * @FilePath: \wanWanApp\src\pages\user\index.vue
  * @Description:
  *
@@ -49,8 +49,9 @@
 
 <script lang="ts" setup>
 const cardGrid = [
-  { label: '店铺', prop: 'eat', icon: 'shop', url: '/pages/shop/index', badge: 3 },
-  { label: '设置', prop: 'eat', icon: 'gear-filled' }
+  { label: '店铺', prop: 'shop', icon: 'shop', url: '/pages/shop/index', badge: 3 },
+  { label: '日志', prop: 'log', icon: 'locked', url: '/pages/log/index' },
+  { label: '设置', prop: 'setting', icon: 'gear-filled' }
 ]
 
 const handleClick = (item: any) => {

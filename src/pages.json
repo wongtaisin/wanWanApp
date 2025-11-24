@@ -61,6 +61,12 @@
       "style": {
         "navigationBarTitleText": "新增店铺"
       }
+    },
+    {
+      "path": "pages/log/index",
+      "style": {
+        "navigationBarTitleText": "日志"
+      }
     }
   ],
   "globalStyle": {
