@@ -188,6 +188,36 @@ const transformed = (row: any) => {
   return params
 }
 
+/**
+ * @description 获取当前月份的开始和结束日期
+ * @param time 2025-11
+ * @returns { firstDay: '2025-11-01', lastDay: '2025-11-30' }
+ */
+function getCurrentMonthRange(time: string) {
+  // 解析 YYYY-MM 格式的字符串
+  const [yearStr, monthStr] = time.split('-')
+  const year = parseInt(yearStr, 10)
+  const month = parseInt(monthStr, 10) - 1 // getMonth() 返回 0-11，所以减 1
+
+  // 当月第一天
+  const firstDay = new Date(year, month, 1)
+  // 当月最后一天
+  const lastDay = new Date(year, month + 1, 0)
+
+  // 格式化为 YYYY-MM-DD
+  const format = (date: Date) => {
+    const y = date.getFullYear()
+    const m = String(date.getMonth() + 1).padStart(2, '0')
+    const d = String(date.getDate()).padStart(2, '0')
+    return `${y}-${m}-${d}`
+  }
+
+  return {
+    firstDay: format(firstDay),
+    lastDay: format(lastDay)
+  }
+}
+
 export default {
   deepClone,
   formatDate,
@@ -198,5 +228,6 @@ export default {
   isMobileNumber,
   validateMinLength,
   snakeToCamel,
-  transformed
+  transformed,
+  getCurrentMonthRange
 }

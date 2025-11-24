@@ -16,7 +16,7 @@
         :class="{
           active: padMonth(m.label) === selectedMonth && currentYear === selectedYear
         }"
-        @click="selectMonth(m.label)"
+        @click="change(m.label)"
       >
         {{ m.label }}
         <view class="month-text">￥{{ m.value }}</view>
@@ -37,7 +37,7 @@ const props = withDefaults(defineProps<Props>(), {
   modelValue: ''
 })
 
-const emits = defineEmits(['update:modelValue', 'yearChange'])
+const emits = defineEmits(['update:modelValue', 'change', 'yearSwitch'])
 
 // 当前年月
 const now = new Date()
@@ -85,19 +85,20 @@ const nextYear = () => {
 
 // 处理年份切换
 const handleYear = (year: number) => {
+  console.log('handleYear 返回:', year)
   selectedYear.value = year
-  emits('yearChange', `${selectedYear.value}`)
   init()
+  emits('yearSwitch', String(year))
 }
 
 // 选择月份
-const selectMonth = (m: string) => {
+const change = (m: string) => {
+  console.log('change 返回:', m)
   selectedYear.value = currentYear.value
   selectedMonth.value = padMonth(m)
-
   const val = `${currentYear.value}-${selectedMonth.value}`
-  console.log(val, `年月月份 selectMonth`)
-  // emits('update:modelValue', val)
+  emits('change', val)
+  emits('update:modelValue', val)
 }
 
 const init = async () => {
@@ -163,7 +164,7 @@ onMounted(() => {
 
   .month-text {
     font-size: 24rpx;
-    color: red;
+    color: #e43d33;
     margin-top: 10rpx;
   }
 }

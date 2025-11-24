@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-15 11:29:03
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-17 16:28:26
+ * @LastEditTime: 2025-11-24 16:33:09
  * @FilePath: \wanWanApp\src\pages\chart\calendar.vue
  * @Description:
  *
@@ -21,15 +21,17 @@
 </template>
 
 <script lang="ts" setup>
+import type { FormData, Info, SelectedItem } from '@/pages/chart/types'
 import { expensesList } from '@/services/expenses'
-import { computed, ref, watch } from 'vue'
-import utils from '../spend/utils'
-import type { FormData, Info, SelectedItem } from './types'
+import _utils from '@/utils/utils'
+import { computed, onMounted, ref } from 'vue'
 
 const modelValue = defineModel<FormData>('modelValue', { default: {} })
 const params = computed(() => modelValue.value)
 const emits = defineEmits<{
   (e: 'update:modelValue', value: FormData): void
+  (e: 'change', value: string): void
+  (e: 'monthSwitch', value: string): void
 }>()
 
 const info = ref<Info>({
@@ -41,16 +43,20 @@ const info = ref<Info>({
 
 const change = (e: any) => {
   console.log('change 返回:', e)
+  emits('change', e.fulldate)
 }
 
 const monthSwitch = (e: any) => {
+  console.log('monthSwitch 返回:', e)
   const month = `${e.year}-${e.month}`
-  params.value.startDate = utils.getCurrentMonthRange(month).firstDay
-  params.value.endDate = utils.getCurrentMonthRange(month).lastDay
-  emits('update:modelValue', params.value)
+  emits('monthSwitch', month)
+  const { firstDay, lastDay } = _utils.getCurrentMonthRange(month)
+  params.value.startDate = firstDay
+  params.value.endDate = lastDay
+  init()
 }
 
-const initList = async () => {
+const init = async () => {
   const res = await expensesList({ ...params.value })
   info.value.selected = res.sum.map((item: SelectedItem) => ({
     date: item.date,
@@ -62,15 +68,22 @@ const initList = async () => {
   }))
 }
 
-watch(
-  () => params.value,
-  () => {
-    if (params.value.startDate && params.value.endDate) {
-      initList()
-    }
-  },
-  { deep: true, immediate: true }
-)
+onMounted(() => {
+  init()
+})
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+// :deep {
+//   .uni-calendar-item--isDay,
+//   .uni-calendar-item--checked {
+//     background-color: #fff;
+//     color: #007aff;
+//     font-weight: bold;
+//   }
+
+//   .uni-calendar-item--extra {
+//     color: #e43d33;
+//   }
+// }
+</style>

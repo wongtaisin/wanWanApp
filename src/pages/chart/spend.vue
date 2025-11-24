@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-06 14:35:26
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-10 10:14:05
+ * @LastEditTime: 2025-11-24 16:39:38
  * @FilePath: \wanWanApp\src\pages\chart\spend.vue
  * @Description:
  *
@@ -13,13 +13,15 @@
     <scroll-view scroll-y style="height: calc(100vh - 78rpx)" @scrolltolower="loadMore">
       <view class="popup-content">
         <uni-list v-for="item in tableData" :key="item.date">
-          <uni-list-item :title="item.shop_name || item.remark" :note="item.create_date">
-            <template v-slot:footer>
-              <view class="chat-custom-right">
-                <text>-{{ item.money }}</text>
-              </view>
-            </template>
-          </uni-list-item>
+          <uni-tooltip :content="item.remark" placement="bottom">
+            <uni-list-item :title="item.shop_name || item.remark" :note="item.create_date">
+              <template v-slot:footer>
+                <view class="chat-custom-right">
+                  <text>-{{ item.money }}</text>
+                </view>
+              </template>
+            </uni-list-item>
+          </uni-tooltip>
         </uni-list>
 
         <!-- 加载提示 -->

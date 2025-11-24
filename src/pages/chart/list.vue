@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-24 14:01:24
+ * @LastEditTime: 2025-11-24 16:30:48
  * @FilePath: \wanWanApp\src\pages\chart\list.vue
  * @Description:
  *
@@ -50,9 +50,10 @@
 </template>
 
 <script lang="ts" setup>
+import type { FormData } from '@/pages/chart/types'
+import { expensesNames } from '@/pages/chart/utils'
 import { expensesCheck } from '@/services/expenses'
 import { computed, ref, watch } from 'vue'
-import type { FormData } from './types'
 
 const modelValue = defineModel<FormData>('modelValue', { default: {} })
 const params = computed(() => modelValue.value)
@@ -85,22 +86,7 @@ const handleOpens = (item: string) => {
 const initCheck = async () => {
   const { sum, total } = await expensesCheck({
     // userId: 1, // TODO: 从登录状态获取
-    name: [
-      'eat',
-      'drink',
-      'play',
-      'glad',
-      'tolls',
-      'oil',
-      'parking',
-      'traffic',
-      'supermarket',
-      'online_shopping',
-      'phone_bill',
-      'red_packet',
-      'vip',
-      'other'
-    ],
+    name: expensesNames,
     startDate: params.value.startDate,
     endDate: params.value.endDate
   })

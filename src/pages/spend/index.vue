@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-24 13:50:25
+ * @LastEditTime: 2025-11-24 16:25:17
  * @FilePath: \wanWanApp\src\pages\spend\index.vue
  * @Description:
  *
@@ -14,7 +14,7 @@
       <uni-row class="top">
         <uni-col :span="8">
           <text class="text">{{ month.slice(0, 4) }}年</text>
-          <CommonMothPicker v-model="month" @change="onChange">
+          <CommonMothPicker v-model="month" @change="handleChange">
             <p class="money">
               {{ month.slice(5, 7) }}
               <text style="font-size: 28rpx">月</text>
@@ -35,8 +35,8 @@
         <view class="list-top">
           <uni-row>
             <uni-col :span="12">
+              <uni-icons type="calendar" size="20" style="color: #409eff; margin-right: 10rpx" />
               <text>
-                <uni-icons type="calendar" size="20" style="color: #409eff" />
                 {{ group.date }}
               </text>
             </uni-col>
@@ -52,7 +52,7 @@
             v-for="(item, i) in group.list"
             :key="item.id"
             :right-options="options"
-            @click="onClick($event, item)"
+            @click="handleClick($event, item)"
             @change="swipeChange($event, i)"
           >
             <uni-list-item :title="item.shop_name || item.remark" :note="item.create_date">
@@ -92,7 +92,6 @@ import { expensesDetailEdit } from '@/services/expenses'
 import { expensesDetailDelete, expensesDetailList, expensesTotal } from '@/services/spend'
 import _utils from '@/utils/utils'
 import { onMounted, reactive, ref } from 'vue'
-import utils from './utils'
 
 const options = reactive([
   {
@@ -112,8 +111,8 @@ const options = reactive([
 const month = ref(`${new Date().getFullYear()}-${new Date().getMonth() + 1}`)
 const tableData = ref<any>([])
 const params = ref({
-  startDate: utils.getCurrentMonthRange(month.value).firstDay,
-  endDate: utils.getCurrentMonthRange(month.value).lastDay,
+  startDate: _utils.getCurrentMonthRange(month.value).firstDay,
+  endDate: _utils.getCurrentMonthRange(month.value).lastDay,
   page: 1,
   pageSize: 10,
   total: 0 // 传了后台也不接受，只用作显示消费笔数
@@ -161,16 +160,17 @@ const initTotal = async () => {
   moneyTotal.value = total || 0
 }
 
-const onChange = (e: any) => {
+const handleChange = (e: any) => {
   month.value = e // 可设置可不设置，因为组件里使用了双向绑定
-  params.value.startDate = utils.getCurrentMonthRange(month.value).firstDay
-  params.value.endDate = utils.getCurrentMonthRange(month.value).lastDay
+  const { firstDay, lastDay } = _utils.getCurrentMonthRange(month.value)
+  params.value.startDate = firstDay
+  params.value.endDate = lastDay
   tableData.value = []
   params.value.page = 1
   init()
 }
 
-const onClick = async (e: any, row: any) => {
+const handleClick = async (e: any, row: any) => {
   if (e.content.text === '修改') {
     const transformedRow: any = {}
     Object.entries(row).forEach(([key, value]) => {
