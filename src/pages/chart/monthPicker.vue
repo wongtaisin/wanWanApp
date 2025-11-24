@@ -13,20 +13,21 @@
         v-for="(m, index) in monthList"
         :key="index"
         class="month-item"
-        :class="{ active: m.value === selectedMonth && currentYear === selectedYear }"
-        @click="selectMonth(m.value)"
+        :class="{
+          active: padMonth(m.label) === selectedMonth && currentYear === selectedYear
+        }"
+        @click="selectMonth(m.label)"
       >
         {{ m.label }}
-        <view class="" style="font-size: 24rpx; color: red; margin-top: 10rpx">
-          ￥{{ m.value }}
-        </view>
+        <view class="month-text">￥{{ m.value }}</view>
       </view>
     </view>
   </view>
 </template>
 
 <script lang="ts" setup>
-import { defineEmits, defineProps, ref } from 'vue'
+import { checkDatePrice } from '@/services/expenses'
+import { defineEmits, defineProps, onMounted, ref } from 'vue'
 
 interface Props {
   modelValue?: string // 格式：YYYY-MM
@@ -36,7 +37,7 @@ const props = withDefaults(defineProps<Props>(), {
   modelValue: ''
 })
 
-const emits = defineEmits(['update:modelValue', 'change'])
+const emits = defineEmits(['update:modelValue', 'yearChange'])
 
 // 当前年月
 const now = new Date()
@@ -44,13 +45,15 @@ const year = now.getFullYear()
 const month = now.getMonth() + 1
 
 const selectedYear = ref(props.modelValue ? Number(props.modelValue.split('-')[0]) : year)
-const selectedMonth = ref(props.modelValue ? Number(props.modelValue.split('-')[1]) : month)
+const selectedMonth = ref(
+  props.modelValue ? props.modelValue.split('-')[1] : String(month).padStart(2, '0')
+)
 
 // UI 当前年的显示
 const currentYear = ref(selectedYear.value)
 
 // 月份列表
-const monthList = [
+const monthList = ref<{ value: number; label: string }[]>([
   { value: 1, label: '1月' },
   { value: 2, label: '2月' },
   { value: 3, label: '3月' },
@@ -63,22 +66,56 @@ const monthList = [
   { value: 10, label: '10月' },
   { value: 11, label: '11月' },
   { value: 12, label: '12月' }
-]
+])
+
+// 格式化月份，确保是两位数
+const padMonth = (m: string) => {
+  return String(Number(m.replace('月', ''))).padStart(2, '0')
+}
 
 // 切换年份
-const prevYear = () => currentYear.value--
-const nextYear = () => currentYear.value++
+const prevYear = () => {
+  currentYear.value--
+  handleYear(currentYear.value)
+}
+const nextYear = () => {
+  currentYear.value++
+  handleYear(currentYear.value)
+}
+
+// 处理年份切换
+const handleYear = (year: number) => {
+  selectedYear.value = year
+  emits('yearChange', `${selectedYear.value}`)
+  init()
+}
 
 // 选择月份
-const selectMonth = (m: number) => {
+const selectMonth = (m: string) => {
   selectedYear.value = currentYear.value
-  selectedMonth.value = m
+  selectedMonth.value = padMonth(m)
 
-  const val = `${currentYear.value}-${String(m).padStart(2, '0')}`
-
-  emits('update:modelValue', val)
-  emits('change', val)
+  const val = `${currentYear.value}-${selectedMonth.value}`
+  console.log(val, `年月月份 selectMonth`)
+  // emits('update:modelValue', val)
 }
+
+const init = async () => {
+  const res = await checkDatePrice({
+    userId: 1, // TODO: 从登录状态获取
+    startDate: `${selectedYear.value}-01-01`,
+    endDate: `${selectedYear.value}-12-31`
+  })
+
+  monthList.value.forEach((item: any) => {
+    const key = `${selectedYear.value}-${padMonth(item.label)}`
+    item.value = res.monthMap[key]?.total || 0
+  })
+}
+
+onMounted(() => {
+  init()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -122,6 +159,12 @@ const selectMonth = (m: number) => {
   .month-item.active {
     color: #007aff;
     font-weight: bold;
+  }
+
+  .month-text {
+    font-size: 24rpx;
+    color: red;
+    margin-top: 10rpx;
   }
 }
 </style>

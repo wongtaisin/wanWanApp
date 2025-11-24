@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-17 16:30:49
+ * @LastEditTime: 2025-11-24 10:09:01
  * @FilePath: \wanWanApp\src\pages\chart\index.vue
  * @Description:
  *
@@ -22,7 +22,24 @@
 
     <Calendar v-if="current === 1" ref="calendarRef" v-model="params" />
 
-    <MonthPicker v-if="current === 2" />
+    <!-- 年视图：截取前7位，如 2025-01-01 → 2025-01 -->
+    <MonthPicker
+      v-if="current === 2"
+      ref="monthPickerRef"
+      :model-value="params.startDate.slice(0, 7)"
+      @update:model-value="
+        val => {
+          params.startDate = `${val}-01`
+          params.endDate = `${utils.getCurrentMonthRange(val).lastDay}`
+        }
+      "
+      @year-change="
+        val => {
+          params.startDate = `${val}-01-01`
+          params.endDate = `${val}-12-31`
+        }
+      "
+    />
 
     <uni-section title="支出类型" type="line" />
     <List ref="listRef" v-model="params" />

@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-14 09:00:29
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-15 17:12:59
+ * @LastEditTime: 2025-11-24 10:01:28
  * @FilePath: \wanWanApp\src\services\expenses.ts
  * @Description:
  *
@@ -27,5 +27,10 @@ export const expensesDetailAdd = async (params: any) => {
 
 export const expensesDetailEdit = async (params: any) => {
   const res: any = await request('/expensesDetail/edit', 'POST', params)
+  return res
+}
+
+export const checkDatePrice = async (params: any) => {
+  const res: any = await request('/expensesDetail/checkDatePrice', 'GET', params)
   return res
 }
