@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-24 10:09:01
+ * @LastEditTime: 2025-11-24 14:07:44
  * @FilePath: \wanWanApp\src\pages\chart\index.vue
  * @Description:
  *
@@ -31,6 +31,7 @@
         val => {
           params.startDate = `${val}-01`
           params.endDate = `${utils.getCurrentMonthRange(val).lastDay}`
+          // handleOpens({ ...params, expensesName: expensesNames })
         }
       "
       @year-change="
@@ -42,7 +43,9 @@
     />
 
     <uni-section title="支出类型" type="line" />
-    <List ref="listRef" v-model="params" />
+    <List ref="listRef" v-model="params" @change="val => handleOpens(val)" />
+
+    <Spend ref="spendRef" />
   </view>
 </template>
 
@@ -52,13 +55,30 @@ import utils from '../spend/utils'
 import Calendar from './calendar.vue'
 import List from './list.vue'
 import MonthPicker from './monthPicker.vue'
+import Spend from './spend.vue'
 import type { FormData } from './types'
+import { getWeekRange } from './utils'
+
+interface ListForm {
+  expensesName: string[]
+}
+
+interface SpendForm {
+  startDate: string
+  endDate: string
+  expensesName: ListForm['expensesName']
+}
 
 const params = ref<FormData>({ startDate: '', endDate: '' })
 const items = reactive(['周', '月', '年'])
 const current = ref(0)
+const spendRef = ref()
 
-const onClickItem = (e: any) => {
+const handleOpens = (rows: SpendForm) => {
+  spendRef.value.opens(rows)
+}
+
+const onClickItem = (e: { currentIndex: number }) => {
   if (current.value !== e.currentIndex) {
     current.value = e.currentIndex
   }
@@ -79,26 +99,6 @@ const onClickItem = (e: any) => {
       params.value.startDate = `${year}-01-01`
       params.value.endDate = `${year}-12-31`
       break
-  }
-}
-
-// 以周一为一周开始，周日为结束
-const getWeekRange = () => {
-  const now = new Date()
-  const day = now.getDay() // 0 (周日) - 6 (周六)
-  const diffToMonday = (day === 0 ? -6 : 1) - day // 周一与当前日期的差值
-  const weekStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() + diffToMonday) // 周一
-  const weekEnd = new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + 6) // 周日
-
-  const fmt = (d: Date) =>
-    `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(
-      2,
-      '0'
-    )}`
-
-  return {
-    weekStart: fmt(weekStart),
-    weekEnd: fmt(weekEnd)
   }
 }
 

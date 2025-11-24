@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-17 14:23:28
+ * @LastEditTime: 2025-11-24 14:01:24
  * @FilePath: \wanWanApp\src\pages\chart\list.vue
  * @Description:
  *
@@ -47,21 +47,18 @@
       </template>
     </uni-list-item>
   </uni-list>
-
-  <Spend ref="spendRef" />
 </template>
 
 <script lang="ts" setup>
 import { expensesCheck } from '@/services/expenses'
 import { computed, ref, watch } from 'vue'
-import Spend from './spend.vue'
 import type { FormData } from './types'
 
 const modelValue = defineModel<FormData>('modelValue', { default: {} })
 const params = computed(() => modelValue.value)
 const tableData = ref<any>({})
 const totals = ref(0)
-const spendRef = ref()
+const emits = defineEmits(['update:modelValue', 'change'])
 
 const classify: any = {
   eat: { label: '吃', icon: 'icon-food-mifan' },
@@ -81,11 +78,8 @@ const classify: any = {
 }
 
 const handleOpens = (item: string) => {
-  spendRef.value.opens({
-    expensesName: [item],
-    startDate: params.value.startDate,
-    endDate: params.value.endDate
-  })
+  emits('update:modelValue', { ...params.value, expensesName: [item] })
+  emits('change', { ...params.value, expensesName: [item] })
 }
 
 const initCheck = async () => {

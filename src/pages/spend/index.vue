@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-06 10:33:07
+ * @LastEditTime: 2025-11-24 13:50:25
  * @FilePath: \wanWanApp\src\pages\spend\index.vue
  * @Description:
  *
@@ -35,7 +35,10 @@
         <view class="list-top">
           <uni-row>
             <uni-col :span="12">
-              <text>{{ group.date }}</text>
+              <text>
+                <uni-icons type="calendar" size="20" style="color: #409eff" />
+                {{ group.date }}
+              </text>
             </uni-col>
             <uni-col :span="12" style="text-align: right">
               <text>支出：{{ group.total }}</text>
@@ -267,5 +270,9 @@ onMounted(() => {
     align-items: center;
     height: 68rpx;
   }
+}
+
+:deep(.uni-list--border-top) {
+  height: 0;
 }
 </style>
