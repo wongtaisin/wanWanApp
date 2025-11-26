@@ -20,7 +20,7 @@
           />
         </uni-forms-item>
 
-        <uni-forms-item label="店铺" name="shopId">
+        <uni-forms-item label="店铺" name="shopName">
           <uni-easyinput
             v-model="params.shopName"
             placeholder="点击选择店铺"

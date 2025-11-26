@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-10 16:07:15
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-13 10:43:14
+ * @LastEditTime: 2025-11-26 11:58:13
  * @FilePath: \wanWanApp\src\pages\shop\index.vue
  * @Description: 店铺列表
  *
@@ -20,7 +20,7 @@
             { text: '删除', style: { backgroundColor: '#dd524d' } },
             { text: '修改', style: { backgroundColor: '#007aff' } }
           ]"
-          @click="onClick($event, item, i)"
+          @click="handleClick($event, item, i)"
           @change="swipeChange($event, i)"
         >
           <uni-list-item
@@ -43,7 +43,7 @@
     <uni-load-more :status="status" />
   </scroll-view>
 
-  <Edit ref="editRef" @refresh="handleRefresh" />
+  <Edit title="编辑地址" ref="editRef" @refresh="handleRefresh" />
 </template>
 
 <script lang="ts" setup>
@@ -60,10 +60,9 @@ const tableData = ref<any>([])
 const swipeActionRef = ref()
 const editRef = ref<any>()
 
-const onClick = async (e: any, row: any, i: number) => {
+const handleClick = async (e: any, row: any, i: number) => {
   if (e.content.text === '修改') {
     editRef.value.opens(row)
-    console.log(`修改`)
   } else {
     await shopDelete(row.id)
     tableData.value.splice(i, 1)

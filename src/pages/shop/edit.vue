@@ -147,7 +147,7 @@ onShow(() => {})
 
 defineExpose({
   opens: (row: FormData) => {
-    params.value = _utils.transformed(row)
+    params.value = _utils.toCamelCase(row)
     setTimeout(() => {
       popupRef.value.open()
     }, 100)

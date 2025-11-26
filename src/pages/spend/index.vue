@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-24 16:25:17
+ * @LastEditTime: 2025-11-26 15:59:10
  * @FilePath: \wanWanApp\src\pages\spend\index.vue
  * @Description:
  *
@@ -52,8 +52,8 @@
             v-for="(item, i) in group.list"
             :key="item.id"
             :right-options="options"
-            @click="handleClick($event, item)"
-            @change="swipeChange($event, i)"
+            @click="handleClick($event, item, i)"
+            @change="swipeChange($event, item, i)"
           >
             <uni-list-item :title="item.shop_name || item.remark" :note="item.create_date">
               <template v-slot:header>
@@ -80,8 +80,8 @@
   </view>
 
   <CommonExpensesPopup
-    ref="expensesPopupRef"
     title="编辑"
+    ref="expensesPopupRef"
     v-model="expensesParams"
     @onSubmit="onSubmit"
   />
@@ -122,6 +122,7 @@ const moneyTotal = ref(0)
 const expensesPopupRef = ref()
 const expensesParams = ref<any>({})
 const swipeActionRef = ref<any[]>([] as any[])
+const editingMeta = ref<{ groupIndex: number; itemIndex: number } | null>(null)
 
 const init = async () => {
   Promise.all([await initList(), await initTotal()])
@@ -138,10 +139,11 @@ const initList = async () => {
     list.reduce((acc: any, item: any) => {
       const date = item.create_date.split(' ')[0] // 只取年月日
       if (!acc[date]) {
-        acc[date] = { date, list: [], total: 0 }
+        // 如果该日期不存在，则创建一个新对象
+        acc[date] = { date, list: [], total: 0 } // 初始化该日期的对象
       }
-      acc[date].list.push(item)
-      acc[date].total += parseFloat(item.money)
+      acc[date].list.push(item) // 把当前项添加到该日期的列表中
+      acc[date].total += parseFloat(item.money) // 累加该日期的支出金额
       return acc
     }, {})
   )
@@ -153,10 +155,8 @@ const initList = async () => {
 
 // 支出总金额
 const initTotal = async () => {
-  const { total }: any = await expensesTotal({
-    startDate: params.value.startDate,
-    endDate: params.value.endDate
-  })
+  const { startDate, endDate } = params.value
+  const { total }: any = await expensesTotal({ startDate, endDate })
   moneyTotal.value = total || 0
 }
 
@@ -170,32 +170,29 @@ const handleChange = (e: any) => {
   init()
 }
 
-const handleClick = async (e: any, row: any) => {
+const handleClick = async (e: any, row: any, i: number) => {
   if (e.content.text === '修改') {
-    const transformedRow: any = {}
-    Object.entries(row).forEach(([key, value]) => {
-      const camelKey = key.includes('_') ? _utils.snakeToCamel(key) : key
-      transformedRow[camelKey] = value
-    })
+    expensesParams.value = _utils.toCamelCase(row)
 
-    expensesParams.value = transformedRow
-
-    // TODO: 需要一个getInfo 要获取到 shopId 和 paymentId，用来显示下拉框的回显
+    // 使用 setTimeout 延迟打开弹窗，避免事件冒泡导致立即关闭
     setTimeout(() => {
       expensesPopupRef.value.open()
-    }, 100) // 使用 setTimeout 延迟打开弹窗，避免事件冒泡导致立即关闭
+    }, 100)
   } else {
-    Promise.all([
-      await expensesDetailDelete(row.id),
-      (tableData.value = []),
-      (params.value.page = 1),
-      init()
-    ]) // 删除
+    await expensesDetailDelete(row.id)
+    tableData.value.splice(i, 1)
+    uni.showToast({ title: '删除成功', icon: 'success' })
   }
 }
 
-const swipeChange = (e: any, index: number) => {
-  console.log(e, index)
+const swipeChange = (e: any, row: any, index: number) => {
+  const groupIndex = tableData.value.findIndex(
+    (item: any) => item.date === row.create_date.slice(0, 10)
+  )
+  if (groupIndex > -1) {
+    editingMeta.value = { groupIndex, itemIndex: index }
+  }
+  console.log(e, editingMeta.value)
 }
 
 const loadMore = () => {
@@ -205,21 +202,16 @@ const loadMore = () => {
 }
 
 const onSubmit = async (values: any) => {
-  // 清理空字符串
-  Object.keys(expensesParams.value).forEach(key => {
-    if (expensesParams.value[key] === '') {
-      delete expensesParams.value[key]
-    }
-  })
+  const mergedRow = { ...values, ...expensesParams.value }
 
-  console.log(values, `编辑消费`, expensesParams.value)
+  // _utils.removeEmptyKeys(mergedRow) // 清理空字符串键值对
+
+  console.log(`编辑消费`, mergedRow)
 
   try {
-    await expensesDetailEdit(expensesParams.value)
-    uni.showToast({
-      title: `编辑成功`,
-      icon: 'success'
-    })
+    await expensesDetailEdit(mergedRow)
+    syncEditedRow(_utils.toSnakeCase(mergedRow))
+    uni.showToast({ title: `编辑成功`, icon: 'success' })
     const refs: any = swipeActionRef.value
     // 优化：兼容 ref="swipeActionRef" 可能为数组或单个实例，统一关闭所有 swipeAction 实例
     if (Array.isArray(refs)) {
@@ -227,14 +219,86 @@ const onSubmit = async (values: any) => {
     } else {
       refs?.closeAll?.()
     }
-    tableData.value = []
-    params.value.page = 1
-    init()
   } catch {
     console.error(`报错`)
   } finally {
     expensesPopupRef.value.close()
   }
+}
+
+/**
+ * @desc 同步编辑后的行数据到表格中, 并更新分组数据和总金额
+ * @param {Record<string, any>} updatedRow - 包含更新后的行数据的对象
+ * @returns {void}
+ *
+ * @example
+ * @demo syncEditedRow({ money: '100', name: '新名称' })
+ * @explain 会更新所有的数据，包括分组数据和总金额
+    1、假设编辑的是第2组第3行数据，更新后的行数据为：{ money: '100', name: '新名称' }
+    2、假设源分组为：{ date: '2025-01-02', list: [...], total: 1000 }
+    3、假设源行数据为：{ id: 123, money: '50', name: '旧名称', create_date: '2025-01-02 10:00:00' }
+    4、合并后的行数据为：{ id: 123, money: '100', name: '新名称', create_date: '2025-01-02 10:00:00' }
+    5、假设旧金额为50，新金额为100，旧日期为2025-01-02，新日期仍为2025-01-02
+    6、则更新后的分组为：{ date: '2025-01-02', list: [...], total: 1050 }
+    7、则更新后的总金额为：1050
+  *
+ */
+const syncEditedRow = (updatedRow: Record<string, any>) => {
+  if (!editingMeta.value) return
+  const { groupIndex, itemIndex } = editingMeta.value
+  const sourceGroup = tableData.value[groupIndex] // 源分组
+  if (!sourceGroup) return
+  const originalRow = sourceGroup.list[itemIndex] // 源行数据
+  if (!originalRow) return
+
+  const mergedRow = { ...originalRow, ...updatedRow }
+  const oldMoney = Number(originalRow.money) || 0
+  const newMoney = Number(mergedRow.money) || 0
+  const oldDate = (originalRow.create_date || sourceGroup.date)?.slice(0, 10)
+  const newDate = (mergedRow.create_date || oldDate)?.slice(0, 10)
+
+  /**
+   * @desc 更新分组的总金额
+   * @param {any} group 分组数据
+   * @param {number} delta 金额增量
+   * @returns {string} 更新后的金额
+   */
+  const updateGroupTotal = (group: any, delta: number) => {
+    group.total = +(Number(group.total || 0) + delta).toFixed(2)
+  }
+
+  // 如果只改内容不改单日期
+  if (oldDate === newDate) {
+    sourceGroup.list[itemIndex] = mergedRow
+    updateGroupTotal(sourceGroup, newMoney - oldMoney)
+  } else {
+    // 日期发生变化，需移动到新分组
+    sourceGroup.list.splice(itemIndex, 1)
+    updateGroupTotal(sourceGroup, -oldMoney)
+    // 如果原组已空则删除组
+    if (sourceGroup.list.length === 0) {
+      tableData.value.splice(groupIndex, 1)
+    }
+
+    // 查找目标组
+    let targetGroup = tableData.value.find((g: any) => g.date === newDate)
+    if (!targetGroup) {
+      targetGroup = { date: newDate, list: [], total: 0 }
+      tableData.value.push(targetGroup)
+      // 重新排序，日期降序（新日期在前）
+      tableData.value.sort((a: any, b: any) => (a.date < b.date ? 1 : -1))
+    }
+
+    // 插入数据（插入到list头部）
+    targetGroup.list.unshift(mergedRow)
+    updateGroupTotal(targetGroup, newMoney)
+  }
+
+  // 总金额同步
+  moneyTotal.value = +(Number(moneyTotal.value) - oldMoney + newMoney).toFixed(2)
+  editingMeta.value = null
+  // 通知响应式系统
+  tableData.value = tableData.value.slice()
 }
 
 onMounted(() => {

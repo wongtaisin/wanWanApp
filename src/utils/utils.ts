@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2024-11-16 18:04:21
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-10-29 11:19:00
+ * @LastEditTime: 2025-11-26 16:15:31
  * @FilePath: \wanWanApp\src\utils\utils.ts
  * @Description: 通用工具函数库
  *
@@ -24,10 +24,11 @@ const deepClone = <T>(data: T): T => {
  * @param {number} timestamp - 时间戳
  * @param {string} format - 日期格式
  * @returns {string} 格式化后的日期字符串
+ *
  * @example
- * formatDate(1507513800642, 'yyyy/MM/dd hh:mm:ss') => '2017/10/09 09:50:00'
- * formatDate(1507513800642, 'yyyy-MM-dd hh:mm:ss') => '2017-10-09 09:50:00'
- * formatDate(1507513800642, 'yyyy.MM.dd , hh-mm-ss') => '2017.10.09 , 09-50-00'
+ * @demo formatDate(1507513800642, 'yyyy/MM/dd hh:mm:ss') => '2017/10/09 09:50:00'
+ * @demo formatDate(1507513800642, 'yyyy-MM-dd hh:mm:ss') => '2017-10-09 09:50:00'
+ * @demo formatDate(1507513800642, 'yyyy.MM.dd , hh-mm-ss') => '2017.10.09 , 09-50-00'
  */
 const formatDate = (timestamp: number, format: string): string => {
   if (!timestamp) return ''
@@ -178,8 +179,11 @@ const snakeToCamel = (str: string): string => {
  * @desc 转换下划线键名为驼峰键名
  * @param {any} row - 包含下划线键名的对象
  * @returns {any} 转换后的对象,键名采用驼峰命名
+ *
+ * @example const row = { user_id: 123, first_name: 'John', last_name: 'Doe' }
+ * @demo toCamelCase(row) => { userId: 123, firstName: 'John', lastName: 'Doe' }
  */
-const transformed = (row: any) => {
+const toCamelCase = (row: any) => {
   const params: any = {}
   Object.entries(row).forEach(([key, value]) => {
     const camelKey = key.includes('_') ? snakeToCamel(key) : key
@@ -189,9 +193,38 @@ const transformed = (row: any) => {
 }
 
 /**
+ * 驼峰转下划线函数
+ * @param {string} str 驼峰字符串
+ * @returns {string} 下划线字符串
+ */
+const camelToSnake = (str: string): string => {
+  return str.replace(/([A-Z])/g, '_$1').toLowerCase()
+}
+
+/**
+ * @desc 转换驼峰键名为下划线键名
+ * @param {any} row - 包含驼峰键名的对象
+ * @returns {any} 转换后的对象,键名采用下划线命名
+ *
+ * @example const row = { userId: 123, firstName: 'John', lastName: 'Doe' }
+ * @demo toSnakeCase(row) => { user_id: 123, first_name: 'John', last_name: 'Doe' }
+ */
+const toSnakeCase = (row: any) => {
+  const params: any = {}
+  Object.entries(row).forEach(([key, value]) => {
+    const snakeKey = /[A-Z]/.test(key) ? camelToSnake(key) : key
+    params[snakeKey] = value
+  })
+  return params
+}
+
+/**
  * @description 获取当前月份的开始和结束日期
- * @param time 2025-11
+ * @param {string} time 2025-11
  * @returns { firstDay: '2025-11-01', lastDay: '2025-11-30' }
+ *
+ * @example
+ * @demo getCurrentMonthRange('2025-11') => { firstDay: '2025-11-01', lastDay: '2025-11-30' }
  */
 function getCurrentMonthRange(time: string) {
   // 解析 YYYY-MM 格式的字符串
@@ -218,6 +251,22 @@ function getCurrentMonthRange(time: string) {
   }
 }
 
+/**
+ * @description 移除对象中值为空字符串的键
+ * @param {any} rows 包含键值对的对象
+ * @returns {any} 移除空值键后的对象
+ *
+ * @example
+ * @demo removeEmptyKeys({ a: '123', b: '', c: undefined, d: null }) => { a: '123' }
+ */
+const removeEmptyKeys = (rows: any) => {
+  Object.keys(rows).forEach(key => {
+    if (rows[key] === '' || rows[key] === undefined || rows[key] === null) {
+      delete rows[key]
+    }
+  })
+}
+
 export default {
   deepClone,
   formatDate,
@@ -228,6 +277,9 @@ export default {
   isMobileNumber,
   validateMinLength,
   snakeToCamel,
-  transformed,
-  getCurrentMonthRange
+  toCamelCase,
+  camelToSnake,
+  toSnakeCase,
+  getCurrentMonthRange,
+  removeEmptyKeys
 }
