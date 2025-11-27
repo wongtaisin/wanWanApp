@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-10 16:07:15
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-27 09:29:19
+ * @LastEditTime: 2025-11-27 13:45:05
  * @FilePath: \wanWanApp\src\pages\log\index.vue
  * @Description: 店铺列表
  *
@@ -27,35 +27,37 @@
           @click="handleClick($event, item, i)"
           @change="swipeChange($event, i)"
         >
-          <uni-list-item
-            :title="item.request_url"
-            :note="`${item.user_name} ${_utils.formatDate(
-              item.create_time,
-              'yyyy-MM-dd hh:mm:ss'
-            )}`"
-          >
-            <template v-slot:footer>
-              <view class="chat-custom-right">
-                <uni-tag
-                  :text="statusMap[item.status_code].text"
-                  :type="statusMap[item.status_code].type"
-                  :circle="true"
-                />
-              </view>
-            </template>
-          </uni-list-item>
+          <view @tap.stop="handleClickListItem(item)">
+            <uni-list-item
+              :title="item.request_url"
+              :note="`${_utils.formatDate(item.create_time, 'yyyy-MM-dd hh:mm:ss')}`"
+            >
+              <template v-slot:footer>
+                <view class="chat-custom-right">
+                  <uni-tag
+                    :text="statusMap[item.status_code].text"
+                    :type="statusMap[item.status_code].type"
+                    :circle="true"
+                  />
+                </view>
+              </template>
+            </uni-list-item>
+          </view>
         </uni-swipe-action-item>
       </uni-swipe-action>
     </uni-list>
     <!-- 加载提示 -->
     <uni-load-more :status="status" />
   </scroll-view>
+
+  <LogDetail ref="detailRef" />
 </template>
 
 <script lang="ts" setup>
 import { operationDelete, operationLog } from '@/services/log'
 import _utils from '@/utils/utils'
 import { onMounted, ref } from 'vue'
+import LogDetail from './detail.vue'
 
 const status = ref('more') // more/loading/noMore
 const params = ref({ page: 1, pageSize: 20 })
@@ -84,6 +86,11 @@ const handleClick = async (e: any, row: any, i: number) => {
 
 const swipeChange = (e: any, index: number) => {
   console.log(e, index)
+}
+
+const detailRef = ref()
+const handleClickListItem = (item: any) => {
+  detailRef.value.opens(item)
 }
 
 const loadMore = () => {
