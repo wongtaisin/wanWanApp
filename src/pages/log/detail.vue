@@ -9,9 +9,10 @@
  * Copyright (c) 2025 by wongtaisin1024@gmail.com, All Rights Reserved.
 -->
 <template>
-  <uni-popup ref="popupRef" type="center" background-color="#fff" borderRadius="20rpx 20rpx 0 0">
+  <uni-popup ref="popupRef" type="center">
     <uni-list :border="true" style="width: 680rpx">
-      <uni-list-item title="用户" :rightText="`${params.user_name}（${params.user_id}）`" />
+      <uni-list-item title="ID" :rightText="params.user_id" />
+      <uni-list-item title="用户" :rightText="`${params.user_name}`" />
       <uni-list-item
         title="日期"
         :rightText="`${_utils.formatDate(params.create_time, 'yyyy-MM-dd hh:mm:ss')}`"

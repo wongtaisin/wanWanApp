@@ -2,35 +2,42 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-27 08:19:52
+ * @LastEditTime: 2025-11-27 15:52:38
  * @FilePath: \wanWanApp\src\pages\spend\index.vue
  * @Description:
  *
  * Copyright (c) 2025 by wongtaisin1024@gmail.com, All Rights Reserved.
 -->
 <template>
-  <view class="chart-page">
-    <scroll-view scroll-y style="height: calc(100vh - 188rpx)" @scrolltolower="loadMore">
-      <uni-row class="top">
-        <uni-col :span="8">
-          <text class="text">{{ month.slice(0, 4) }}年</text>
-          <CommonMothPicker v-model="month" @change="handleChange">
-            <p class="money">
-              {{ month.slice(5, 7) }}
-              <text style="font-size: 28rpx">月</text>
-            </p>
-          </CommonMothPicker>
-        </uni-col>
-        <uni-col :span="8">
-          <text class="text">消费笔数</text>
-          <p class="money">{{ params.total }}</p>
-        </uni-col>
-        <uni-col :span="8">
-          <text class="text">支出</text>
-          <p class="money">{{ moneyTotal }}</p>
-        </uni-col>
-      </uni-row>
+  <view class="spend-page">
+    <uni-row class="top">
+      <uni-col :span="8">
+        <text class="text">{{ month.slice(0, 4) }}年</text>
+        <CommonMothPicker v-model="month" @change="handleChange">
+          <p class="money">
+            {{ month.slice(5, 7) }}
+            <text style="font-size: 28rpx">月</text>
+          </p>
+        </CommonMothPicker>
+      </uni-col>
+      <uni-col :span="8">
+        <text class="text">消费笔数</text>
+        <p class="money">{{ params.total }}</p>
+      </uni-col>
+      <uni-col :span="8">
+        <text class="text">支出</text>
+        <p class="money">{{ moneyTotal }}</p>
+      </uni-col>
+    </uni-row>
 
+    <scroll-view
+      class="list-scroll"
+      scroll-y
+      @scrolltolower="loadMore"
+      refresher-enabled
+      :refresher-triggered="triggered"
+      @refresherrefresh="onRefresh"
+    >
       <uni-list v-for="group in tableData" :key="group.date">
         <view class="list-top">
           <uni-row>
@@ -93,6 +100,8 @@ import { expensesDetailDelete, expensesDetailList, expensesTotal } from '@/servi
 import _utils from '@/utils/utils'
 import { onMounted, reactive, ref } from 'vue'
 
+type SpendGroup = { date: string; list: any[]; total: number }
+
 const options = reactive([
   {
     text: '删除',
@@ -109,12 +118,12 @@ const options = reactive([
 ])
 
 const month = ref(`${new Date().getFullYear()}-${new Date().getMonth() + 1}`)
-const tableData = ref<any>([])
+const tableData = ref<SpendGroup[]>([])
 const params = ref({
   startDate: _utils.getCurrentMonthRange(month.value).firstDay,
   endDate: _utils.getCurrentMonthRange(month.value).lastDay,
   page: 1,
-  pageSize: 10,
+  pageSize: 15,
   total: 0 // 传了后台也不接受，只用作显示消费笔数
 })
 const status = ref('more') // more/loading/noMore
@@ -123,9 +132,10 @@ const expensesPopupRef = ref()
 const expensesParams = ref<any>({})
 const swipeActionRef = ref<any[]>([] as any[])
 const editingMeta = ref<{ groupIndex: number; itemIndex: number } | null>(null)
+const triggered = ref(false) // 是否在刷新中
 
 const init = async () => {
-  Promise.all([await initList(), await initTotal()])
+  await Promise.all([initList(), initTotal()])
 }
 
 // 初始化数据
@@ -136,7 +146,7 @@ const initList = async () => {
 
   // 重新设计list，需要把每一天的支出都展示出来，转成[{list:{}, date:2025-01-01, total:0}]
   const grouped = Object.values(
-    list.reduce((acc: any, item: any) => {
+    list.reduce((acc: Record<string, any>, item: any) => {
       const date = item.create_date.split(' ')[0] // 只取年月日
       if (!acc[date]) {
         // 如果该日期不存在，则创建一个新对象
@@ -146,9 +156,9 @@ const initList = async () => {
       acc[date].total += parseFloat(item.money) // 累加该日期的支出金额
       return acc
     }, {})
-  )
+  ) as SpendGroup[]
 
-  tableData.value = [...tableData.value, ...grouped]
+  tableData.value = [...tableData.value, ...grouped] // 合并数据
   const totalPage = Math.ceil(total / params.value.pageSize) // 计算总页数
   status.value = params.value.page >= totalPage ? 'noMore' : 'more'
 }
@@ -199,6 +209,17 @@ const loadMore = () => {
   if (status.value !== 'more') return
   params.value.page++
   initList()
+}
+
+const onRefresh = async () => {
+  triggered.value = true
+
+  params.value.page = 1
+  tableData.value = []
+
+  await initList()
+
+  triggered.value = false // 关闭刷新动画
 }
 
 const onSubmit = async (values: any) => {
@@ -307,11 +328,19 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.chart-page {
-  padding-bottom: 108rpx;
+.spend-page {
+  height: calc(100vh - 108px);
+
+  .list-scroll {
+    height: calc(100vh - 196px);
+  }
+
   .top {
     padding: 20rpx;
     background: #fede2b;
+    position: sticky;
+    top: 76rpx;
+    z-index: 2;
 
     .text {
       color: #7c7b7b;
