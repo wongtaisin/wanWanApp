@@ -60,6 +60,7 @@
 <script lang="ts" setup>
 import { shopAll } from '@/services/shop'
 import { useShop } from '@/store/common'
+import { onPullDownRefresh } from '@dcloudio/uni-app'
 import pinyin from 'pinyin'
 import { computed, onMounted, ref } from 'vue'
 
@@ -243,6 +244,14 @@ const handleConfirm = (value: string) => {
 
 /** 关闭弹窗 */
 const handleClose = () => popupRef.value.close()
+
+onPullDownRefresh(() => {
+  console.log('触发下拉刷新')
+
+  loadShop().then(() => {
+    uni.stopPullDownRefresh()
+  })
+})
 
 onMounted(() => {
   loadShop()

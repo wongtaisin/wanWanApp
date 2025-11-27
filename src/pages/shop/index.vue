@@ -9,7 +9,14 @@
  * Copyright (c) 2025 by wongtaisin1024@gmail.com, All Rights Reserved.
 -->
 <template>
-  <scroll-view scroll-y style="height: calc(100vh - 22rpx)" @scrolltolower="loadMore">
+  <scroll-view
+    scroll-y
+    style="height: calc(100vh - 22rpx)"
+    @scrolltolower="loadMore"
+    refresher-enabled
+    :refresher-triggered="triggered"
+    @refresherrefresh="onRefresh"
+  >
     <uni-list>
       <uni-swipe-action ref="swipeActionRef">
         <!-- 右侧带角标 -->
@@ -91,6 +98,18 @@ const init = async () => {
   const { list, total } = await shopList(params.value)
   tableData.value = [...tableData.value, ...list]
   status.value = tableData.value.length >= total ? 'noMore' : 'more'
+}
+
+const triggered = ref(false) // 是否在刷新中
+const onRefresh = async () => {
+  triggered.value = true
+
+  params.value.page = 1
+  tableData.value = []
+
+  await init()
+
+  triggered.value = false // 关闭刷新动画
 }
 
 onMounted(init)

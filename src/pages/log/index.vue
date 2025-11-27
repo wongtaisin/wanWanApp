@@ -2,14 +2,21 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-10 16:07:15
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-25 08:54:43
+ * @LastEditTime: 2025-11-27 09:29:19
  * @FilePath: \wanWanApp\src\pages\log\index.vue
  * @Description: 店铺列表
  *
  * Copyright (c) 2025 by wongtaisin1024@gmail.com, All Rights Reserved.
 -->
 <template>
-  <scroll-view scroll-y style="height: calc(100vh - 22rpx)" @scrolltolower="loadMore">
+  <scroll-view
+    scroll-y
+    style="height: calc(100vh - 22rpx)"
+    @scrolltolower="loadMore"
+    refresher-enabled
+    :refresher-triggered="triggered"
+    @refresherrefresh="onRefresh"
+  >
     <uni-list>
       <uni-swipe-action ref="swipeActionRef">
         <!-- 右侧带角标 -->
@@ -54,7 +61,6 @@ const status = ref('more') // more/loading/noMore
 const params = ref({ page: 1, pageSize: 20 })
 const tableData = ref<any>([])
 const swipeActionRef = ref()
-
 const statusMap = {
   200: { text: '成功', type: 'success' },
   304: { text: '未修改', type: 'warning' },
@@ -64,6 +70,7 @@ const statusMap = {
   404: { text: '资源不存在', type: 'danger' },
   500: { text: '服务器错误', type: 'danger' }
 } as any
+const triggered = ref(false) // 是否在刷新中
 
 const handleClick = async (e: any, row: any, i: number) => {
   if (e.content.text === '修改') {
@@ -83,6 +90,17 @@ const loadMore = () => {
   if (status.value !== 'more') return
   params.value.page++
   init()
+}
+
+const onRefresh = async () => {
+  triggered.value = true
+
+  params.value.page = 1
+  tableData.value = []
+
+  await init()
+
+  triggered.value = false // 关闭刷新动画
 }
 
 const init = async () => {

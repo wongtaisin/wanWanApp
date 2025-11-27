@@ -53,7 +53,8 @@
       "path": "pages/shop/indexedList",
       "style": {
         "navigationBarTitleText": "店铺索引",
-        "navigationStyle": "custom"
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": true
       }
     },
     {
