@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-26 15:59:10
+ * @LastEditTime: 2025-11-27 08:19:52
  * @FilePath: \wanWanApp\src\pages\spend\index.vue
  * @Description:
  *
@@ -83,7 +83,7 @@
     title="编辑"
     ref="expensesPopupRef"
     v-model="expensesParams"
-    @onSubmit="onSubmit"
+    @submit="onSubmit"
   />
 </template>
 

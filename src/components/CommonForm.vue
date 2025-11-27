@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 15:27:20
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-13 16:31:10
+ * @LastEditTime: 2025-11-27 08:15:51
  * @FilePath: \wanWanApp\src\components\CommonForm.vue
  * @Description:
  *
@@ -11,7 +11,7 @@
 <template>
   <uni-forms
     ref="formRef"
-    :rules="rules"
+    :rules="props.rules"
     :model="params"
     :label-width="props.labelWidth"
     :label-align="props.labelAlign"
@@ -24,9 +24,9 @@
       :required="column.required ?? false"
     >
       <uni-easyinput
-        :disabled="column.disabled"
+        :disabled="column.disabled ?? false"
         :type="column.type"
-        :placeholder="column.placeholder"
+        :placeholder="column.placeholder || '请输入'"
         v-model="params[column.prop]"
         @click="column.handler"
       />
@@ -34,7 +34,7 @@
 
     <slot />
 
-    <button class="forms-button" @click="onSubmit">提交</button>
+    <button class="forms-button" @click="onSubmit">{{ props.buttonText }}</button>
   </uni-forms>
 </template>
 
@@ -50,23 +50,25 @@ interface Props {
   labelWidth?: string
   labelAlign?: 'left' | 'right'
   rules?: Record<string, any> // 验证
+  buttonText?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  labelAlign: 'left'
+  labelAlign: 'left',
+  buttonText: '提交'
 })
 
 const modelValue = defineModel<FormData>('modelValue', { default: {} })
 const params = computed(() => modelValue.value)
 const formColumns = computed(() => props.columns)
-const emits = defineEmits(['refresh'])
+const emits = defineEmits(['submit'])
 const formRef = ref()
 
 const onSubmit = async () => {
   formRef.value
     .validate()
     .then((res: any) => {
-      emits('refresh', res)
+      emits('submit', res)
     })
     .catch((err: any) => {
       console.error('err', err)

@@ -15,9 +15,9 @@
       label-align="right"
       label-width="150rpx"
       :rules="rules"
-      v-model="params"
       :columns="formColumns"
-      @refresh="onSubmit"
+      v-model="params"
+      @submit="onSubmit"
     >
       <uni-forms-item label="省/市/区" name="areaCode">
         <AreaCityChina @change="handleChange" />

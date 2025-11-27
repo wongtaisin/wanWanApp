@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 15:10:00
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-13 16:20:37
+ * @LastEditTime: 2025-11-27 08:20:47
  * @FilePath: \wanWanApp\src\pages\expenses\index.vue
  * @Description:
  *
@@ -24,7 +24,7 @@
       </uni-grid>
     </view>
 
-    <CommonExpensesPopup ref="popupRef" v-model="params" @onSubmit="onSubmit" />
+    <CommonExpensesPopup ref="expensesPopupRef" v-model="params" @submit="onSubmit" />
   </view>
 </template>
 
@@ -53,10 +53,10 @@ const initialFormData: FormData = {
 }
 
 const params = ref<FormData>({ ...initialFormData })
-const popupRef = ref()
+const expensesPopupRef = ref()
 
 const handleClick = (item: { label: string; prop: string; icon: string }) => {
-  popupRef.value.open() // 打开弹窗
+  expensesPopupRef.value.open() // 打开弹窗
   params.value = { ...initialFormData }
   params.value.createDate = _utils.formatDate(Date.now(), 'yyyy-MM-dd hh:mm:ss')
   params.value.expensesName = item.prop
@@ -85,7 +85,7 @@ const onSubmit = async (values: any) => {
       console.error('新增失败:', err)
     })
     .finally(() => {
-      popupRef.value.close()
+      expensesPopupRef.value.close()
     })
 }
 

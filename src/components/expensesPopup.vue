@@ -7,9 +7,9 @@
         label-align="right"
         label-width="150rpx"
         :rules="rules"
-        v-model="params"
         :columns="formColumns"
-        @refresh="onSubmit"
+        v-model="params"
+        @submit="onSubmit"
       >
         <uni-forms-item label="支付类型" name="paymentId" required>
           <uni-data-select
@@ -75,7 +75,7 @@ const userShop = useShop()
 const modelValue = defineModel<FormData>('modelValue', { default: {} })
 const params = computed(() => modelValue.value)
 const popupRef = ref()
-const emits = defineEmits(['onSubmit'])
+const emits = defineEmits(['submit'])
 
 // const handleUploadSuccess = (data: any) => {
 //   // 存储上传成功后的图片URL
@@ -84,7 +84,7 @@ const emits = defineEmits(['onSubmit'])
 // }
 
 const onSubmit = async (values: any) => {
-  emits('onSubmit', values)
+  emits('submit', values)
 }
 
 /**
