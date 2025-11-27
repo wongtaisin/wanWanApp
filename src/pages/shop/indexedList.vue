@@ -27,8 +27,8 @@
           active: false
         },
         {
-          iconPath: '/static/image/icon/icon_spend.png',
-          selectedIconPath: '/static/image/icon/icon_spend_HL.png',
+          iconPath: '/static/image/icon/icon_shop.png',
+          selectedIconPath: '/static/image/icon/icon_shop_HL.png',
           text: '新增',
           active: false
         }

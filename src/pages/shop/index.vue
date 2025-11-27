@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-10 16:07:15
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-26 11:58:13
+ * @LastEditTime: 2025-11-27 11:29:06
  * @FilePath: \wanWanApp\src\pages\shop\index.vue
  * @Description: 店铺列表
  *
@@ -50,6 +50,34 @@
     <uni-load-more :status="status" />
   </scroll-view>
 
+  <uni-fab
+    :pattern="{
+      color: '#7A7E83',
+      backgroundColor: '#fff',
+      selectedColor: '#007AFF',
+      buttonColor: '#007AFF',
+      iconColor: '#fff'
+    }"
+    :content="[
+      {
+        iconPath: '/static/image/icon/icon_home.png',
+        selectedIconPath: '/static/image/icon/icon_home_HL.png',
+        text: '首页',
+        active: false
+      },
+      {
+        iconPath: '/static/image/icon/icon_shop.png',
+        selectedIconPath: '/static/image/icon/icon_shop_HL.png',
+        text: '新增',
+        active: false
+      }
+    ]"
+    horizontal="right"
+    vertical="bottom"
+    direction="horizontal"
+    @trigger="handleTrigger"
+  />
+
   <Edit title="编辑地址" ref="editRef" @refresh="handleRefresh" />
 </template>
 
@@ -66,6 +94,7 @@ const params = ref({
 const tableData = ref<any>([])
 const swipeActionRef = ref()
 const editRef = ref<any>()
+const triggered = ref(false) // 是否在刷新中
 
 const handleClick = async (e: any, row: any, i: number) => {
   if (e.content.text === '修改') {
@@ -87,20 +116,23 @@ const loadMore = () => {
   init()
 }
 
+const handleTrigger = ({ item, index }: { item: any; index: number }) => {
+  switch (index) {
+    case 0:
+      uni.switchTab({ url: '/pages/expenses/index' })
+      break
+    case 1:
+      uni.navigateTo({ url: '/pages/shop/add' })
+      break
+  }
+}
+
 const handleRefresh = () => {
   params.value.page = 1
   tableData.value = []
   init()
 }
 
-const init = async () => {
-  status.value = 'loading'
-  const { list, total } = await shopList(params.value)
-  tableData.value = [...tableData.value, ...list]
-  status.value = tableData.value.length >= total ? 'noMore' : 'more'
-}
-
-const triggered = ref(false) // 是否在刷新中
 const onRefresh = async () => {
   triggered.value = true
 
@@ -110,6 +142,13 @@ const onRefresh = async () => {
   await init()
 
   triggered.value = false // 关闭刷新动画
+}
+
+const init = async () => {
+  status.value = 'loading'
+  const { list, total } = await shopList(params.value)
+  tableData.value = [...tableData.value, ...list]
+  status.value = tableData.value.length >= total ? 'noMore' : 'more'
 }
 
 onMounted(init)
