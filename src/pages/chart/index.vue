@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-24 16:28:16
+ * @LastEditTime: 2025-11-28 17:01:39
  * @FilePath: \wanWanApp\src\pages\chart\index.vue
  * @Description:
  *
@@ -19,6 +19,8 @@
         @clickItem="onClickItem"
       />
     </view>
+
+    <Week v-if="current === 0" />
 
     <Calendar
       v-if="current === 1"
@@ -92,6 +94,7 @@ import MonthPicker from '@/pages/chart/monthPicker.vue'
 import Spend from '@/pages/chart/spend.vue'
 import type { FormData } from '@/pages/chart/types'
 import { expensesNames, getWeekRange } from '@/pages/chart/utils'
+import Week from '@/pages/chart/week.vue'
 import _utils from '@/utils/utils'
 import { onMounted, reactive, ref } from 'vue'
 
