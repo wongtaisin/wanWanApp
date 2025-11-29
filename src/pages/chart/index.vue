@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-28 17:01:39
+ * @LastEditTime: 2025-11-29 08:43:53
  * @FilePath: \wanWanApp\src\pages\chart\index.vue
  * @Description:
  *
@@ -20,7 +20,13 @@
       />
     </view>
 
-    <Week v-if="current === 0" />
+    <Week
+      v-if="current === 0"
+      @click="(val: {start: string, end: string})=>{
+      params.startDate = val.start
+      params.endDate = val.end
+    }"
+    />
 
     <Calendar
       v-if="current === 1"
