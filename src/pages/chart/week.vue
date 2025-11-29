@@ -2,14 +2,18 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-15 11:29:03
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-29 10:12:30
+ * @LastEditTime: 2025-11-29 11:21:29
  * @FilePath: \wanWanApp\src\pages\chart\week.vue
  * @Description:
  *
  * Copyright (c) 2025 by wongtaisin1024@gmail.com, All Rights Reserved.
 -->
 <template>
-  <view class="week-year">当前年份：{{ dateYear }}年</view>
+  <view class="week-year">
+    <view class="arrow" @click="prevYear">«</view>
+    <view class="year">{{ dateYear }}</view>
+    <view class="arrow" @click="nextYear">»</view>
+  </view>
 
   <scroll-view
     scroll-x="true"
@@ -35,12 +39,12 @@
 import { getCurrentWeekInYear, getDateRangeOfWeek, getWeeksInYear } from '@/pages/chart/utils'
 import { onMounted, ref } from 'vue'
 
-const dateYear = new Date().getFullYear()
-const week = ref(getWeeksInYear(dateYear)) as any
+const dateYear = ref(new Date().getFullYear())
+const week = ref(getWeeksInYear(dateYear.value)) as any
 const weekList = ref<string[]>([])
-weekList.value = [...Array(week.value).keys()].map(item => `${dateYear}-${item + 1}`)
+weekList.value = [...Array(week.value).keys()].map(item => `${dateYear.value}-${item + 1}`)
 const activeWeekLabel = ref<string>('')
-activeWeekLabel.value = `${dateYear}-${getCurrentWeekInYear(dateYear)}`
+activeWeekLabel.value = `${dateYear.value}-${getCurrentWeekInYear(dateYear.value)}`
 const activeWeekId = ref<string>('0')
 const emits = defineEmits(['click'])
 
@@ -59,16 +63,50 @@ const handleClick = (item: string) => {
   console.log(`${year}-${week}周的日期范围是：${start} 至 ${end}`)
 }
 
+// 切换年份
+const prevYear = () => {
+  dateYear.value--
+  handleYear(dateYear.value)
+}
+
+const nextYear = () => {
+  dateYear.value++
+  handleYear(dateYear.value)
+}
+
+// 处理年份切换
+const handleYear = (year: number) => {
+  dateYear.value = year
+  week.value = getWeeksInYear(dateYear.value)
+  weekList.value = [...Array(week.value).keys()].map(item => `${dateYear.value}-${item + 1}`)
+  activeWeekLabel.value = `${dateYear.value}-${getCurrentWeekInYear(dateYear.value)}`
+  handleClick(activeWeekLabel.value)
+}
+
 onMounted(() => {
-  handleClick(`${dateYear}-${getCurrentWeekInYear(dateYear)}`)
+  handleClick(activeWeekLabel.value)
 })
 </script>
 
 <style lang="scss" scoped>
 .week-year {
-  text-align: center;
-  padding: 20rpx 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20rpx;
+  font-size: 34rpx;
+  padding-bottom: 20rpx;
   border-bottom: 1rpx solid #ededed;
+
+  .arrow {
+    padding: 0 40rpx;
+    font-size: 32rpx;
+    color: #555;
+  }
+
+  .year {
+    font-size: 36rpx;
+  }
 }
 
 .week-container {
