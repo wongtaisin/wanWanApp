@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 15:10:00
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-27 08:20:47
+ * @LastEditTime: 2025-12-02 08:48:04
  * @FilePath: \wanWanApp\src\pages\expenses\index.vue
  * @Description:
  *
@@ -63,17 +63,12 @@ const handleClick = (item: { label: string; prop: string; icon: string }) => {
 }
 
 const onSubmit = async (values: any) => {
-  // 清理空字符串
-  Object.keys(params.value).forEach(key => {
-    if (params.value[key] === '') {
-      delete params.value[key]
-    }
-  })
+  const mergedRow = { ...values, ...params.value }
 
-  console.log(values, `新增消费`, params.value)
+  console.log(`新增消费`, mergedRow)
 
   await request('/expensesDetail/add', 'POST', params.value)
-    .then((res: any) => {
+    .then((_res: any) => {
       const tit =
         tableData.value.find((item: any) => item.prop === values.expensesName)?.label || ''
       uni.showToast({

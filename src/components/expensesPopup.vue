@@ -25,6 +25,7 @@
             v-model="params.shopName"
             placeholder="点击选择店铺"
             @focus="handleShopSelect"
+            @clear="handleShopClear"
           />
         </uni-forms-item>
 
@@ -102,6 +103,13 @@ const handleShopSelect = () => {
   uni.navigateTo({
     url: '/pages/shop/indexedList'
   })
+}
+
+const handleShopClear = () => {
+  if (!params.value.shopName) {
+    params.value.shopId = null
+    params.value.shopName = null // 空值改为null
+  }
 }
 
 const range = [
