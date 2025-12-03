@@ -23,9 +23,11 @@
 <script lang="ts" setup>
 import type { FormData, Info, SelectedItem } from '@/pages/chart/types'
 import { expensesList } from '@/services/expenses'
+import { getInfo } from '@/store/user'
 import _utils from '@/utils/utils'
 import { computed, onMounted, ref } from 'vue'
 
+const userInfo = getInfo().user
 const modelValue = defineModel<FormData>('modelValue', { default: {} })
 const params = computed(() => modelValue.value)
 const emits = defineEmits<{
@@ -57,7 +59,7 @@ const monthSwitch = (e: any) => {
 }
 
 const init = async () => {
-  const res = await expensesList({ ...params.value, userId: 1 })
+  const res = await expensesList({ ...params.value, userId: userInfo.userId })
   info.value.selected = res.sum.map((item: SelectedItem) => ({
     date: item.date,
     info: `￥${item.info}`,

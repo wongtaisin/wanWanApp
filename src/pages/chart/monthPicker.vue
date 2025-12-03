@@ -27,6 +27,7 @@
 
 <script lang="ts" setup>
 import { checkDatePrice } from '@/services/expensesDetail'
+import { getInfo } from '@/store/user'
 import { defineEmits, defineProps, onMounted, ref } from 'vue'
 
 interface Props {
@@ -37,6 +38,7 @@ const props = withDefaults(defineProps<Props>(), {
   modelValue: ''
 })
 
+const userInfo = getInfo().user
 const emits = defineEmits(['update:modelValue', 'change', 'yearSwitch'])
 
 // 当前年月
@@ -103,7 +105,7 @@ const change = (m: string) => {
 
 const init = async () => {
   const res = await checkDatePrice({
-    userId: 1, // TODO: 从登录状态获取
+    userId: userInfo.userId,
     startDate: `${selectedYear.value}-01-01`,
     endDate: `${selectedYear.value}-12-31`
   })

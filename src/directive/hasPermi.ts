@@ -2,14 +2,12 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-12-03 15:47:26
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-03 15:50:21
+ * @LastEditTime: 2025-12-03 15:58:14
  * @FilePath: \wanWanApp\src\directive\hasPermi.ts
  * @Description:
  *
  * Copyright (c) 2025 by wongtaisin1024@gmail.com, All Rights Reserved.
  */
-import { DirectiveBinding } from 'vue'
-
 interface Element extends HTMLElement {
   parentNode: Element | null
 }
@@ -20,7 +18,7 @@ interface Element extends HTMLElement {
  * @example v-hasPermi="['system:user:add','system:user:edit']"
  */
 const hasPermi = {
-  mounted(el: Element, binding: DirectiveBinding): void {
+  mounted(el: Element, binding: any): void {
     const { value } = binding
     const ALL_PERMISSION = '*:*:*'
 
