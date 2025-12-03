@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-15 11:29:03
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-24 16:33:09
+ * @LastEditTime: 2025-12-03 14:21:18
  * @FilePath: \wanWanApp\src\pages\chart\calendar.vue
  * @Description:
  *
@@ -57,7 +57,7 @@ const monthSwitch = (e: any) => {
 }
 
 const init = async () => {
-  const res = await expensesList({ ...params.value })
+  const res = await expensesList({ ...params.value, userId: 1 })
   info.value.selected = res.sum.map((item: SelectedItem) => ({
     date: item.date,
     info: `￥${item.info}`,

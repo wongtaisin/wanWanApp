@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-13 16:12:04
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-04 08:35:28
+ * @LastEditTime: 2025-12-03 15:26:39
  * @FilePath: \wanWanApp\src\pages\login\index.vue
  * @Description:
  *
@@ -24,6 +24,7 @@
 
 <script lang="ts" setup>
 import { login } from '@/services/user'
+import { getInfo } from '@/store/user'
 import { reactive, ref } from 'vue'
 
 const params = reactive({
@@ -35,15 +36,17 @@ const rules = {
   user_name: { rules: [{ required: true, errorMessage: '用户名不能为空' }] },
   password: { rules: [{ required: true, errorMessage: '密码不能为空' }] }
 }
+const userInfo = getInfo()
 
 const onSubmit = () => {
   formRef.value
     .validate()
     .then(async (res: any) => {
       const { token }: any = await login(res)
-      console.log('创建成功:', token)
+      uni.setStorageSync('token', token) // 登录成功后，将token存储到本地
+      const data = await userInfo.getUserInfo() // 登录成功后，获取用户信息
+      userInfo.setUserInfo(data) // 登录成功后，设置用户信息
       uni.showToast({ title: '登录成功', icon: 'success' })
-      uni.setStorageSync('token', token)
       uni.switchTab({ url: '/pages/expenses/index' })
     })
     .catch((err: any) => {
