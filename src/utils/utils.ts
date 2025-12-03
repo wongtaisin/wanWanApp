@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2024-11-16 18:04:21
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-03 13:46:48
+ * @LastEditTime: 2025-12-03 16:30:50
  * @FilePath: \wanWanApp\src\utils\utils.ts
  * @Description: 通用工具函数库
  *
@@ -266,6 +266,23 @@ class utils {
         delete rows[key]
       }
     })
+  }
+
+  /**
+   * @desc 权限验证
+   * @param {string} str - 权限字符串
+   * @param {string[]} permissions - 权限数组
+   * @returns {boolean} 验证结果
+   */
+  authPermission(str: string, permissions: string[]): boolean {
+    const all_permission = '*:*:*'
+
+    // 检查参数有效性
+    if (!str || !permissions || !Array.isArray(permissions)) {
+      return false
+    }
+
+    return permissions.some(permission => permission === all_permission || permission === str)
   }
 }
 

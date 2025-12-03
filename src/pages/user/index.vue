@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:33:29
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-24 17:04:48
+ * @LastEditTime: 2025-12-03 16:35:03
  * @FilePath: \wanWanApp\src\pages\user\index.vue
  * @Description:
  *
@@ -32,7 +32,7 @@
     <uni-card :is-shadow="false" class="user-card">
       <uni-grid :column="4" :showBorder="false" :square="false">
         <uni-grid-item v-for="item in cardGrid" @click="handleClick(item)">
-          <view class="card-grid">
+          <view class="card-grid" v-if="hasPermi(item.permission || '')">
             <view v-if="item.badge" class="grid-dot">
               <uni-badge class="uni-badge-left-margin" :text="item.badge" />
             </view>
@@ -48,10 +48,27 @@
 </template>
 
 <script lang="ts" setup>
+import { getInfo } from '@/store/user'
+import _utils from '@/utils/utils'
+
+const permissions = getInfo().permissions // 用户权限
+
+const hasPermi = (str: string) => {
+  if (!str) return true
+  return _utils.authPermission(str, permissions)
+}
+
 const cardGrid = [
-  { label: '店铺', prop: 'shop', icon: 'shop', url: '/pages/shop/index', badge: 3 },
-  { label: '日志', prop: 'log', icon: 'locked', url: '/pages/log/index' },
-  { label: '设置', prop: 'setting', icon: 'gear-filled' }
+  { label: '店铺', prop: 'shop', icon: 'shop', url: '/pages/shop/index' },
+  { label: '设置', prop: 'setting', icon: 'gear-filled' },
+  {
+    label: '日志',
+    prop: 'log',
+    icon: 'locked',
+    url: '/pages/log/index',
+    badge: 3,
+    permission: 'system:user:logs'
+  }
 ]
 
 const handleClick = (item: any) => {
