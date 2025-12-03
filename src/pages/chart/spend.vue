@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-06 14:35:26
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-24 16:39:38
+ * @LastEditTime: 2025-12-03 13:54:21
  * @FilePath: \wanWanApp\src\pages\chart\spend.vue
  * @Description:
  *
@@ -32,7 +32,7 @@
 </template>
 
 <script lang="ts" setup>
-import { expensesDetailList } from '@/services/spend'
+import { expensesDetailList } from '@/services/expensesDetail'
 import { ref } from 'vue'
 
 interface FormData {

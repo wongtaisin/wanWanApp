@@ -2,8 +2,8 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-01-09 09:59:21
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-01-09 11:50:37
- * @FilePath: \phone\src\utils\index.ts
+ * @LastEditTime: 2025-12-03 14:08:52
+ * @FilePath: \wanWanApp\src\utils\index.ts
  * @Description:
  *
  * Copyright (c) 2025 by wongtaisin1024@gmail.com, All Rights Reserved.
@@ -11,7 +11,7 @@
 import components from '@/components/index'
 import directives from '@/directive/index'
 import type { App, Component } from 'vue'
-import utils from './utils'
+import _utils from './utils'
 
 /**
  * 注册全局工具函数和指令
@@ -20,7 +20,7 @@ import utils from './utils'
  */
 const install = (app: App): void => {
   // 注册工具函数
-  app.config.globalProperties.$utils = utils
+  app.config.globalProperties.$utils = _utils
 
   // 注册指令
   directives.forEach(({ name, directive }: { name: string; directive: any }) => {
@@ -36,7 +36,7 @@ const install = (app: App): void => {
 // 声明类型,扩展Vue全局属性
 declare module 'vue' {
   interface ComponentCustomProperties {
-    $utils: typeof utils // 声明$utils工具函数的类型
+    $utils: typeof _utils // 声明$utils工具函数的类型
   }
 }
 

@@ -86,7 +86,7 @@ const handleOpens = (item: string) => {
 const initCheck = async () => {
   const { sum, total } = await expensesCheck({
     // userId: 1, // TODO: 从登录状态获取
-    name: expensesNames,
+    expensesName: expensesNames,
     startDate: params.value.startDate,
     endDate: params.value.endDate
   })

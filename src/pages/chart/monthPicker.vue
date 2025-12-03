@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts" setup>
-import { checkDatePrice } from '@/services/expenses'
+import { checkDatePrice } from '@/services/expensesDetail'
 import { defineEmits, defineProps, onMounted, ref } from 'vue'
 
 interface Props {

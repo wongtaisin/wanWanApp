@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-27 15:52:38
+ * @LastEditTime: 2025-12-03 13:53:55
  * @FilePath: \wanWanApp\src\pages\spend\index.vue
  * @Description:
  *
@@ -95,8 +95,12 @@
 </template>
 
 <script lang="ts" setup>
-import { expensesDetailEdit } from '@/services/expenses'
-import { expensesDetailDelete, expensesDetailList, expensesTotal } from '@/services/spend'
+import { expensesTotal } from '@/services/expenses'
+import {
+  expensesDetailDelete,
+  expensesDetailEdit,
+  expensesDetailList
+} from '@/services/expensesDetail'
 import _utils from '@/utils/utils'
 import { onMounted, reactive, ref } from 'vue'
 
