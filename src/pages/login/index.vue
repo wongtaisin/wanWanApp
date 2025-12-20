@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-13 16:12:04
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-03 15:26:39
+ * @LastEditTime: 2025-12-16 19:28:05
  * @FilePath: \wanWanApp\src\pages\login\index.vue
  * @Description:
  *
@@ -28,8 +28,8 @@ import { getInfo } from '@/store/user'
 import { reactive, ref } from 'vue'
 
 const params = reactive({
-  user_name: '大帅',
-  password: '123456'
+  user_name: '',
+  password: ''
 })
 const formRef = ref()
 const rules = {
