@@ -58,7 +58,7 @@
 </template>
 
 <script lang="ts" setup>
-import { shopAll } from '@/services/shop'
+import { shopAll } from '@/api/shop'
 import { useShop } from '@/store/common'
 import { onPullDownRefresh } from '@dcloudio/uni-app'
 import pinyin from 'pinyin'

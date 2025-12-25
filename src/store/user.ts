@@ -9,7 +9,7 @@
  * Copyright (c) 2025 by wongtaisin1024@gmail.com, All Rights Reserved.
  */
 
-import { userInfo } from '@/services/user'
+import { userInfo } from '@/api/user'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 

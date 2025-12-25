@@ -26,9 +26,9 @@
 </template>
 
 <script lang="tsx" setup>
+import { shopEdit } from '@/api/shop'
 import AreaCityChina from '@/components/areaCityChina.vue'
 import CommonUniForm from '@/components/uniForm.vue'
-import { shopEdit } from '@/services/shop'
 import _utils from '@/utils/utils'
 import { onShow } from '@dcloudio/uni-app'
 import UniDatetimePicker from '@dcloudio/uni-ui/lib/uni-datetime-picker/uni-datetime-picker.vue'

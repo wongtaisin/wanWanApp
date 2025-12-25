@@ -95,12 +95,8 @@
 </template>
 
 <script lang="ts" setup>
-import { expensesTotal } from '@/services/expenses'
-import {
-  expensesDetailDelete,
-  expensesDetailEdit,
-  expensesDetailList
-} from '@/services/expensesDetail'
+import { expensesTotal } from '@/api/expenses'
+import { expensesDetailDelete, expensesDetailEdit, expensesDetailList } from '@/api/expensesDetail'
 import _utils from '@/utils/utils'
 import { onMounted, reactive, ref } from 'vue'
 

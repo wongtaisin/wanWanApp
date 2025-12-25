@@ -82,7 +82,7 @@
 </template>
 
 <script lang="ts" setup>
-import { shopDelete, shopList } from '@/services/shop'
+import { shopDelete, shopList } from '@/api/shop'
 import { onMounted, ref } from 'vue'
 import Edit from './edit.vue'
 

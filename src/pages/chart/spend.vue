@@ -32,7 +32,7 @@
 </template>
 
 <script lang="ts" setup>
-import { expensesDetailList } from '@/services/expensesDetail'
+import { expensesDetailList } from '@/api/expensesDetail'
 import { ref } from 'vue'
 
 interface FormData {

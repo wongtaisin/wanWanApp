@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-10 16:49:02
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-14 16:44:27
+ * @LastEditTime: 2025-12-25 16:41:06
  * @FilePath: \wanWanApp\src\components\areaCityChina.vue
  * @Description:
  *
@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts" setup>
-import { areaData } from '@/services/common'
+import { areaData } from '@/api/common'
 import { onShow } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 

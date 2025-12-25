@@ -40,8 +40,8 @@
 </template>
 
 <script lang="ts" setup>
+import { shopAdd } from '@/api/shop'
 import AreaCityChina from '@/components/areaCityChina.vue'
-import { shopAdd } from '@/services/shop'
 import { ref } from 'vue'
 
 interface FormData {

@@ -50,9 +50,9 @@
 </template>
 
 <script lang="ts" setup>
+import { expensesCheck } from '@/api/expenses'
 import type { FormData } from '@/pages/chart/types'
 import { expensesNames } from '@/pages/chart/utils'
-import { expensesCheck } from '@/services/expenses'
 import { computed, ref, watch } from 'vue'
 
 const modelValue = defineModel<FormData>('modelValue', { default: {} })

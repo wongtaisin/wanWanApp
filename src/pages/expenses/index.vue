@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-import { request } from '@/services/request'
+import { request } from '@/api/request'
 import _utils from '@/utils/utils'
 import { ref } from 'vue'
 

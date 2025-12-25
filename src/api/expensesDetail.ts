@@ -1,4 +1,4 @@
-import { request } from '@/services/request'
+import { request } from '@/api/request'
 
 export const expensesDetailList = async (params: any) => {
   const res: any = await request('/expensesDetail/list', 'POST', params)

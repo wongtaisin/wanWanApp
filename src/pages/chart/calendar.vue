@@ -21,8 +21,8 @@
 </template>
 
 <script lang="ts" setup>
+import { expensesList } from '@/api/expenses'
 import type { FormData, Info, SelectedItem } from '@/pages/chart/types'
-import { expensesList } from '@/services/expenses'
 import { getInfo } from '@/store/user'
 import _utils from '@/utils/utils'
 import { computed, onMounted, ref } from 'vue'

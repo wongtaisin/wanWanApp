@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts" setup>
-import { login } from '@/services/user'
+import { login } from '@/api/user'
 import { getInfo } from '@/store/user'
 import { reactive, ref } from 'vue'
 

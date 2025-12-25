@@ -54,7 +54,7 @@
 </template>
 
 <script lang="ts" setup>
-import { operationDelete, operationLog } from '@/services/log'
+import { operationDelete, operationLog } from '@/api/log'
 import _utils from '@/utils/utils'
 import { onMounted, ref } from 'vue'
 import LogDetail from './detail.vue'

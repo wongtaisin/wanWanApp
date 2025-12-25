@@ -8,7 +8,7 @@
  *
  * Copyright (c) 2025 by wongtaisin1024@gmail.com, All Rights Reserved.
  */
-import { request } from '@/services/request'
+import { request } from '@/api/request'
 
 export const operationLog = async (params: any) => {
   const res: any = await request('/operationLog/list', 'GET', params)
