@@ -24,7 +24,7 @@
       </uni-grid>
     </view>
 
-    <CommonExpensesPopup ref="expensesPopupRef" v-model="params" @submit="onSubmit" />
+    <ExpensesPopup ref="expensesPopupRef" v-model="params" @submit="onSubmit" />
   </view>
 </template>
 

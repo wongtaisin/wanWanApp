@@ -30,7 +30,7 @@
         </uni-forms-item>
 
         <!-- <uni-forms-item label="图片" name="image">
-          <CommonAutoUploadFile
+          <AutoUploadFile
             limit="1"
             upload-url="/api/common/upload"
             file-mediatype="image"

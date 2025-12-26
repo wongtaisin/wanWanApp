@@ -13,12 +13,12 @@
     <uni-row class="top">
       <uni-col :span="8">
         <text class="text">{{ month.slice(0, 4) }}年</text>
-        <CommonMothPicker v-model="month" @change="handleChange">
+        <MothPicker v-model="month" @change="handleChange">
           <p class="money">
             {{ month.slice(5, 7) }}
             <text style="font-size: 28rpx">月</text>
           </p>
-        </CommonMothPicker>
+        </MothPicker>
       </uni-col>
       <uni-col :span="8">
         <text class="text">消费笔数</text>
@@ -86,12 +86,7 @@
     </scroll-view>
   </view>
 
-  <CommonExpensesPopup
-    title="编辑"
-    ref="expensesPopupRef"
-    v-model="expensesParams"
-    @submit="onSubmit"
-  />
+  <ExpensesPopup title="编辑" ref="expensesPopupRef" v-model="expensesParams" @submit="onSubmit" />
 </template>
 
 <script lang="ts" setup>

@@ -12,7 +12,11 @@
   ],
 
   "compilerOptions": {
-    "sourceMap": true,
+    "sourceMap": true, // 生成source map文件，用于调试
+    "jsx": "preserve", // 保留JSX，不转换为函数调用
+    "jsxImportSource": "vue", // 导入Vue的JSX模块
+    "esModuleInterop": true, // 启用ES模块互操作性
+    "resolveJsonModule": true, // 解析JSON模块，可import JSON文件
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
