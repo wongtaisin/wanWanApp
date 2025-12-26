@@ -18,7 +18,7 @@ import MothPicker from '@/components/mothPicker.vue'
 
 // 全局组件注册配置
 const components: Array<{ name: string; component: Component }> = [
-  { name: 'CommonAutoUploadFile', component: AutoUploadFile },
+  { name: 'AutoUploadFile', component: AutoUploadFile },
   { name: 'CommonForm', component: CommonForm },
   { name: 'CommonProgress', component: CommonProgress },
   { name: 'ExpensesPopup', component: ExpensesPopup },

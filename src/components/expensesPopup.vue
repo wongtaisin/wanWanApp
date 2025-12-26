@@ -29,14 +29,15 @@
           />
         </uni-forms-item>
 
-        <!-- <uni-forms-item label="图片" name="image">
+        <uni-forms-item label="图片" name="image">
           <AutoUploadFile
             limit="1"
-            upload-url="/api/common/upload"
             file-mediatype="image"
+            :data="{ module: 'expenses' }"
+            upload-url="/api/file/base/upload"
             @success="handleUploadSuccess"
           />
-        </uni-forms-item> -->
+        </uni-forms-item>
 
         <uni-forms-item label="备注" name="remark">
           <uni-easyinput type="textarea" v-model="params.remark" placeholder="请输入备注" />
@@ -78,11 +79,12 @@ const params = computed(() => modelValue.value)
 const popupRef = ref()
 const emits = defineEmits(['submit'])
 
-// const handleUploadSuccess = (data: any) => {
-//   // 存储上传成功后的图片URL
-//   params.value.image = data.url
-//   console.log('上传成功，图片URL:', data.url)
-// }
+// 存储上传成功后的图片URL
+const handleUploadSuccess = (file: any) => {
+  const { url } = file.data
+  params.value.image = url
+  console.log('上传成功，图片URL:', file.data, params.value.image)
+}
 
 const onSubmit = async (values: any) => {
   emits('submit', values)

@@ -20,8 +20,8 @@ export default defineConfig({
     cors: false,
     proxy: {
       '/api': {
-        // target: 'http://127.0.0.1:3001/api',
-        target: 'http://8.155.51.40:3001/api',
+        target: 'http://127.0.0.1:3001/api',
+        // target: 'http://8.155.51.40:3001/api',
         changeOrigin: true,
         rewrite: path => path.replace('/api', '')
       }

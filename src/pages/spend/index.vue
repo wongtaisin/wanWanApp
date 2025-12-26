@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-03 13:53:55
+ * @LastEditTime: 2025-12-26 16:35:30
  * @FilePath: \wanWanApp\src\pages\spend\index.vue
  * @Description:
  *
@@ -66,7 +66,10 @@
               <template v-slot:header>
                 <image
                   class="slot-image"
-                  src="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png"
+                  :src="
+                    item.image ||
+                    `https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png`
+                  "
                   mode="widthFix"
                   style="width: 86rpx; margin-right: 20rpx"
                 />
