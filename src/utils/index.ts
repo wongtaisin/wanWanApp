@@ -2,14 +2,14 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-01-09 09:59:21
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-03 14:08:52
+ * @LastEditTime: 2025-12-26 09:08:46
  * @FilePath: \wanWanApp\src\utils\index.ts
  * @Description:
  *
  * Copyright (c) 2025 by wongtaisin1024@gmail.com, All Rights Reserved.
  */
 import components from '@/components/index'
-import directives from '@/directive/index'
+import directives from '@/directives/index'
 import type { App, Component } from 'vue'
 import _utils from './utils'
 

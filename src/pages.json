@@ -11,7 +11,7 @@
     {
       "path": "pages/expenses/index", // 路径
       "style": {
-        "navigationBarTitleText": "花销",
+        "navigationBarTitleText": "wanWan",
         "backgroundColor": "#000", // 背景颜色
         "navigationBarTextStyle": "black", // 导航栏文字颜色
         "navigationBarBackgroundColor": "#fede2b", // 导航栏背景颜色
