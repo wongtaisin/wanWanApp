@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-26 16:35:30
+ * @LastEditTime: 2025-12-27 09:54:04
  * @FilePath: \wanWanApp\src\pages\spend\index.vue
  * @Description:
  *
@@ -63,16 +63,25 @@
             @change="swipeChange($event, item, i)"
           >
             <uni-list-item :title="item.shop_name || item.remark" :note="item.create_date">
-              <template v-slot:header>
+              <template v-slot:header v-if="item.image">
+                <!-- 图片 本地地址需要读取，不然值得获取 /api -->
                 <image
-                  class="slot-image"
-                  :src="
-                    item.image ||
-                    `https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png`
-                  "
-                  mode="widthFix"
-                  style="width: 86rpx; margin-right: 20rpx"
+                  :src="`${item.image}`"
+                  mode="heightFix"
+                  style="height: 86rpx; margin-right: 20rpx"
                 />
+              </template>
+              <template v-slot:body v-else>
+                <view class="body-content">
+                  <view>
+                    <!-- <svg class="slot-icon">
+                      <use xlink:href="#icon-dianpu1" />
+                    </svg> -->
+                    {{ item.shop_name }}
+                  </view>
+                  <view> {{ item.remark }} </view>
+                  <view> {{ item.create_date }} </view>
+                </view>
               </template>
               <template v-slot:footer>
                 <view class="chat-custom-right">
@@ -356,10 +365,37 @@ onMounted(() => {
     color: #a0a0a0;
   }
 
+  .body-content {
+    width: 650rpx;
+
+    .slot-icon {
+      width: 14px;
+      height: 14px;
+      margin-right: 5rpx;
+    }
+    view {
+      &:first-child {
+        font-size: 14px;
+        color: #3b4144;
+      }
+      &:nth-child(2) {
+        font-size: 28rpx;
+        margin: 10rpx 0;
+      }
+      &:last-child {
+        font-size: 12px;
+        color: #999999;
+      }
+    }
+  }
+
   .chat-custom-right {
     display: flex;
     align-items: center;
-    height: 68rpx;
+    text {
+      width: 100rpx;
+      text-align: right;
+    }
   }
 }
 
