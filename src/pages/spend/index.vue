@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-27 11:16:06
+ * @LastEditTime: 2025-12-27 10:33:53
  * @FilePath: \wanWanApp\src\pages\spend\index.vue
  * @Description:
  *
@@ -66,10 +66,11 @@
               <template v-slot:header v-if="item.image">
                 <!-- 图片 本地地址需要读取，不然值得获取 /api -->
                 <image
+                  lazy-load
                   :src="`${item.image}`"
                   mode="heightFix"
-                  style="height: 86rpx; margin-right: 20rpx"
                   @click="previewSingleImage(item)"
+                  style="height: 86rpx; margin-right: 20rpx"
                 />
               </template>
               <template v-slot:body v-else>
