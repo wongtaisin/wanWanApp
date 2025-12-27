@@ -32,6 +32,13 @@
         <uni-forms-item label="图片" name="image">
           <AutoUploadFile
             limit="1"
+            :fileList="[
+              {
+                name: params.id,
+                extname: 'image',
+                url: `${params.image}`
+              }
+            ]"
             file-mediatype="image"
             :data="{ module: 'expenses' }"
             upload-url="/api/file/base/upload"

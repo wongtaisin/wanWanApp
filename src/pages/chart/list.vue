@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-24 16:30:48
+ * @LastEditTime: 2025-12-27 10:23:22
  * @FilePath: \wanWanApp\src\pages\chart\list.vue
  * @Description:
  *
@@ -122,5 +122,9 @@ watch(
   align-items: center;
   justify-content: space-between;
   color: #333;
+}
+
+:deep(.uni-list--border-bottom) {
+  height: 0;
 }
 </style>

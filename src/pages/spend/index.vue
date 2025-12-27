@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-27 09:54:04
+ * @LastEditTime: 2025-12-27 10:58:02
  * @FilePath: \wanWanApp\src\pages\spend\index.vue
  * @Description:
  *
@@ -69,6 +69,7 @@
                   :src="`${item.image}`"
                   mode="heightFix"
                   style="height: 86rpx; margin-right: 20rpx"
+                  @click="previewSingleImage(item)"
                 />
               </template>
               <template v-slot:body v-else>
@@ -229,6 +230,16 @@ const onRefresh = async () => {
   triggered.value = false // 关闭刷新动画
 }
 
+const previewSingleImage = (item: any) => {
+  const img = `${item.image}`
+  uni.previewImage({
+    current: img,
+    urls: [img],
+    indicator: 'default',
+    loop: false
+  })
+}
+
 const onSubmit = async (values: any) => {
   const mergedRow = { ...values, ...expensesParams.value }
 
@@ -377,10 +388,11 @@ onMounted(() => {
       &:first-child {
         font-size: 14px;
         color: #3b4144;
+        margin-bottom: 10rpx;
       }
       &:nth-child(2) {
         font-size: 28rpx;
-        margin: 10rpx 0;
+        margin-bottom: 10rpx;
       }
       &:last-child {
         font-size: 12px;

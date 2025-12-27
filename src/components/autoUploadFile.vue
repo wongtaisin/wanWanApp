@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-07 17:12:54
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-08 17:24:23
+ * @LastEditTime: 2025-12-27 10:57:36
  * @FilePath: \wanWanApp\src\components\autoUploadFile.vue
  * @Description:
  *
@@ -34,6 +34,7 @@ interface Props {
   limit?: string | number
   data?: any
   headers?: Record<string, any>
+  fileList?: any
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -42,7 +43,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 // 绑定文件列表
-const fileList = ref<any[]>([])
+const fileList = ref<any[]>(props.fileList)
 
 // header（自动附带 token）
 const headers = computed(() => ({
