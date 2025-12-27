@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:33:29
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-03 16:35:03
+ * @LastEditTime: 2025-12-27 11:14:15
  * @FilePath: \wanWanApp\src\pages\user\index.vue
  * @Description:
  *
@@ -48,10 +48,10 @@
 </template>
 
 <script lang="ts" setup>
-import { getInfo } from '@/store/user'
+import { useInfoStore } from '@/store/user'
 import _utils from '@/utils/utils'
 
-const permissions = getInfo().permissions // 用户权限
+const permissions = useInfoStore().permissions // 用户权限
 
 const hasPermi = (str: string) => {
   if (!str) return true

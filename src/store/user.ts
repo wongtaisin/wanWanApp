@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-12-03 14:57:14
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-03 15:36:12
+ * @LastEditTime: 2025-12-27 11:13:14
  * @FilePath: \wanWanApp\src\store\user.ts
  * @Description:
  *
@@ -13,15 +13,15 @@ import { userInfo } from '@/api/user'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-interface UserInfo {
+interface UseInfo {
   userId: string // 用户id
   userName: string // 用户名
   phone: string // 手机号
 }
 
-export const getInfo = defineStore('getInfo', {
+export const useInfoStore = defineStore('userInfo', {
   state: () => ({
-    user: ref<UserInfo>({
+    user: ref<UseInfo>({
       userId: '',
       userName: '',
       phone: ''
@@ -45,7 +45,7 @@ export const getInfo = defineStore('getInfo', {
   },
   persist: {
     key: 'userInfo',
-    storage: sessionStorage,
+    storage: localStorage,
     pick: ['user', 'permissions'] // 指定state 那些参数需要持久化, [] 表示 undefine 或者 null
   }
 })

@@ -27,8 +27,8 @@
 
 <script lang="ts" setup>
 import { checkDatePrice } from '@/api/expensesDetail'
-import { getInfo } from '@/store/user'
-import { defineEmits, defineProps, onMounted, ref } from 'vue'
+import { useInfoStore } from '@/store/user'
+import { onMounted, ref } from 'vue'
 
 interface Props {
   modelValue?: string // 格式：YYYY-MM
@@ -38,7 +38,7 @@ const props = withDefaults(defineProps<Props>(), {
   modelValue: ''
 })
 
-const userInfo = getInfo().user
+const userInfo = useInfoStore().user
 const emits = defineEmits(['update:modelValue', 'change', 'yearSwitch'])
 
 // 当前年月

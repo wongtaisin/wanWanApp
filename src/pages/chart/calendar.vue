@@ -23,11 +23,11 @@
 <script lang="ts" setup>
 import { expensesList } from '@/api/expenses'
 import type { FormData, Info, SelectedItem } from '@/pages/chart/types'
-import { getInfo } from '@/store/user'
+import { useInfoStore } from '@/store/user'
 import _utils from '@/utils/utils'
 import { computed, onMounted, ref } from 'vue'
 
-const userInfo = getInfo().user
+const userInfo = useInfoStore().user
 const modelValue = defineModel<FormData>('modelValue', { default: {} })
 const params = computed(() => modelValue.value)
 const emits = defineEmits<{

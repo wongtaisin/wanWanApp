@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-13 16:12:04
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-16 19:28:05
+ * @LastEditTime: 2025-12-27 11:11:32
  * @FilePath: \wanWanApp\src\pages\login\index.vue
  * @Description:
  *
@@ -24,7 +24,7 @@
 
 <script lang="ts" setup>
 import { login } from '@/api/user'
-import { getInfo } from '@/store/user'
+import { useInfoStore } from '@/store/user'
 import { reactive, ref } from 'vue'
 
 const params = reactive({
@@ -36,7 +36,7 @@ const rules = {
   user_name: { rules: [{ required: true, errorMessage: '用户名不能为空' }] },
   password: { rules: [{ required: true, errorMessage: '密码不能为空' }] }
 }
-const userInfo = getInfo()
+const userInfo = useInfoStore()
 
 const onSubmit = () => {
   formRef.value
