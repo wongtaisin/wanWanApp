@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 15:10:00
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-02 08:48:04
+ * @LastEditTime: 2025-12-30 15:48:15
  * @FilePath: \wanWanApp\src\pages\expenses\index.vue
  * @Description:
  *
@@ -15,9 +15,15 @@
       <uni-grid :column="4" :show-border="false">
         <uni-grid-item v-for="(item, i) in tableData" :key="i" @click="handleClick(item)">
           <view style="text-align: center; padding: 20rpx 0">
+            /* #ifdef H5 */
             <svg class="icon">
               <use :xlink:href="`#${item.icon}`" />
             </svg>
+            /* #endif */
+            <span />
+            /* #ifdef APP */
+            <text :class="'icon iconfont ' + item.icon" />
+            /* #endif */
             <text class="grid-text">{{ item.label }}</text>
           </view>
         </uni-grid-item>
@@ -106,6 +112,7 @@ const tableData = ref([
 .expenses-content {
   width: 100vw;
   margin-top: 40rpx;
+
   /* #ifdef APP */
   padding-bottom: calc(env(safe-area-inset-bottom) - 40rpx);
   /* #endif */
