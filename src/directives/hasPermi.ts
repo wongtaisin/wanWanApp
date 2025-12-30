@@ -23,7 +23,7 @@ const hasPermi = {
     const ALL_PERMISSION = '*:*:*'
 
     // 在mounted钩子中获取最新的权限数据
-    const userInfo = sessionStorage.getItem('userInfo')
+    const userInfo = uni.getStorageSync('userInfo')
     const userInfoData: any = JSON.parse(userInfo || '{}').permissions
     const permissions: string[] = userInfoData || []
 
