@@ -1,7 +1,8 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    // "module": "ESNext", // import.meta 不支持ESNext模块
+    "module": "es2020", // import.meta 不支持ESNext模块
+    "moduleResolution": "bundler", // 启用bundler模式，支持import.meta
     "composite": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "types": ["@dcloudio/types"]

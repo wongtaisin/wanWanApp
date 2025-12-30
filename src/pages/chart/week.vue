@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-15 11:29:03
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-29 11:21:29
+ * @LastEditTime: 2025-12-30 08:28:05
  * @FilePath: \wanWanApp\src\pages\chart\week.vue
  * @Description:
  *
@@ -52,11 +52,11 @@ const emits = defineEmits(['click'])
  * @description: 点击周项，获取周的日期范围
  * @param {string} item 2025-52， 表示2025年第52周
  *
- * @example: 2025-52周的日期范围是：2025-12-28 至 2026-01-03
+ * @example: 2026-01周的日期范围是：2025-12-28 至 2026-01-03
  */
 const handleClick = (item: string) => {
-  const week = Number(item.split('-')[1])
   const year = Number(item.split('-')[0])
+  const week = Number(item.split('-')[1])
   activeWeekId.value = String(week)
   const { start, end } = getDateRangeOfWeek(year, week)
   emits('click', { start, end })
