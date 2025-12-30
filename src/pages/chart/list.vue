@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-27 10:23:22
+ * @LastEditTime: 2025-12-30 16:29:39
  * @FilePath: \wanWanApp\src\pages\chart\list.vue
  * @Description:
  *
@@ -19,9 +19,15 @@
       @click="handleOpens(item)"
     >
       <template v-slot:header>
+        /* #ifdef H5 */
         <svg class="slot-icon">
           <use :xlink:href="`#${classify[item].icon}`" />
         </svg>
+        /* #endif */
+        <text />
+        /* #ifdef APP */
+        <text :class="'iconfont ' + classify[item].icon" />
+        /* #endif */
       </template>
       <!-- <template v-slot:body>
           <view class="slot-box">
@@ -110,6 +116,11 @@ watch(
 .slot-icon {
   width: 80rpx;
   height: 80rpx;
+  margin-right: 20rpx;
+}
+
+.iconfont {
+  font-size: 60rpx;
   margin-right: 20rpx;
 }
 

@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:33:29
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-27 11:14:15
+ * @LastEditTime: 2025-12-30 16:22:55
  * @FilePath: \wanWanApp\src\pages\user\index.vue
  * @Description:
  *
@@ -14,14 +14,14 @@
       <uni-row :gutter="20">
         <uni-col :span="12" class="user-info">
           <image
-            src="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png"
+            src="https://img0.baidu.com/it/u=4060187940,3351722992&fm=253&fmt=auto&app=138&f=JPEG?w=200&h=200"
             class="avatar"
           />
           <text>大帅</text>
         </uni-col>
         <uni-col :span="6" :push="6">
           <uni-tag
-            text="标签"
+            text="超管"
             :circle="true"
             custom-style="background-color: #fff; border-color: #fff; color: #000;"
           />

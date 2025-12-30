@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 15:10:00
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-30 15:48:15
+ * @LastEditTime: 2025-12-30 16:31:51
  * @FilePath: \wanWanApp\src\pages\expenses\index.vue
  * @Description:
  *
@@ -20,9 +20,9 @@
               <use :xlink:href="`#${item.icon}`" />
             </svg>
             /* #endif */
-            <span />
+            <text />
             /* #ifdef APP */
-            <text :class="'icon iconfont ' + item.icon" />
+            <text :class="'iconfont ' + item.icon" />
             /* #endif */
             <text class="grid-text">{{ item.label }}</text>
           </view>
@@ -139,6 +139,10 @@ const tableData = ref([
     width: 80rpx;
     height: 80rpx;
     margin: 0 auto;
+  }
+
+  .iconfont {
+    font-size: 55rpx;
   }
 }
 </style>

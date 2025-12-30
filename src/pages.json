@@ -86,8 +86,8 @@
   },
   "tabBar": {
     "color": "#000000", // 未选中图标颜色
-    "selectedColor": "#FEDE2B", // 选中图标颜色
-    "borderStyle": "#f5f5f5", // 边框样式，默认值为"black"
+    "selectedColor": "#fede2b", // 选中图标颜色
+    "borderStyle": "#c6c6c6", // 边框样式，默认值为"black"
     "backgroundColor": "#ffffff", // 背景颜色
     "position": "bottom", // 位置，默认值为"bottom"
     "height": "54px", // 高度，增大高度
