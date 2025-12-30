@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-27 10:33:53
+ * @LastEditTime: 2025-12-30 15:30:29
  * @FilePath: \wanWanApp\src\pages\spend\index.vue
  * @Description:
  *
@@ -65,11 +65,12 @@
             <uni-list-item :title="item.shop_name || item.remark" :note="item.create_date">
               <template v-slot:header v-if="item.image">
                 <!-- 图片 本地地址需要读取，不然值得获取 /api -->
+
                 <image
                   lazy-load
-                  :src="`${item.image}`"
                   mode="heightFix"
-                  @click="previewSingleImage(item)"
+                  :src="`${URL}${item.image}`"
+                  @click="previewSingleImage(`${URL}${item.image}`)"
                   style="height: 86rpx; margin-right: 20rpx"
                 />
               </template>
@@ -108,6 +109,11 @@ import { expensesTotal } from '@/api/expenses'
 import { expensesDetailDelete, expensesDetailEdit, expensesDetailList } from '@/api/expensesDetail'
 import _utils from '@/utils/utils'
 import { onMounted, reactive, ref } from 'vue'
+
+const URL =
+  process.env.NODE_ENV === 'development' ? 'http://192.168.36.37:3001' : 'http://8.155.51.40:3001'
+
+console.log(process.env.NODE_ENV, URL)
 
 type SpendGroup = { date: string; list: any[]; total: number }
 
@@ -231,11 +237,10 @@ const onRefresh = async () => {
   triggered.value = false // 关闭刷新动画
 }
 
-const previewSingleImage = (item: any) => {
-  const img = `${item.image}`
+const previewSingleImage = (image: string) => {
   uni.previewImage({
-    current: img,
-    urls: [img],
+    current: image,
+    urls: [image],
     indicator: 'default',
     loop: false
   })
@@ -351,14 +356,24 @@ onMounted(() => {
   height: calc(100vh - 108px);
 
   .list-scroll {
-    height: calc(100vh - 196px);
+    /* #ifdef H5 */
+    height: calc(100vh - 190px);
+    /* #endif */
+
+    /* #ifdef APP */
+    height: 100%;
+    /* #endif */
   }
 
   .top {
     padding: 20rpx;
     background: #fede2b;
     position: sticky;
+
+    /* #ifdef H5 */
     top: 76rpx;
+    /* #endif */
+
     z-index: 2;
 
     .text {
@@ -405,6 +420,7 @@ onMounted(() => {
   .chat-custom-right {
     display: flex;
     align-items: center;
+
     text {
       width: 100rpx;
       text-align: right;

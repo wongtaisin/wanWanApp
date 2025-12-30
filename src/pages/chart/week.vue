@@ -96,7 +96,7 @@ onMounted(() => {
   margin-top: 20rpx;
   font-size: 34rpx;
   padding-bottom: 20rpx;
-  border-bottom: 1rpx solid #ededed;
+  border-bottom: 1px solid #ededed;
 
   .arrow {
     padding: 0 40rpx;

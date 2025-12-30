@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-09-11 16:36:48
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-30 11:20:38
+ * @LastEditTime: 2025-12-30 15:11:58
  * @FilePath: \wanWanApp\src\main.ts
  * @Description:
  *
@@ -16,7 +16,13 @@ import './uni.scss'
 import Pinia from './store/index'
 import install from './utils/index'
 
-console.log('环境变量：', import.meta.env.MODE, import.meta.env.VITE_API_BASE_URL)
+// 导入样式文件
+import './static/iconfont/iconfont.css'
+// #ifdef H5
+import './static/iconfont/iconfont.js'
+// #endif
+
+console.log('环境变量：', import.meta.env.MODE)
 
 // #ifdef H5
 import VConsole from 'vconsole'

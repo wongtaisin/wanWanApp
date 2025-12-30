@@ -53,7 +53,7 @@
       "path": "pages/shop/indexedList",
       "style": {
         "navigationBarTitleText": "店铺索引",
-        "navigationStyle": "custom",
+        // "navigationStyle": "custom",
         "enablePullDownRefresh": true
       }
     },
@@ -81,17 +81,18 @@
     "background": "#F5F6F9", //安全区域外的背景颜色，默认值为"#FFFFFF"
     "bottom": {
       // 底部安全区域配置
-      "offset": "none|auto" // 底部安全区域偏移，"none"表示不空出安全区域，"auto"自动计算空出安全区域，默认值为"none"
+      "offset": "auto" // 底部安全区域偏移，"none"表示不空出安全区域，"auto"自动计算空出安全区域，默认值为"none"
     }
   },
   "tabBar": {
+    "custom": true, // 是否自定义tabBar，默认值为false
     "color": "black", // 未选中图标颜色
     "selectedColor": "#3cc51f", // 选中图标颜色
     "borderStyle": "black", // 边框样式，默认值为"black"
     "backgroundColor": "#ffffff", // 背景颜色
     "position": "bottom", // 位置，默认值为"bottom"
-    "height": "108rpx", // 高度，增大高度
-    "fontSize": "24rpx", // 字体大小，增大字号
+    "height": "54px", // 高度，增大高度
+    "fontSize": "12px", // 字体大小，增大字号
     "list": [
       {
         "pagePath": "pages/expenses/index", // 文件路径

@@ -270,7 +270,7 @@ onMounted(() => {
     padding: 24rpx 32rpx;
     font-size: 30rpx;
     color: #333;
-    border-top: 1rpx solid #eaeaea;
+    border-top: 1px solid #eaeaea;
     background-color: #f9f9f9;
 
     .selected-text {

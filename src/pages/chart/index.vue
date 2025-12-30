@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-29 08:43:53
+ * @LastEditTime: 2025-12-30 14:51:08
  * @FilePath: \wanWanApp\src\pages\chart\index.vue
  * @Description:
  *
@@ -155,12 +155,21 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .chart-page {
-  padding-bottom: 108rpx;
-
   .chart-segmented {
     background: #fede2b;
     padding: 0 40rpx;
     padding-bottom: 20rpx;
+    position: sticky;
+
+    /* #ifdef H5 */
+    top: 76rpx;
+    /* #endif */
+
+    /* #ifdef APP */
+    top: 0rpx;
+    /* #endif */
+
+    z-index: 2;
   }
 
   .slot-icon {

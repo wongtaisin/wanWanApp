@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-10 16:12:42
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-12 17:33:06
+ * @LastEditTime: 2025-12-30 14:02:15
  * @FilePath: \wanWanApp\src\pages\shop\add.vue
  * @Description:
  *
@@ -13,7 +13,7 @@
     <CommonForm
       ref="formRef"
       label-align="right"
-      label-width="150rpx"
+      label-width="75px"
       :rules="rules"
       :columns="formColumns"
       v-model="params"
