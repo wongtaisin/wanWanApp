@@ -10,19 +10,11 @@
  */
 import type { Component } from 'vue'
 
-import AutoUploadFile from '@/components/autoUploadFile.vue'
-import CommonForm from '@/components/common/forms.vue'
-import CommonProgress from '@/components/common/progress.vue'
-import ExpensesPopup from '@/components/expensesPopup.vue'
-import MothPicker from '@/components/mothPicker.vue'
+import AreaCityChina2 from '@/components/areaCityChina2.vue'
 
 // 全局组件注册配置
 const components: Array<{ name: string; component: Component }> = [
-  { name: 'AutoUploadFile', component: AutoUploadFile },
-  { name: 'CommonForm', component: CommonForm },
-  { name: 'CommonProgress', component: CommonProgress },
-  { name: 'ExpensesPopup', component: ExpensesPopup },
-  { name: 'MothPicker', component: MothPicker }
+  { name: 'AreaCityChina3', component: AreaCityChina2 }
 ]
 
 export default components

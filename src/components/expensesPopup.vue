@@ -2,7 +2,7 @@
   <uni-popup ref="popupRef" type="bottom" background-color="#fff" borderRadius="20rpx 20rpx 0 0">
     <view style="padding: 20rpx">
       <view class="popup-title">{{ props.title }}</view>
-      <CommonForm
+      <CommonForms
         ref="commonFormRef"
         label-align="right"
         label-width="75px"
@@ -53,7 +53,7 @@
         <uni-forms-item label="创建时间" name="createDate" required>
           <uni-datetime-picker type="datetime" return-type="string" v-model="params.createDate" />
         </uni-forms-item>
-      </CommonForm>
+      </CommonForms>
     </view>
   </uni-popup>
 </template>

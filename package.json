@@ -69,6 +69,8 @@
     "@vue/tsconfig": "^0.1.3",
     "postcss-pxtransform": "^4.1.7",
     "typescript": "^5.9.3",
+    "unplugin-auto-import": "^20.3.0",
+    "unplugin-vue-components": "^30.0.0",
     "vite": "5.2.8",
     "vue-tsc": "^3.2.1"
   }

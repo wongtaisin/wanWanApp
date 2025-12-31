@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-10 16:07:15
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-27 11:29:06
+ * @LastEditTime: 2025-12-31 09:29:44
  * @FilePath: \wanWanApp\src\pages\shop\index.vue
  * @Description: 店铺列表
  *
@@ -34,12 +34,12 @@
             :title="item.shop_name"
             :note="[item.province, item.city, item.area, item.address].filter(Boolean).join('')"
           >
-            <template v-slot:header>
+            <template v-slot:header v-if="item.images">
               <image
-                class="slot-image"
-                src="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png"
-                mode="widthFix"
-                style="width: 86rpx; margin-right: 20rpx"
+                lazy-load
+                mode="heightFix"
+                :src="`${URL}${item.images}`"
+                style="height: 86rpx; margin-right: 20rpx"
               />
             </template>
           </uni-list-item>
@@ -86,6 +86,8 @@ import { shopDelete, shopList } from '@/api/shop'
 import { onMounted, ref } from 'vue'
 import Edit from './edit.vue'
 
+const { URL } = getURL()
+
 const status = ref('more') // more/loading/noMore
 const params = ref({
   page: 1,
@@ -96,7 +98,7 @@ const swipeActionRef = ref()
 const editRef = ref<any>()
 const triggered = ref(false) // 是否在刷新中
 
-const handleClick = async (e: any, row: any, i: number) => {
+const handleClick = async (e: any, row: any, i: number | string) => {
   if (e.content.text === '修改') {
     editRef.value.opens(row)
   } else {
@@ -106,7 +108,7 @@ const handleClick = async (e: any, row: any, i: number) => {
   }
 }
 
-const swipeChange = (e: any, index: number) => {
+const swipeChange = (e: any, index: number | string) => {
   console.log(e, index)
 }
 

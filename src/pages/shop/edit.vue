@@ -12,7 +12,7 @@
   <uni-popup ref="popupRef" type="bottom" background-color="#fff" borderRadius="20rpx 20rpx 0 0">
     <view style="padding: 20rpx">
       <view class="popup-title">{{ props.title }}</view>
-      <UniForm
+      <CommonUniForm
         ref="commonFormRef"
         label-align="right"
         label-width="150rpx"
@@ -27,8 +27,6 @@
 
 <script lang="tsx" setup>
 import { shopEdit } from '@/api/shop'
-import AreaCityChina from '@/components/areaCityChina.vue'
-import UniForm from '@/components/uniForm.vue'
 import _utils from '@/utils/utils'
 import { onShow } from '@dcloudio/uni-app'
 import UniDatetimePicker from '@dcloudio/uni-ui/lib/uni-datetime-picker/uni-datetime-picker.vue'

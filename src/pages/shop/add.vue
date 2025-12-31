@@ -10,7 +10,7 @@
 -->
 <template>
   <view class="shop-add">
-    <CommonForm
+    <CommonForms
       ref="formRef"
       label-align="right"
       label-width="75px"
@@ -35,13 +35,12 @@
           placeholder="请输入备注"
         />
       </uni-forms-item>
-    </CommonForm>
+    </CommonForms>
   </view>
 </template>
 
 <script lang="ts" setup>
 import { shopAdd } from '@/api/shop'
-import AreaCityChina from '@/components/areaCityChina.vue'
 import { ref } from 'vue'
 
 interface FormData {

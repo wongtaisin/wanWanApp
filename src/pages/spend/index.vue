@@ -110,10 +110,7 @@ import { expensesDetailDelete, expensesDetailEdit, expensesDetailList } from '@/
 import _utils from '@/utils/utils'
 import { onMounted, reactive, ref } from 'vue'
 
-const URL =
-  process.env.NODE_ENV === 'development' ? 'http://192.168.36.37:3001' : 'http://8.155.51.40:3001'
-
-console.log(process.env.NODE_ENV, URL)
+const { URL } = getURL()
 
 type SpendGroup = { date: string; list: any[]; total: number }
 
