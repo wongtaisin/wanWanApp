@@ -88,8 +88,6 @@ import Edit from './edit.vue'
 
 const { URL } = getURL()
 
-console.log(URL, `路由地址`)
-
 const status = ref('more') // more/loading/noMore
 const params = ref({
   page: 1,

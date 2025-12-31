@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-12 09:30:14
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-31 10:44:12
+ * @LastEditTime: 2025-12-31 11:15:47
  * @FilePath: \wanWanApp\src\pages\shop\edit.vue
  * @Description:
  *
@@ -54,6 +54,7 @@ interface FormData {
   [key: string]: string | number | Record<string, any>[] | undefined | null | any
 }
 
+const { URL } = getURL()
 const params = ref<FormData>({
   shopName: '',
   province: '',
@@ -65,6 +66,17 @@ const params = ref<FormData>({
   createDate: ''
 })
 const popupRef = ref()
+const fileList = computed(() =>
+  params.value.images
+    ? [
+        {
+          name: params.value.id,
+          extname: 'image',
+          url: `${URL}${params.value.images}`
+        }
+      ]
+    : undefined
+)
 const emits = defineEmits(['refresh'])
 
 // 存储上传成功后的图片URL
@@ -129,20 +141,14 @@ const formColumns = computed(() => [
     required: !params.value.provinceCode ? false : true
   },
   {
-    prop: 'areaCode',
-    label: '省/市/区',
-    placeholder: '请选择省/市/区',
+    prop: 'images',
+    label: '店铺图片',
+    placeholder: '请选择店铺图片',
     slot: {
       render: (row: any) => (
         <AutoUploadFile
           limit={1}
-          fileList={[
-            {
-              name: row.id,
-              extname: 'images',
-              url: `${row.images}`
-            }
-          ]}
+          fileList={fileList}
           fileMediatype="image"
           data={{ module: 'shop' }}
           uploadUrl="/api/file/base/upload"

@@ -32,13 +32,7 @@
         <uni-forms-item label="图片" name="image">
           <AutoUploadFile
             limit="1"
-            :fileList="[
-              {
-                name: params.id,
-                extname: 'image',
-                url: `${params.image}`
-              }
-            ]"
+            :fileList="fileList"
             file-mediatype="image"
             :data="{ module: 'expenses' }"
             upload-url="/api/file/base/upload"
@@ -80,10 +74,22 @@ interface FormData {
   [key: string]: string | number | Record<string, any>[] | undefined | null | any
 }
 
+const { URL } = getURL()
 const userShop = useShop()
 const modelValue = defineModel<FormData>('modelValue', { default: {} })
 const params = computed(() => modelValue.value)
 const popupRef = ref()
+const fileList = computed(() =>
+  params.value.image
+    ? [
+        {
+          name: params.value.id,
+          extname: 'image',
+          url: `${URL}${params.value.image}`
+        }
+      ]
+    : undefined
+)
 const emits = defineEmits(['submit'])
 
 // 存储上传成功后的图片URL
