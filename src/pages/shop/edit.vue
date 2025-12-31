@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-12 09:30:14
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-13 09:52:34
+ * @LastEditTime: 2025-12-31 10:44:12
  * @FilePath: \wanWanApp\src\pages\shop\edit.vue
  * @Description:
  *
@@ -27,6 +27,7 @@
 
 <script lang="tsx" setup>
 import { shopEdit } from '@/api/shop'
+import AutoUploadFile from '@/components/autoUploadFile.vue'
 import _utils from '@/utils/utils'
 import { onShow } from '@dcloudio/uni-app'
 import UniDatetimePicker from '@dcloudio/uni-ui/lib/uni-datetime-picker/uni-datetime-picker.vue'
@@ -65,6 +66,12 @@ const params = ref<FormData>({
 })
 const popupRef = ref()
 const emits = defineEmits(['refresh'])
+
+// 存储上传成功后的图片URL
+const handleUploadSuccess = (file: any) => {
+  const { url } = file.data
+  params.value.images = url
+}
 
 const onSubmit = async (values: any) => {
   const op = { ...values, ...params.value }
@@ -121,6 +128,29 @@ const formColumns = computed(() => [
     placeholder: '请输入地址',
     required: !params.value.provinceCode ? false : true
   },
+  {
+    prop: 'areaCode',
+    label: '省/市/区',
+    placeholder: '请选择省/市/区',
+    slot: {
+      render: (row: any) => (
+        <AutoUploadFile
+          limit={1}
+          fileList={[
+            {
+              name: row.id,
+              extname: 'images',
+              url: `${row.images}`
+            }
+          ]}
+          fileMediatype="image"
+          data={{ module: 'shop' }}
+          uploadUrl="/api/file/base/upload"
+          onSuccess={handleUploadSuccess}
+        />
+      )
+    }
+  },
   { prop: 'remark', label: '备注', placeholder: '请输入备注', type: 'textarea' },
   {
     prop: 'createDate',
@@ -129,6 +159,7 @@ const formColumns = computed(() => [
     slot: {
       render: (row: any) => (
         <UniDatetimePicker
+          disabled={true}
           type="datetime"
           format="yyyy-MM-dd HH:mm:ss"
           value-format="yyyy-MM-dd HH:mm:ss"

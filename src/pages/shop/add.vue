@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-10 16:12:42
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-30 14:02:15
+ * @LastEditTime: 2025-12-31 10:38:51
  * @FilePath: \wanWanApp\src\pages\shop\add.vue
  * @Description:
  *
@@ -25,6 +25,23 @@
 
       <uni-forms-item label="详细地址" name="address">
         <uni-easyinput v-model="params.address" placeholder="请输入详细地址" />
+      </uni-forms-item>
+
+      <uni-forms-item label="图片" name="images">
+        <AutoUploadFile
+          limit="1"
+          :fileList="[
+            {
+              name: params.id,
+              extname: 'images',
+              url: `${params.images}`
+            }
+          ]"
+          file-mediatype="image"
+          :data="{ module: 'shop' }"
+          upload-url="/api/file/base/upload"
+          @success="handleUploadSuccess"
+        />
       </uni-forms-item>
 
       <uni-forms-item label="备注" name="remark">
@@ -70,6 +87,12 @@ const handleChange = (row: any) => {
   // const { provinceCode, cityCode, ...rest } = row
   params.value = { ...params.value, ...row }
   console.log(params.value, `params`)
+}
+
+// 存储上传成功后的图片URL
+const handleUploadSuccess = (file: any) => {
+  const { url } = file.data
+  params.value.images = url
 }
 
 const rules = {

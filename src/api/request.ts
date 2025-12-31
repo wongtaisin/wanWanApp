@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-13 09:48:34
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-30 15:15:34
+ * @LastEditTime: 2025-12-31 10:54:29
  * @FilePath: \wanWanApp\src\api\request.ts
  * @Description:
  *
@@ -13,8 +13,6 @@ const URL =
   import.meta.env.MODE === 'development'
     ? import.meta.env.VITE_DEV_BASE_URL
     : import.meta.env.VITE_PROD_BASE_URL
-
-console.log('环境接口：', URL)
 
 const BASE_URL = `${URL}/api`
 

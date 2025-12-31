@@ -2,8 +2,8 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-08 16:59:39
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-13 09:25:57
- * @FilePath: \wanWanApp\src\components\uniForm.vue
+ * @LastEditTime: 2025-12-31 10:31:50
+ * @FilePath: \wanWanApp\src\components\common\uniForm.vue
  * @Description:
  *
  * Copyright (c) 2025 by wongtaisin1024@gmail.com, All Rights Reserved.
@@ -78,11 +78,23 @@ const containerRender = () => (
       </UniFormsItem>
     ))}
     {slots.default?.()}
-    <uni-button type="primary" size="large" onClick={onSubmit}>
+    <button class="submit-btn" onClick={onSubmit}>
       提交
-    </uni-button>
+    </button>
   </UniForms>
 )
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+:deep {
+  .submit-btn {
+    width: 100%;
+    height: 68rpx;
+    background-color: #007aff;
+    border: none;
+    color: #fff;
+    padding: 10rpx 20rpx;
+    border-radius: 40rpx;
+  }
+}
+</style>

@@ -1,8 +1,6 @@
 export const getURL = () => {
   const URL =
-    import.meta.env.NODE_ENV === 'development'
-      ? 'http://192.168.36.37:3001'
-      : 'http://8.155.51.40:3001'
+    import.meta.env.MODE === 'development' ? 'http://192.168.36.37:3001' : 'http://8.155.51.40:3001'
 
   return { URL }
 

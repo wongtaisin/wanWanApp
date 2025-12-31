@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-10 16:07:15
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-31 09:29:44
+ * @LastEditTime: 2025-12-31 10:50:35
  * @FilePath: \wanWanApp\src\pages\shop\index.vue
  * @Description: 店铺列表
  *
@@ -87,6 +87,8 @@ import { onMounted, ref } from 'vue'
 import Edit from './edit.vue'
 
 const { URL } = getURL()
+
+console.log(URL, `路由地址`)
 
 const status = ref('more') // more/loading/noMore
 const params = ref({
