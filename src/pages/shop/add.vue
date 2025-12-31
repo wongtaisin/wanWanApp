@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-10 16:12:42
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-31 10:38:51
+ * @LastEditTime: 2025-12-31 11:27:58
  * @FilePath: \wanWanApp\src\pages\shop\add.vue
  * @Description:
  *
@@ -30,13 +30,6 @@
       <uni-forms-item label="图片" name="images">
         <AutoUploadFile
           limit="1"
-          :fileList="[
-            {
-              name: params.id,
-              extname: 'images',
-              url: `${params.images}`
-            }
-          ]"
           file-mediatype="image"
           :data="{ module: 'shop' }"
           upload-url="/api/file/base/upload"
