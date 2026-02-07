@@ -12,7 +12,6 @@ unpackage
 .DS_Store
 dist
 *.local
-package-lock.json
 
 # Editor directories and files
 .idea
