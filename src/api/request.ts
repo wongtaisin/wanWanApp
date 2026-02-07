@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-13 09:48:34
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-31 10:54:29
+ * @LastEditTime: 2026-02-07 16:56:45
  * @FilePath: \wanWanApp\src\api\request.ts
  * @Description:
  *
@@ -18,6 +18,28 @@ const BASE_URL = `${URL}/api`
 
 const getToken = () => {
   return uni.getStorageSync('token') || ''
+}
+
+// 从 header 中提取 token
+const getHeaderToken = (header?: Record<string, any>) => {
+  if (!header) return ''
+  const raw =
+    header.Authorization || // 优先取 Authorization
+    header.authorization || // 次之取 authorization
+    header.AUTHORIZATION || // 再次取 AUTHORIZATION
+    header['authorization'] || // 再次取 authorization
+    header['Authorization'] || // 最后取 Authorization
+    '' // 兜底为空字符串
+  if (!raw || typeof raw !== 'string') return ''
+  return raw.startsWith('Bearer ') ? raw.slice(7) : raw
+}
+
+// 从 header 中提取 token 并保存到本地存储
+const saveTokenFromHeader = (header?: Record<string, any>) => {
+  const nextToken = getHeaderToken(header)
+  if (nextToken) {
+    uni.setStorageSync('token', nextToken)
+  }
 }
 
 export const request = (
@@ -39,6 +61,10 @@ export const request = (
         ...header
       },
       success: (res: UniApp.RequestSuccessCallbackResult) => {
+        /* #ifdef H5 */
+        saveTokenFromHeader(res.header)
+        /* #endif */
+
         const { statusCode, data: responseData } = res
 
         // 🔹 情况1：HTTP 层面 401（后端真返回 401）
