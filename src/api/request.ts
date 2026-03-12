@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-13 09:48:34
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2026-02-07 16:56:45
+ * @LastEditTime: 2026-03-12 17:55:00
  * @FilePath: \wanWanApp\src\api\request.ts
  * @Description:
  *
@@ -34,11 +34,18 @@ const getHeaderToken = (header?: Record<string, any>) => {
   return raw.startsWith('Bearer ') ? raw.slice(7) : raw
 }
 
-// 从 header 中提取 token 并保存到本地存储
+// 从 header 中提取 token 并保存到本地存储（H5 平台）
 const saveTokenFromHeader = (header?: Record<string, any>) => {
   const nextToken = getHeaderToken(header)
   if (nextToken) {
     uni.setStorageSync('token', nextToken)
+  }
+}
+
+// 从响应体中提取 token 并保存到本地存储（App/小程序平台）
+const saveTokenFromBody = (data?: any) => {
+  if (data && typeof data === 'object' && typeof data._newToken === 'string' && data._newToken) {
+    uni.setStorageSync('token', data._newToken)
   }
 }
 
@@ -62,7 +69,11 @@ export const request = (
       },
       success: (res: UniApp.RequestSuccessCallbackResult) => {
         /* #ifdef H5 */
-        saveTokenFromHeader(res.header)
+        saveTokenFromHeader(res.header) // H5 平台：从响应头读取刷新的 token
+        /* #endif */
+
+        /* #ifdef APP */
+        saveTokenFromBody(res.data) // App/小程序平台：从响应体读取刷新的 token
         /* #endif */
 
         const { statusCode, data: responseData } = res
