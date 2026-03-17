@@ -25,10 +25,10 @@ import './static/iconfont/iconfont.js'
 console.log('环境变量：', import.meta.env.MODE)
 
 // #ifdef H5
-import VConsole from 'vconsole'
-
 if (import.meta.env.MODE === 'development') {
-  new VConsole()
+  import('vconsole').then(module => {
+    new module.default()
+  })
 }
 // #endif
 

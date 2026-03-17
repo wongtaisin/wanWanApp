@@ -38,7 +38,7 @@
               <image
                 lazy-load
                 mode="heightFix"
-                :src="`${URL}${item.images}`"
+                :src="`${BASE_URL}${item.images}`"
                 style="height: 86rpx; margin-right: 20rpx"
               />
             </template>
@@ -86,7 +86,7 @@ import { shopDelete, shopList } from '@/api/shop'
 import { onMounted, ref } from 'vue'
 import Edit from './edit.vue'
 
-const { URL } = getURL()
+const { BASE_URL } = getURL()
 
 const status = ref('more') // more/loading/noMore
 const params = ref({

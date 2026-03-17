@@ -23,3 +23,7 @@ dist
 *.njsproj
 *.sln
 *.sw?
+
+# Auto-generated typing files
+src/types/auto-imports.d.ts
+src/types/auto-components.d.ts

@@ -12,6 +12,8 @@
   ],
 
   "compilerOptions": {
+    "module": "esnext", // 支持 import.meta（Vite 环境变量）
+    "moduleResolution": "bundler", // 与 Vite 打包器匹配
     "sourceMap": true, // 生成source map文件，用于调试
     "jsx": "preserve", // 保留JSX，不转换为函数调用
     "jsxImportSource": "vue", // 导入Vue的JSX模块

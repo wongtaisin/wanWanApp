@@ -69,8 +69,8 @@
                 <image
                   lazy-load
                   mode="heightFix"
-                  :src="`${URL}${item.image}`"
-                  @click="previewSingleImage(`${URL}${item.image}`)"
+                  :src="`${BASE_URL}${item.image}`"
+                  @click="previewSingleImage(`${BASE_URL}${item.image}`)"
                   style="height: 86rpx; margin-right: 20rpx"
                 />
               </template>
@@ -110,7 +110,7 @@ import { expensesDetailDelete, expensesDetailEdit, expensesDetailList } from '@/
 import _utils from '@/utils/utils'
 import { onMounted, reactive, ref } from 'vue'
 
-const { URL } = getURL()
+const { BASE_URL } = getURL()
 
 type SpendGroup = { date: string; list: any[]; total: number }
 

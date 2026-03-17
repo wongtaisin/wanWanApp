@@ -54,7 +54,7 @@ interface FormData {
   [key: string]: string | number | Record<string, any>[] | undefined | null | any
 }
 
-const { URL } = getURL()
+const { BASE_URL } = getURL()
 const params = ref<FormData>({
   shopName: '',
   province: '',
@@ -72,7 +72,7 @@ const fileList = computed(() =>
         {
           name: params.value.id,
           extname: 'image',
-          url: `${URL}${params.value.images}`
+          url: `${BASE_URL}${params.value.images}`
         }
       ]
     : undefined

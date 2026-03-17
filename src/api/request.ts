@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-10-13 09:48:34
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2026-03-12 17:55:00
+ * @LastEditTime: 2026-03-17 15:54:28
  * @FilePath: \wanWanApp\src\api\request.ts
  * @Description:
  *
@@ -68,13 +68,8 @@ export const request = (
         ...header
       },
       success: (res: UniApp.RequestSuccessCallbackResult) => {
-        /* #ifdef H5 */
-        saveTokenFromHeader(res.header) // H5 平台：从响应头读取刷新的 token
-        /* #endif */
-
-        /* #ifdef APP */
-        saveTokenFromBody(res.data) // App/小程序平台：从响应体读取刷新的 token
-        /* #endif */
+        saveTokenFromHeader(res.header) // 防止因为平台差异丢失 header，这是为了 H5 平台
+        saveTokenFromBody(res.data) // 防止因为宏判断丢失 body._newToken，这是为了小程序平台，app
 
         const { statusCode, data: responseData } = res
 

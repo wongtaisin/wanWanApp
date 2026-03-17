@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-07 17:12:54
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-27 10:57:36
+ * @LastEditTime: 2026-03-17 18:42:23
  * @FilePath: \wanWanApp\src\components\autoUploadFile.vue
  * @Description:
  *
@@ -27,6 +27,8 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
+
+const { BASE_URL } = getURL()
 
 interface Props {
   fileMediatype?: string // image / video / all
@@ -54,25 +56,56 @@ const headers = computed(() => ({
 const emits = defineEmits(['success'])
 
 // 文件选择校验
-const onSelect = (e: any) => {
+const onSelect = async (e: any) => {
   const file = e.tempFiles[0]
+  let uploadPath = file.path
 
-  const maxSize = 10 * 1024 * 1024 // 10MB
-  for (const item of e.tempFiles) {
-    if (item.size > maxSize) {
+  const maxSize = 2 * 1024 * 1024 // 2MB
+
+  const isImage =
+    file.fileType === 'image' || /\.(jpg|jpeg|png|gif|webp)$/i.test(file.name || file.path)
+
+  if (isImage && file.size > maxSize) {
+    console.log(file, `111111`, uni.compressImage)
+    if (typeof uni.compressImage !== 'function') {
       uni.showToast({
-        title: '文件不能超过10MB',
+        title: '图片不能超过1MB',
         icon: 'none'
       })
-      // 清空选中防止继续上传
       fileList.value = []
       return
     }
+
+    uni.showLoading({ title: '压缩中...' })
+    try {
+      let quality = Math.floor((maxSize / file.size) * 100)
+      quality = Math.max(10, Math.min(90, quality)) // 限制质量在 10 ~ 90 之间
+
+      const compressRes: any = await new Promise((resolve, reject) => {
+        uni.compressImage({
+          src: file.path,
+          quality: quality,
+          success: res => resolve(res),
+          fail: err => reject(err)
+        })
+      })
+      if (compressRes && compressRes.tempFilePath) {
+        uploadPath = compressRes.tempFilePath
+      }
+    } catch (error) {
+      console.error('图片压缩失败', error)
+    } finally {
+      uni.hideLoading()
+    }
   }
 
+  const uploadUrl = props.uploadUrl.startsWith('http')
+    ? props.uploadUrl
+    : `${BASE_URL}${props.uploadUrl}`
+
   uni.uploadFile({
-    url: props.uploadUrl,
-    filePath: file.path,
+    url: uploadUrl,
+    filePath: uploadPath,
     name: 'file', // 必须和后端 multer.single('file') 对应
     header: headers.value,
     formData: props.data || {},

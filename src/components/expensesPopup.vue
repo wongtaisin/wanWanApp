@@ -74,7 +74,7 @@ interface FormData {
   [key: string]: string | number | Record<string, any>[] | undefined | null | any
 }
 
-const { URL } = getURL()
+const { BASE_URL } = getURL()
 const userShop = useShop()
 const modelValue = defineModel<FormData>('modelValue', { default: {} })
 const params = computed(() => modelValue.value)
@@ -85,7 +85,7 @@ const fileList = computed(() =>
         {
           name: params.value.id,
           extname: 'image',
-          url: `${URL}${params.value.image}`
+          url: `${BASE_URL}${params.value.image}`
         }
       ]
     : undefined
