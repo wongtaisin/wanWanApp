@@ -17,7 +17,9 @@ dist
 .idea
 .history
 .vscode
+.cursor
 .hbuilderx
+.qoder
 *.suo
 *.ntvs*
 *.njsproj

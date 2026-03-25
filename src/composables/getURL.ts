@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2026-03-12 14:48:22
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2026-03-17 18:44:26
+ * @LastEditTime: 2026-03-25 09:15:14
  * @FilePath: \wanWanApp\src\composables\getURL.ts
  * @Description:
  *
@@ -11,7 +11,7 @@
 export const getURL = () => {
   const BASE_URL =
     import.meta.env.MODE === 'development'
-      ? 'http://192.168.181.221:3001'
+      ? 'http://127.0.0.1:3001' // 调试 app 需要固定的ip地址
       : 'http://8.155.51.40:3001'
 
   return { BASE_URL }
