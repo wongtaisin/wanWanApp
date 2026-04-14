@@ -2,7 +2,7 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-15 11:29:03
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-03 14:21:18
+ * @LastEditTime: 2026-04-14 09:35:29
  * @FilePath: \wanWanApp\src\pages\chart\calendar.vue
  * @Description:
  *
@@ -75,17 +75,4 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss" scoped>
-// :deep {
-//   .uni-calendar-item--isDay,
-//   .uni-calendar-item--checked {
-//     background-color: #fff;
-//     color: #007aff;
-//     font-weight: bold;
-//   }
-
-//   .uni-calendar-item--extra {
-//     color: #e43d33;
-//   }
-// }
-</style>
+<style lang="scss" scoped></style>

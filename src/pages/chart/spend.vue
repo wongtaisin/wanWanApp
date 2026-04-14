@@ -91,4 +91,8 @@ defineExpose({
   max-width: 600rpx;
   min-width: 375rpx;
 }
+
+:deep(.uni-list--border-bottom) {
+  height: 0;
+}
 </style>
