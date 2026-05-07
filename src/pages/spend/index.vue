@@ -2,8 +2,8 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:32:58
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-30 15:30:29
- * @FilePath: \wanWanApp\src\pages\spend\index.vue
+ * @LastEditTime: 2026-05-07 14:12:01
+ * @FilePath: \wanWanUA\src\pages\spend\index.vue
  * @Description:
  *
  * Copyright (c) 2025 by wongtaisin1024@gmail.com, All Rights Reserved.
@@ -230,6 +230,7 @@ const onRefresh = async () => {
   tableData.value = []
 
   await initList()
+  await initTotal()
 
   triggered.value = false // 关闭刷新动画
 }

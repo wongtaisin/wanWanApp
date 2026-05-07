@@ -1,11 +1,11 @@
 <template>
   <uni-popup ref="popupRef" type="bottom" background-color="#fff" borderRadius="20rpx 20rpx 0 0">
-    <view style="padding: 20rpx">
+    <view style="padding: 30rpx">
       <view class="popup-title">{{ props.title }}</view>
       <CommonForms
         ref="commonFormRef"
         label-align="right"
-        label-width="75px"
+        label-width="20%"
         :rules="rules"
         :columns="formColumns"
         v-model="params"
@@ -45,7 +45,12 @@
         </uni-forms-item>
 
         <uni-forms-item label="创建时间" name="createDate" required>
-          <uni-datetime-picker type="datetime" return-type="string" v-model="params.createDate" />
+          <uni-datetime-picker
+            type="datetime"
+            return-type="string"
+            v-model="params.createDate"
+            :end="maxDate"
+          />
         </uni-forms-item>
       </CommonForms>
     </view>
@@ -53,9 +58,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useShop } from '@/store/common'
-import { onShow } from '@dcloudio/uni-app'
-import { computed, ref } from 'vue'
+import { useShop } from '@/store/common';
+import { onShow } from '@dcloudio/uni-app';
+import { computed, ref } from 'vue';
 
 interface Props {
   title?: string
@@ -146,6 +151,17 @@ const rules = {
     ]
   }
 }
+
+const maxDate = computed(() => {
+  // 返回当天结束的时间戳，确保不能选择大于当天的日期
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = now.getMonth()
+  const day = now.getDate()
+  // 创建当天23:59:59的时间戳
+  const endOfDay = new Date(year, month, day, 23, 59, 59).getTime()
+  return endOfDay
+})
 
 const formColumns = ref([
   {
