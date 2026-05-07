@@ -2,8 +2,8 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-01 10:33:29
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-30 16:22:55
- * @FilePath: \wanWanApp\src\pages\user\index.vue
+ * @LastEditTime: 2026-05-07 17:14:34
+ * @FilePath: \wanWanUA\src\pages\user\index.vue
  * @Description:
  *
  * Copyright (c) 2025 by wongtaisin1024@gmail.com, All Rights Reserved.
@@ -19,7 +19,7 @@
           />
           <text>大帅</text>
         </uni-col>
-        <uni-col :span="6" :push="6">
+        <uni-col :span="6" :push="6" style="margin-top: 38rpx">
           <uni-tag
             text="超管"
             :circle="true"
@@ -32,7 +32,7 @@
     <uni-card :is-shadow="false" class="user-card">
       <uni-grid :column="4" :showBorder="false" :square="false">
         <uni-grid-item v-for="item in cardGrid" @click="handleClick(item)">
-          <view class="card-grid" v-if="hasPermi(item.permission || '')">
+          <view class="card-grid" v-if="hasPerm(item.permission || '')">
             <view v-if="item.badge" class="grid-dot">
               <uni-badge class="uni-badge-left-margin" :text="item.badge" />
             </view>
@@ -53,7 +53,7 @@ import _utils from '@/utils/utils'
 
 const permissions = useInfoStore().permissions // 用户权限
 
-const hasPermi = (str: string) => {
+const hasPerm = (str: string) => {
   if (!str) return true
   return _utils.authPermission(str, permissions)
 }
