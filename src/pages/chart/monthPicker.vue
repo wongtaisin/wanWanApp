@@ -4,7 +4,7 @@
     <view class="header">
       <view class="arrow" @click="prevYear">«</view>
       <view class="year">{{ currentYear }}</view>
-      <view class="arrow" @click="nextYear">»</view>
+      <view class="arrow" :class="`${currentYear === year ? 'not' : ''}`" @click="nextYear">»</view>
     </view>
 
     <!-- 月份网格 -->
@@ -16,7 +16,7 @@
         :class="{
           active: padMonth(m.label) === selectedMonth && currentYear === selectedYear
         }"
-        @click="change(m.label)"
+        @click="handleMonth(m.label)"
       >
         {{ m.label }}
         <view class="month-text">￥{{ m.value }}</view>
@@ -81,6 +81,10 @@ const prevYear = () => {
   handleYear(currentYear.value)
 }
 const nextYear = () => {
+  if (currentYear.value === year) {
+    return
+  }
+
   currentYear.value++
   handleYear(currentYear.value)
 }
@@ -94,8 +98,16 @@ const handleYear = (year: number) => {
 }
 
 // 选择月份
-const change = (m: string) => {
-  console.log('change 返回:', m)
+const handleMonth = (m: string) => {
+  // 如果是当前年份，不能选择大于当前月份的月份
+  if (currentYear.value === year && Number(padMonth(m)) > month) {
+    uni.showToast({
+      title: `现在是${month}月份，不能选择未来月份`,
+      icon: 'none'
+    })
+    return
+  }
+
   selectedYear.value = currentYear.value
   selectedMonth.value = padMonth(m)
   const val = `${currentYear.value}-${selectedMonth.value}`
@@ -139,6 +151,10 @@ onMounted(() => {
     padding: 0 40rpx;
     font-size: 32rpx;
     color: #555;
+  }
+
+  .not {
+    color: #c1c2c2;
   }
 
   .year {

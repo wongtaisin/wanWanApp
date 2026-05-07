@@ -2,8 +2,8 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-15 11:29:03
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-12-30 08:28:05
- * @FilePath: \wanWanApp\src\pages\chart\week.vue
+ * @LastEditTime: 2026-05-07 15:03:19
+ * @FilePath: \wanWanUA\src\pages\chart\week.vue
  * @Description:
  *
  * Copyright (c) 2025 by wongtaisin1024@gmail.com, All Rights Reserved.
@@ -12,7 +12,7 @@
   <view class="week-year">
     <view class="arrow" @click="prevYear">«</view>
     <view class="year">{{ dateYear }}</view>
-    <view class="arrow" @click="nextYear">»</view>
+    <view class="arrow" :class="`${dateYear === nowYear ? 'not' : ''}`" @click="nextYear">»</view>
   </view>
 
   <scroll-view
@@ -39,12 +39,14 @@
 import { getCurrentWeekInYear, getDateRangeOfWeek, getWeeksInYear } from '@/pages/chart/utils'
 import { onMounted, ref } from 'vue'
 
-const dateYear = ref(new Date().getFullYear())
+const nowYear = ref(new Date().getFullYear())
+const dateYear = ref(nowYear.value)
 const week = ref(getWeeksInYear(dateYear.value)) as any
 const weekList = ref<string[]>([])
-weekList.value = [...Array(week.value).keys()].map(item => `${dateYear.value}-${item + 1}`)
+const currentWeek = getCurrentWeekInYear(dateYear.value)
+weekList.value = [...Array(currentWeek).keys()].map(item => `${dateYear.value}-${item + 1}`)
 const activeWeekLabel = ref<string>('')
-activeWeekLabel.value = `${dateYear.value}-${getCurrentWeekInYear(dateYear.value)}`
+activeWeekLabel.value = `${dateYear.value}-${currentWeek}`
 const activeWeekId = ref<string>('0')
 const emits = defineEmits(['click'])
 
@@ -70,16 +72,24 @@ const prevYear = () => {
 }
 
 const nextYear = () => {
+  if (dateYear.value === nowYear.value) {
+    return
+  }
+
   dateYear.value++
   handleYear(dateYear.value)
 }
 
 // 处理年份切换
-const handleYear = (year: number) => {
-  dateYear.value = year
+const handleYear = (val: number) => {
+  dateYear.value = val
   week.value = getWeeksInYear(dateYear.value)
-  weekList.value = [...Array(week.value).keys()].map(item => `${dateYear.value}-${item + 1}`)
-  activeWeekLabel.value = `${dateYear.value}-${getCurrentWeekInYear(dateYear.value)}`
+  const currentWeek = getCurrentWeekInYear(dateYear.value)
+  // 如果是当前年份，只显示到当周；否则显示全年周数
+  const isCurrentYear = val === new Date().getFullYear()
+  const weeksToShow = isCurrentYear ? currentWeek : week.value
+  weekList.value = [...Array(weeksToShow).keys()].map(item => `${dateYear.value}-${item + 1}`)
+  activeWeekLabel.value = `${dateYear.value}-${currentWeek}`
   handleClick(activeWeekLabel.value)
 }
 
@@ -102,6 +112,10 @@ onMounted(() => {
     padding: 0 40rpx;
     font-size: 32rpx;
     color: #555;
+  }
+
+  .not {
+    color: #c1c2c2;
   }
 
   .year {

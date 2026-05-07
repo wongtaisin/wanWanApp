@@ -2,8 +2,8 @@
  * @Author: wingddd wongtaisin1024@gmail.com
  * @Date: 2025-11-24 14:08:01
  * @LastEditors: wingddd wongtaisin1024@gmail.com
- * @LastEditTime: 2025-11-29 09:04:40
- * @FilePath: \wanWanApp\src\pages\chart\utils.ts
+ * @LastEditTime: 2026-05-07 15:01:12
+ * @FilePath: \wanWanUA\src\pages\chart\utils.ts
  * @Description: 图表工具函数
  *
  * Copyright (c) 2025 by wongtaisin1024@gmail.com, All Rights Reserved.
@@ -11,7 +11,7 @@
 import _utils from '@/utils/utils'
 
 /**
- * 获取当前日期所在周的周一和周日
+ * @deprecated 获取当前日期所在周的周一和周日
  * @param {Date} data 可选，默认当前日期 yyyy-MM-dd
  * @returns 包含周一和周日的对象，格式为 { weekStart: 'yyyy-MM-dd', weekEnd: 'yyyy-MM-dd' }
  */
@@ -51,7 +51,7 @@ export const expensesNames = [
 ]
 
 /**
- * 获取指定年份的周数
+ * @deprecated 获取指定年份的周数
  * @param {number} year 年份 (例如: 2025)
  * @returns 该年的周数 (52 或 53)
  * @description 该函数根据年份判断是否为闰年，从而确定该年是否有 53 周。
@@ -68,11 +68,10 @@ export function getWeeksInYear(year: number): number {
 }
 
 /**
- * 根据年份和 ISO 周数计算该周的开始日期（周一）和结束日期（周日）。
- * 遵循 ISO 8601 标准：周一是一周的第一天。
- * @param year 年份 (例如: 2025)
- * @param week 周数 (例如: 42)
- * @returns 包含开始日期和结束日期对象的范围
+ * @deprecated 根据年份和 ISO 周数计算该周的开始日期（周一）和结束日期（周日），遵循 ISO 8601 标准：周一是一周的第一天。
+ * @param {number} year 年份 (例如: 2025)
+ * @param {number} week 周数 (例如: 42)
+ * @returns 包含开始日期和结束日期的范围，格式为 { start: 'yyyy-MM-dd', end: 'yyyy-MM-dd' }
  */
 export function getDateRangeOfWeek(year: number, week: number): { start: string; end: string } {
   // 创建一个日期对象，设置为该年份的 1 月 1 日
@@ -107,6 +106,12 @@ export function getDateRangeOfWeek(year: number, week: number): { start: string;
   }
 }
 
+/**
+ * @description 获取指定日期所在年份的周数
+ * @param {number} year 年份 (例如: 2025)
+ * @param {Date} date 日期对象 (例如: new Date())
+ * @returns 周数 (例如: 42)
+ */
 export function getCurrentWeekInYear(year: number, date: Date = new Date()): number {
   const jan1 = new Date(year, 0, 1)
   const dayOfWeek = jan1.getDay()

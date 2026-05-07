@@ -17,6 +17,7 @@
     :insert="info.insert"
     @change="change"
     @monthSwitch="monthSwitch"
+    :endDate="maxDate"
   />
 </template>
 
@@ -57,6 +58,16 @@ const monthSwitch = (e: any) => {
   params.value.endDate = lastDay
   init()
 }
+
+// 当天日期 yyyy-mm-dd
+const maxDate = computed(() => {
+  const today = new Date()
+  const year = today.getFullYear()
+  const month = String(today.getMonth() + 1).padStart(2, '0')
+  const day = String(today.getDate()).padStart(2, '0')
+
+  return `${year}-${month}-${day}`
+})
 
 const init = async () => {
   const res = await expensesList({ ...params.value, userId: userInfo.userId })
